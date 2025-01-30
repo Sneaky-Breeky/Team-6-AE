@@ -1,0 +1,15 @@
+/Users/1234/Team-6-AE/src/backend/bin/Debug/net8.0/backend
+/Users/1234/Team-6-AE/src/backend/bin/Debug/net8.0/backend.deps.json
+/Users/1234/Team-6-AE/src/backend/bin/Debug/net8.0/backend.runtimeconfig.json
+/Users/1234/Team-6-AE/src/backend/bin/Debug/net8.0/backend.dll
+/Users/1234/Team-6-AE/src/backend/bin/Debug/net8.0/backend.pdb
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/backend.GeneratedMSBuildEditorConfig.editorconfig
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/backend.AssemblyInfoInputs.cache
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/backend.AssemblyInfo.cs
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/backend.csproj.CoreCompileInputs.cache
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/backend.sourcelink.json
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/backend.dll
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/refint/backend.dll
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/backend.pdb
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/backend.genruntimeconfig.cache
+/Users/1234/Team-6-AE/src/backend/obj/Debug/net8.0/ref/backend.dll
