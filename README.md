@@ -17,3 +17,7 @@ We will use C# for backend. Here is several usefull command:
     1. `dotnet test --logger "console;verbosity=normal"`
     1. `IClassFixture<T>` Is one convenient way to do Before all and After all in C# since we are using Xunit. Will add usage example later.
 
+    ## Database
+
+    ## Frontend
+
