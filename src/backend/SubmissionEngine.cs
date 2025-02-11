@@ -1,18 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExifToolWrapper;
+// using ExifToolWrapper;
 
 namespace backend.SubmissionEngine
 {
     public class SubmissionEngine
     {
-        private ExifTool _exifTool;
+        // private ExifTool _exifTool;
+        // private ExifToolWrapper.ExifTool _exifTool;
 
         public SubmissionEngine()
         {
             // Initialize ExifToolWrapper
-            _exifTool = new ExifTool();
+            // _exifTool = new ExifTool();
+            // _exifTool = new ExifToolWrapper.ExifTool();
         }
       
         // Method to upload files, extracts EXIF metadata for each file

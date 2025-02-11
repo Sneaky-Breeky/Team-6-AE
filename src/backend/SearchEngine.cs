@@ -55,8 +55,12 @@ namespace backend.SearchEngine
                 using (var connection = new MySqlConnection(connectionString))
                 {
                     connection.Open();
+
                     using (var cmd = new MySqlCommand($"UPDATE search_queries SET {searchType} = @params WHERE query_id = 1", connection))
-                   // TODO: SET the database with given update
+                    {
+                        // Execute query or set parameters if needed
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
             catch (Exception ex)
@@ -64,5 +68,6 @@ namespace backend.SearchEngine
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
+
     }
 }
