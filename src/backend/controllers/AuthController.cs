@@ -9,8 +9,6 @@ using System.Text;
 using backend.auth;
 using Microsoft.Extensions.Logging;
 
-
-
 namespace backend.auth
 {
     [Route("api/auth")]
@@ -43,7 +41,7 @@ namespace backend.auth
 
     public class LoginRequest
     {
-        public string Email { get; set; }
-        public string Password { get; set; }
+        public required string Email { get; set; }
+        public required string Password { get; set; }
     }
 }
