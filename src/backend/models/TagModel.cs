@@ -40,7 +40,9 @@ namespace backend.sql
 
         public Type Type { get; set; }
 
+        public required int FileId { get; set; }
 
+        public required FileModel File { get; set; }
 
 
 

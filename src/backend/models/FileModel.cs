@@ -48,12 +48,11 @@ namespace backend.sql
 
         public required string Copyright { get; set; }
 
+        public TagModel? Tags { get; set; }
 
+        public int? ProjectId { get; set; }
 
-
-
-
-
+        public ProjectModel? Project { get; set; }
         
     }
 

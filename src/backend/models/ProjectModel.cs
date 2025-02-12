@@ -8,14 +8,16 @@ namespace backend.sql
     {
         public int Id { get; set; }
 
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
-        public string Status { get; set; }
+        public required string Status { get; set; }
 
-        public string location { get; set; }
+        public string? location { get; set; }
 
-        public DateTime LastUpdate { get; set; }
+        public required DateTime LastUpdate { get; set; }
         // change in ER diagram
+
+        public ICollection<FileModel>? Files { get; set; }
 
     }
 }

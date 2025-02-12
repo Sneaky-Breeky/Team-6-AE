@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\tests\\backendTests\\backendTests.csproj": {}
+    "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\tests\\backendTests\\backendTests.csproj": {}
   },
   "projects": {
-    "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\src\\backend\\backend.csproj": {
+    "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\src\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\src\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\src\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\src\\backend\\backend.csproj",
-        "packagesPath": "C:\\Users\\Gary\\.nuget\\packages\\",
-        "outputPath": "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\src\\backend\\obj\\",
+        "projectPath": "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\src\\backend\\backend.csproj",
+        "packagesPath": "C:\\Users\\mukun\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\src\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Gary\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\mukun\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -112,32 +110,30 @@
         }
       }
     },
-    "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\tests\\backendTests\\backendTests.csproj": {
+    "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\tests\\backendTests\\backendTests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\tests\\backendTests\\backendTests.csproj",
+        "projectUniqueName": "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\tests\\backendTests\\backendTests.csproj",
         "projectName": "backendTests",
-        "projectPath": "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\tests\\backendTests\\backendTests.csproj",
-        "packagesPath": "C:\\Users\\Gary\\.nuget\\packages\\",
-        "outputPath": "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\tests\\backendTests\\obj\\",
+        "projectPath": "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\tests\\backendTests\\backendTests.csproj",
+        "packagesPath": "C:\\Users\\mukun\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\tests\\backendTests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Gary\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\mukun\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\src\\backend\\backend.csproj": {
-                "projectPath": "D:\\UBC\\Y4S2\\CPSC319\\github\\Team-6-AE\\src\\backend\\backend.csproj"
+              "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\src\\backend\\backend.csproj": {
+                "projectPath": "C:\\Users\\mukun\\Desktop\\CPSC319\\Team-6-AE\\src\\backend\\backend.csproj"
               }
             }
           }
