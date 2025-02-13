@@ -1,10 +1,24 @@
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Typography, Button } from "antd";
+import { Input, Typography, Button, Form } from "antd";
+
 const { Title } = Typography;
 
 //TODO : some of the boxes use the same formatting as UserDashboard.js, best to abstract styles
 
 export default function UserDashboard() {
+    const [projectName, setProjectName] = useState(null);
+    const [metadataTags, setMetadataTags] = useState(null);
+    const [location, setLocation] = useState(null);
+    const metadataBoxStyle = {
+        textAlign: 'left',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '10px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        paddingLeft: 2,
+        paddingRight: 2,
+    };
+
     return (
         <Box
             sx={{
@@ -28,7 +42,6 @@ export default function UserDashboard() {
                 sx={{
                     display: 'flex',
                     flexGrow: 1,
-                    padding: 4,
                 }}
             >
                 {/* Left container for upload */}
@@ -37,10 +50,11 @@ export default function UserDashboard() {
                         display: 'flex',
                         flexDirection: 'column',
                         justifyContent: 'flex-start',
-                        gap: 2,
                         width: '60%',
                         minWidth: '150px',
                         overflow: 'hidden',
+                        padding: 4,
+                        paddingRight: 2,
                     }}
                 >
                     <Title level={3} style={{ textAlign: 'left' }}>
@@ -92,6 +106,69 @@ export default function UserDashboard() {
                     </Box>
                 </Box>
 
+                {/* Right container for metadata */}
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start',
+                        gap: 2,
+                        width: '30%',
+                        minWidth: '150px',
+                        overflow: 'hidden',
+                        padding: 4,
+                        paddingLeft: 2,
+                    }}
+                >
+                    {/*Project Name Box*/}
+                    <Box sx={metadataBoxStyle}>
+                        <Title level={5}>Project name</Title>
+                        <Form.Item>
+                            <Input
+                                value={projectName}
+                                onChange={(e) => setProjectName(e.target.value)}
+                            />
+                        </Form.Item>
+                    </Box>
+
+                    {/*Metadata Tags Box*/}
+                    <Box sx={metadataBoxStyle}>
+                        <Title level={5}>Add metadata:</Title>
+                        <Form.Item>
+                            <Input
+                                placeholder="ex. bridge"
+                                value={metadataTags}
+                                onChange={(e) => setMetadataTags(e.target.value)}
+                            />
+                        </Form.Item>
+                    </Box>
+
+                    {/*Resolution Box*/}
+                    <Box sx={metadataBoxStyle}>
+                        <Title level={5}>Adjust resolution:</Title>
+                    </Box>
+
+                    {/*Date Box*/}
+                    <Box sx={metadataBoxStyle}>
+                        <Title level={5}>Add date:</Title>
+                    </Box>
+
+                    {/*Location Box*/}
+                    <Box sx={metadataBoxStyle}>
+                        <Title level={5}>Add metadata:</Title>
+                        <Form.Item>
+                            <Input
+                                placeholder="ex. bridge"
+                                value={location}
+                                onChange={(e) => setLocation(e.target.value)}
+                            />
+                        </Form.Item>
+                    </Box>
+
+                    <Button type="primary" htmlType="button" color="cyan" variant="solid" >
+                        Upload files to Project
+                    </Button>
+                </Box>
             </Box>
         </Box>
     )
