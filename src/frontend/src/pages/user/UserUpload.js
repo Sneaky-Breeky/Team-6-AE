@@ -155,10 +155,9 @@ export default function UserDashboard() {
 
                     {/*Location Box*/}
                     <Box sx={metadataBoxStyle}>
-                        <Title level={5}>Add metadata:</Title>
+                        <Title level={5}>Location:</Title>
                         <Form.Item>
                             <Input
-                                placeholder="ex. bridge"
                                 value={location}
                                 onChange={(e) => setLocation(e.target.value)}
                             />
