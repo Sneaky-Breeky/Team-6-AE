@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import UserDashboard from './pages/user/UserDashboard';
+import UserUpload from './pages/user/UserUpload';
 import { isAdmin, isLoggedIn } from './utils/auth';
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         {isLoggedIn() && !isAdmin() && (
           <Route path="/user/dashboard" element={<UserDashboard />} />
         )}
+        <Route path="/user/upload" element={<UserUpload />} />
 
         <Route
           path="/"
