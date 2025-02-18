@@ -8,6 +8,7 @@ export const authenticateUser = (email, password) => {
   const user = mockUsers.find((u) => u.email === email && u.password === password);
   if (user) {
     sessionStorage.setItem('userRole', user.role);
+    sessionStorage.setItem('menu', 0);
     return user;
   }
   const emailExists = mockUsers.find((u) => u.email === email);

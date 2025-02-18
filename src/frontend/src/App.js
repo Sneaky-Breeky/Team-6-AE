@@ -18,13 +18,13 @@ function App() {
             <AppNavbar />
             <Routes>
               {isAdmin() ? (
-                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
               ) : (
-                <Route path="/user/dashboard" element={<UserDashboard />} />
+                  <Route path="/user/dashboard" element={<UserDashboard />} />
               )}
               <Route path="/" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
               <Route path="*" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
-
+              
               <Route path="/activityLog" element={<ActivityLog />} />
               <Route path="*" element={<Navigate to="/activityLog" />} />
             </Routes>

@@ -11,7 +11,7 @@ import BackupTableIcon from '@mui/icons-material/BackupTable';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 
-
+// assumption that this is only for users and not admin
 const mainListItems = [
   { text: 'Dashboard', icon: <HomeRoundedIcon /> },
   { text: 'Project Directory', icon: <BackupTableIcon /> },
@@ -29,7 +29,21 @@ export default function MenuContent() {
       <List dense>
         {mainListItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton selected={index === 0}>
+            <ListItemButton selected={index === parseInt(sessionStorage.getItem('menu'))} 
+            onClick={() => {
+              sessionStorage.setItem('menu', index);
+              switch(parseInt(sessionStorage.getItem('menu'))) {
+                case 0: // update for admin later
+                window.location.href = '/user/dashboard';
+                  break;
+                case 3:
+                  window.location.href = '/activityLog';
+                  break;
+                default:
+                  window.location.href = '/user/dashboard';
+              }
+            }}
+            >
               <ListItemIcon sx={{ color: 'white' }} >{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} sx={{ color: 'white' }}/>
             </ListItemButton>
