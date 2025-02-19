@@ -4,7 +4,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import UserDashboard from './pages/user/UserDashboard';
 import UserUpload from './pages/user/UserUpload';
 import ProjectDirectory from './pages/user/UserProjectDir';
-import ActivityLog from './pages/user/ActivityLog';
+import ActivityLog from './pages/user/UserActivityLog';
 import { isAdmin, isLoggedIn } from './utils/auth';
 import SideMenu from './components/SideMenu'; 
 import AppNavbar from './components/AppNavbar'; 
@@ -34,7 +34,7 @@ function App() {
               <Route path="*" element={<Navigate to="/user/uploadFiles" />} />
 
               <Route path="/user/activityLog" element={<ActivityLog />} />
-              <Route path="*" element={<Navigate to="/activityLog" />} />
+              <Route path="*" element={<Navigate to="/user/activityLog" />} />
             </Routes>
           </Box>
         </Box>
