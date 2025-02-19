@@ -9,12 +9,18 @@ const { Title } = Typography;
 const { Meta } = Card;
 
 const projects = [
-  { title: 'Bridge Construction', location: 'Toronto', image: '../../../images/bridge.jpg' },
+  { title: 'Bridge Construction', location: 'Toronto', image: '/images/bridge.webp' },
   { title: 'High-Rise Development', location: 'Vancouver', image: '/images/highrise.jpg' },
   { title: 'Highway Expansion', location: 'Montreal', image: '/images/highway.jpg' },
-  { title: 'Oil Pipeline Repair', location: 'Alberta', image: '/images/oil_pipeline.jpg' },
-  { title: 'Park Restoration', location: 'Ottawa', image: '/images/park.jpg' },
-  { title: 'School Construction', location: 'Quebec City', image: '/images/school.jpg' },
+  { title: 'Oil Pipeline Repair', location: 'Alberta', image: '/images/pipeline.jpg' },
+  { title: 'Park Restoration', location: 'Ottawa', image: '/images/park.jpeg' },
+  { title: 'School Construction', location: 'Quebec City', image: '/images/school.png' },
+  { title: 'Bridge Construction', location: 'Toronto', image: '/images/bridge.webp' },
+  { title: 'High-Rise Development', location: 'Vancouver', image: '/images/highrise.jpg' },
+  { title: 'Highway Expansion', location: 'Montreal', image: '/images/highway.jpg' },
+  { title: 'Oil Pipeline Repair', location: 'Alberta', image: '/images/pipeline.jpg' },
+  { title: 'Park Restoration', location: 'Ottawa', image: '/images/park.jpeg' },
+  { title: 'School Construction', location: 'Quebec City', image: '/images/school.png' }
 ];
 
 export default function UserDashboard() {
@@ -23,7 +29,8 @@ export default function UserDashboard() {
   const navigate = useNavigate();
 
   const handleSearch = () => {
-    navigate(`/search-results?query=${searchQuery}&date=${selectedDate || ''}`);
+    // when backend is done connect this part with backend
+    console.log("Search Query:", searchQuery, "Date:", selectedDate);
   };
 
   return (
@@ -140,7 +147,7 @@ export default function UserDashboard() {
     overflow: 'hidden',
   }}
 >
-  <Title level={3} style={{ textAlign: 'center', marginBottom: '20px' }}>
+  <Title level={3} style={{ textAlign: 'center', marginBottom: '30px', marginTop: '0px' }}>
     Active Projects
   </Title>
   <Box
