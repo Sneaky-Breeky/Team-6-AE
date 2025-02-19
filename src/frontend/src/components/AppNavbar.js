@@ -7,7 +7,6 @@ import MuiToolbar from '@mui/material/Toolbar';
 import { tabsClasses } from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
-import AE_logo from '../AE_logo.png';
 
 
 const Toolbar = styled(MuiToolbar)({
