@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './pages/Login';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import UserDashboard from './pages/user/UserDashboard';
+import UserUpload from './pages/user/UserUpload';
 import ActivityLog from './pages/ActivityLog';
 import { isAdmin, isLoggedIn } from './utils/auth';
 import SideMenu from './components/SideMenu'; 
@@ -21,6 +22,8 @@ function App() {
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
               ) : (
                   <Route path="/user/dashboard" element={<UserDashboard />} />
+              ) && (
+                <Route path="/user/upload" element={<UserUpload />} />
               )}
               <Route path="/" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
               <Route path="*" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
