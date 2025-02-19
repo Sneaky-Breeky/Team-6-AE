@@ -36,8 +36,14 @@ export default function MenuContent() {
                 case 0: // update for admin later
                 window.location.href = '/user/dashboard';
                   break;
+                case 1:
+                  window.location.href = '/user/projectDirectory';
+                  break;
+                case 2:
+                  window.location.href = '/user/uploadFiles';
+                  break;
                 case 3:
-                  window.location.href = '/activityLog';
+                  window.location.href = '/user/activityLog';
                   break;
                 default:
                   window.location.href = '/user/dashboard';

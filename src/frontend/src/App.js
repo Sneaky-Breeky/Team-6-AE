@@ -3,7 +3,8 @@ import Login from './pages/Login';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import UserDashboard from './pages/user/UserDashboard';
 import UserUpload from './pages/user/UserUpload';
-import ActivityLog from './pages/ActivityLog';
+import ProjectDirectory from './pages/user/UserProjectDir';
+import ActivityLog from './pages/user/ActivityLog';
 import { isAdmin, isLoggedIn } from './utils/auth';
 import SideMenu from './components/SideMenu'; 
 import AppNavbar from './components/AppNavbar'; 
@@ -22,13 +23,17 @@ function App() {
                   <Route path="/admin/dashboard" element={<AdminDashboard />} />
               ) : (
                   <Route path="/user/dashboard" element={<UserDashboard />} />
-              ) && (
-                <Route path="/user/upload" element={<UserUpload />} />
               )}
               <Route path="/" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
               <Route path="*" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
               
-              <Route path="/activityLog" element={<ActivityLog />} />
+              <Route path="/user/projectDirectory" element={<ProjectDirectory />} />
+              <Route path="*" element={<Navigate to="/user/projectDirectory" />} />
+
+              <Route path="/user/uploadFiles" element={<UserUpload />} />
+              <Route path="*" element={<Navigate to="/user/uploadFiles" />} />
+
+              <Route path="/user/activityLog" element={<ActivityLog />} />
               <Route path="*" element={<Navigate to="/activityLog" />} />
             </Routes>
           </Box>
