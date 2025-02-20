@@ -34,7 +34,7 @@ function App() {
               <Route path="*" element={<Navigate to="/user/uploadFiles" />} />
 
               <Route path="/user/activityLog" element={<ActivityLog />} />
-              <Route path="*" element={<Navigate to="/activityLog" />} />
+              <Route path="*" element={<Navigate to="/user/activityLog" />} />
             </Routes>
           </Box>
         </Box>
