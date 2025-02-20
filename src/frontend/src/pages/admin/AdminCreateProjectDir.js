@@ -1,15 +1,45 @@
 import React, { useState } from 'react';
-import { Typography, Input, Form, Button, Tag } from "antd"
+import { Typography, Input, Form, Button, Tag, Flex } from "antd"
 import Box from '@mui/material/Box';
 
 const { Title } = Typography;
+
+const tagStyle = {
+    backgroundColor: '#dbdbdb'
+};
 
 export default function CreateProjectDirectory() {
     const [projectName, setProjectName] = useState(null);
     const [description, setDescription] = useState(null);
     const [location, setLocation] = useState(null);
-    const [defaultMetadataInputs, setDefaultMetadataInputs] = useState();
-    const [defaultMetadataTags, setDefaultMetadataTags] = useState();
+    const [defaultMetadataInputsInput, setDefaultMetadataInputsInput] = useState();
+    const [defaultMetadataInputs, setDefaultMetadataInputs] = useState([]);
+    const [defaultMetadataTagInput, setDefaultMetadataTagInput] = useState();
+    const [defaultMetadataTags, setDefaultMetadataTags] = useState([]);
+
+    const handleMetadataTagClose = (removedTag) => {
+        const newTags = defaultMetadataTags.filter((tag) => tag !== removedTag);
+        setDefaultMetadataTags(newTags);
+    }
+
+    const handleMetadataTagAdd = () => {
+        if (defaultMetadataTagInput && !defaultMetadataTags.includes(defaultMetadataTagInput)) {
+            setDefaultMetadataTags([...defaultMetadataTags, defaultMetadataTagInput]);
+        }
+        setDefaultMetadataTagInput("");
+    }
+
+    const handleMetadataInputClose = (removedInput) => {
+        const newInputs = defaultMetadataInputs.filter((tag) => tag !== removedInput);
+        setDefaultMetadataInputs(newInputs);
+    }
+
+    const handleMetadataInputAdd = () => {
+        if (defaultMetadataInputsInput && !defaultMetadataInputs.includes(defaultMetadataInputsInput)) {
+            setDefaultMetadataInputs([...defaultMetadataInputs, defaultMetadataInputsInput]);
+        }
+        setDefaultMetadataInputsInput("");
+    }
 
     return (
         <Box
@@ -43,7 +73,7 @@ export default function CreateProjectDirectory() {
                         flexDirection: 'column',
                         justifyContent: 'flex-start',
                         alignItems: 'left',
-                        height: '60vh',
+                        height: '80vh',
                         width: '80%',
                         margin: '20px auto',
                         backgroundColor: '#f5f5f5',
@@ -80,25 +110,48 @@ export default function CreateProjectDirectory() {
                     <Title level={5}>Default Metadata Inputs:</Title>
                     <Form.Item>
                         <Input
-                            value={defaultMetadataInputs}
-                            onChange={(e) => setDefaultMetadataInputs(e.target.value)}
+                            value={defaultMetadataInputsInput}
+                            onChange={(e) => setDefaultMetadataInputsInput(e.target.value)}
+                            onPressEnter={(e) => handleMetadataInputAdd(e.target.value)}
                         />
                     </Form.Item>
-
-                    {/*TODO: TAGS GO HERE*/}
-                    
+                    <Flex gap="4px 0" wrap>
+                        {defaultMetadataInputs.map((tag) => (
+                            <Tag
+                                style={tagStyle}
+                                key={tag}
+                                closable={true}
+                                onClose={() => handleMetadataInputClose(tag)}
+                            >
+                                {tag}
+                            </Tag>
+                        ))
+                        }
+                    </Flex>
 
                     <Title level={5}>Default Metadata Tags:</Title>
                     <Form.Item>
                         <Input
-                            value={defaultMetadataTags}
-                            onChange={(e) => setDefaultMetadataTags(e.target.value)}
+                            value={defaultMetadataTagInput}
+                            onChange={(e) => setDefaultMetadataTagInput(e.target.value)}
+                            onPressEnter={(e) => handleMetadataTagAdd(e.target.value)}
                         />
                     </Form.Item>
+                    <Flex gap="4px 0" wrap>
+                        {defaultMetadataTags.map((tag) => (
+                            <Tag
+                                style={tagStyle}
+                                key={tag}
+                                closable={true}
+                                onClose={() => handleMetadataTagClose(tag)}
+                            >
+                                {tag}
+                            </Tag>
+                        ))
+                        }
+                    </Flex>
 
-                    {/*TODO: TAGS GO HERE*/}
-
-                    <Button style={{ marginTop: "5%", padding: "3%"}} type="primary" htmlType="button" color="cyan" variant="solid" >
+                    <Button style={{ marginTop: "5%", padding: "3%" }} type="primary" htmlType="button" color="cyan" variant="solid" >
                         Add Project
                     </Button>
                 </Box>
