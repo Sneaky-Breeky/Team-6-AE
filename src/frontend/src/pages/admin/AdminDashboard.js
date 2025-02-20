@@ -1,10 +1,16 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Input, Button, Typography, Card, Row, Col } from 'antd';
+import { Input, Button, Typography, Row, Col } from 'antd';
 import { PlusOutlined, UserOutlined, SettingOutlined, LockOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
-const { Meta } = Card;
+
+const pages = [
+  {title: 'Create Project Directories', icon: PlusOutlined, url: '/admin/projectDirectory' },
+  {title: 'User Management', icon: UserOutlined, url: '/admin/userManagement' },
+  {title: 'Metadata Management', icon: SettingOutlined, url: '/admin/metadataManagement' },
+  {title: 'Assign Project Security', icon: LockOutlined, url: '/admin/projectSecurity' }
+]
 
 export default function AdminDashboard() {
   return (
@@ -40,9 +46,10 @@ export default function AdminDashboard() {
 >
 
       <Row gutter={[16, 16]} justify="center">
-        <Col span={12} align="center">
+        {pages.map((page) => (
+          <Col span={12} align="center">
           <Box
-          onClick={() => alert(`Redirecting to "Create Project Directories"`)}
+          onClick={() => alert(`Redirecting to "${page.url}"`)}
           sx={{
             textAlign: 'center',
             width: 250,
@@ -54,68 +61,11 @@ export default function AdminDashboard() {
             '&:hover': { boxShadow: 3},
             }}
           >
-            <UserOutlined style={{ marginTop: '30px', fontSize: '80px'}}/>
-            <h4>Create Project Directories</h4>
+            <page.icon style={{ marginTop: '30px', fontSize: '80px'}}/>
+            <h4>{page.title}</h4>
           </Box>
         </Col>
-
-        <Col span={12} align="center">
-          <Box
-          onClick={() => alert(`Redirecting to "User Management"`)}
-          sx={{
-            textAlign: 'center',
-            width: 250,
-            height: 200,
-            backgroundColor: 'grey.300',
-            border: 1,
-            borderColor: 'grey.500',
-            borderRadius: '16px',
-            '&:hover': { boxShadow: 3},
-            }}
-          >
-            <SettingOutlined style={{ marginTop: '30px', fontSize: '80px'}}/>
-            <h4>User Management</h4>
-          </Box>
-        </Col>
-
-        <Col span={12} align="center">
-          <Box
-          onClick={() => alert(`Redirecting to "Metadata Management"`)}
-          sx={{
-            textAlign: 'center',
-            width: 250,
-            height: 200,
-            backgroundColor: 'grey.300',
-            border: 1,
-            borderColor: 'grey.500',
-            borderRadius: '16px',
-            '&:hover': { boxShadow: 3},
-            }}
-          >
-            <PlusOutlined style={{ marginTop: '30px', fontSize: '80px'}}/>
-            <h4>Metadata Management</h4>
-          </Box>
-        </Col>
-
-        <Col span={12} align="center">
-          <Box
-          onClick={() => alert(`Redirecting to "Assign Project Security"`)}
-          sx={{
-            textAlign: 'center',
-            width: 250,
-            height: 200,
-            backgroundColor: 'grey.300',
-            border: 1,
-            borderColor: 'grey.500',
-            borderRadius: '16px',
-            '&:hover': { boxShadow: 3},
-            }}
-          >
-            <LockOutlined style={{ marginTop: '30px', fontSize: '80px'}}/>
-            <h4>Assign Project Security</h4>
-          </Box>
-        </Col>
-
+        ))}
       </Row>
     </Box>
   </Box>

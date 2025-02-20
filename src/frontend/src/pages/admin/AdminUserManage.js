@@ -47,12 +47,6 @@ export default function AdminUserManage() {
             <th style={{height: '50px', textAlign: 'left', borderBottom:'1px solid black'}} >Timestamp</th>
             <th style={{height: '50px', textAlign: 'left', borderBottom:'1px solid black'}} >Activities</th>
         </tr>
-            {logs.map((log) => (
-                <tr>
-                    <td style={{width: '40%', textAlign: 'left', borderBottom:'1px solid black'}} >{logTime(log.time)}</td>
-                    <td style={{width: '60%', textAlign: 'left', borderBottom:'1px solid black'}} >{log.action}</td>
-                </tr>
-            ))}
     </table>
 
 </Box>
