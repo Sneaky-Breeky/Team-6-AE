@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Input, Typography, Button, Form } from "antd";
+import { Input, Typography, DatePicker, Button, Form, Select } from "antd";
+import { CalendarOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -10,6 +11,7 @@ export default function UserDashboard() {
     const [projectName, setProjectName] = useState(null);
     const [metadataTags, setMetadataTags] = useState(null);
     const [location, setLocation] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
     const metadataBoxStyle = {
         textAlign: 'left',
         backgroundColor: '#f5f5f5',
@@ -146,11 +148,24 @@ export default function UserDashboard() {
                     {/*Resolution Box*/}
                     <Box sx={metadataBoxStyle}>
                         <Title level={5}>Adjust resolution:</Title>
+                        <Form.Item>
+                            <Select options={
+                                [{ value: 'low', label: <span>Low</span> },
+                                { value: 'medium', label: <span>Medium</span> },
+                                { value: 'high', label: <span>High</span> }]} />
+                        </Form.Item>
                     </Box>
 
                     {/*Date Box*/}
                     <Box sx={metadataBoxStyle}>
                         <Title level={5}>Add date:</Title>
+                        <Form.Item>
+                            <DatePicker
+                                placeholder="Select date"
+                                onChange={(date, dateString) => setSelectedDate(dateString)}
+                                suffixIcon={<CalendarOutlined />}
+                            />
+                        </Form.Item>
                     </Box>
 
                     {/*Location Box*/}
