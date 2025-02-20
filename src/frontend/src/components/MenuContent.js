@@ -9,6 +9,7 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import { isAdmin } from '../utils/auth';
 
@@ -32,7 +33,7 @@ function GetDirectoryPrefix(isAdmin) {
 
 if (isAdmin()) {
   mainListItems.push(
-    { text: 'Project Creation', icon: <BackupTableIcon /> })
+    { text: 'Project Creation', icon: <CreateNewFolderIcon /> })
 }
 
 export default function MenuContent() {
