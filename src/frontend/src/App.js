@@ -4,6 +4,7 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import UserDashboard from './pages/user/UserDashboard';
 import UserUpload from './pages/user/UserUpload';
 import ProjectDirectory from './pages/user/UserProjectDir';
+import CreateProjectDirectory from './pages/admin/AdminCreateProjectDir';
 import ActivityLog from './pages/user/ActivityLog';
 import { isAdmin, isLoggedIn } from './utils/auth';
 import SideMenu from './components/SideMenu'; 
@@ -35,6 +36,11 @@ function App() {
 
               <Route path="/user/activityLog" element={<ActivityLog />} />
               <Route path="*" element={<Navigate to="/activityLog" />} />
+
+              <Route path="/admin/createProjectDirectory" element={<CreateProjectDirectory />} />
+              <Route path="*" element={<Navigate to="/admin/createProjectDirectory" />} />
+
+
             </Routes>
           </Box>
         </Box>

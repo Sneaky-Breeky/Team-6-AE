@@ -10,6 +10,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import { isAdmin } from '../utils/auth';
 
 // assumption that this is only for users and not admin
 const mainListItems = [
@@ -19,39 +20,57 @@ const mainListItems = [
   { text: 'Activity Log', icon: <AssignmentRoundedIcon /> },
 ];
 
+// additional main list items admins have access to
+const adminListItems = [
+  { text: 'Dashboard', icon: <HomeRoundedIcon /> },
+  { text: 'Project Directory', icon: <BackupTableIcon /> },
+  { text: 'Upload Files', icon: <CloudUploadIcon /> },
+  { text: 'Activity Log', icon: <AssignmentRoundedIcon /> },
+  { text: 'Project Creation', icon: <BackupTableIcon /> }
+]
+
 const secondaryListItems = [
   { text: 'Logout', icon: <PeopleRoundedIcon /> }
 ];
+
+// TODO: put this in utils?
+function GetDirectoryPrefix(isAdmin) {
+  const ret = isAdmin ? '/admin/' : '/user/';
+  return ret;
+}
 
 export default function MenuContent() {
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
       <List dense>
-        {mainListItems.map((item, index) => (
+        {(isAdmin() ? adminListItems : mainListItems).map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton selected={index === parseInt(sessionStorage.getItem('menu'))} 
-            onClick={() => {
-              sessionStorage.setItem('menu', index);
-              switch(parseInt(sessionStorage.getItem('menu'))) {
-                case 0: // update for admin later
-                window.location.href = '/user/dashboard';
-                  break;
-                case 1:
-                  window.location.href = '/user/projectDirectory';
-                  break;
-                case 2:
-                  window.location.href = '/user/uploadFiles';
-                  break;
-                case 3:
-                  window.location.href = '/user/activityLog';
-                  break;
-                default:
-                  window.location.href = '/user/dashboard';
-              }
-            }}
+            <ListItemButton selected={index === parseInt(sessionStorage.getItem('menu'))}
+              onClick={() => {
+                sessionStorage.setItem('menu', index);
+                switch (parseInt(sessionStorage.getItem('menu'))) {
+                  case 0: // update for admin later
+                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'dashboard';
+                    break;
+                  case 1:
+                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'projectDirectory';
+                    break;
+                  case 2:
+                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'uploadFiles';
+                    break;
+                  case 3:
+                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'activityLog';
+                    break;
+                  case 4:
+                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'createProjectDirectory';
+                    break;
+                  default:
+                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'dashboard';
+                }
+              }}
             >
               <ListItemIcon sx={{ color: 'white' }} >{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} sx={{ color: 'white' }}/>
+              <ListItemText primary={item.text} sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
         ))}
@@ -61,7 +80,7 @@ export default function MenuContent() {
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
             <ListItemButton>
               <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} sx={{ color: 'white' }}/>
+              <ListItemText primary={item.text} sx={{ color: 'white' }} />
             </ListItemButton>
           </ListItem>
         ))}
