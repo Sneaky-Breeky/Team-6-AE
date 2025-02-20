@@ -42,13 +42,6 @@ export default function AdminUserManage() {
   }}
 >
 
-    <table style={{width: '100%', borderCollapse: 'collapse'}}>
-        <tr>
-            <th style={{height: '50px', textAlign: 'left', borderBottom:'1px solid black'}} >Timestamp</th>
-            <th style={{height: '50px', textAlign: 'left', borderBottom:'1px solid black'}} >Activities</th>
-        </tr>
-    </table>
-
 </Box>
 
     </Box>
