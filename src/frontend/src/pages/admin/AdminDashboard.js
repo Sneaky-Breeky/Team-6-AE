@@ -119,11 +119,5 @@ export default function AdminDashboard() {
       </Row>
     </Box>
   </Box>
-
-
-
-    
   );
-
-  
 }
