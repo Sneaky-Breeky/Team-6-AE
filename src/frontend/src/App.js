@@ -6,6 +6,7 @@ import AdminUserManage from './pages/admin/AdminUserManage';
 import UserDashboard from './pages/user/UserDashboard';
 import UserUpload from './pages/user/UserUpload';
 import ProjectDirectory from './pages/user/UserProjectDir';
+import CreateProjectDirectory from './pages/admin/AdminCreateProjectDir';
 import ActivityLog from './pages/user/UserActivityLog';
 import { isAdmin, isLoggedIn } from './utils/auth';
 import SideMenu from './components/SideMenu'; 
@@ -37,6 +38,9 @@ function App() {
 
               <Route path="/user/activityLog" element={<ActivityLog />} />
               <Route path="*" element={<Navigate to="/user/activityLog" />} />
+
+              <Route path="/admin/createProjectDirectory" element={<CreateProjectDirectory />} />
+              <Route path="*" element={<Navigate to="/admin/createProjectDirectory" />} />
 
               <Route path="/admin/metadataManagement" element={<AdminMetadataManage />} />
               <Route path="*" element={<Navigate to="/admin/metadataManagement" />} />
