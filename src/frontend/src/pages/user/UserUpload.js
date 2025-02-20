@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Input, Typography, DatePicker, Button, Form, Select } from "antd";
+import { Input, Typography, DatePicker, Button, Form, Select, Tag, Flex } from "antd";
 import { CalendarOutlined } from '@ant-design/icons';
 
 const { Title } = Typography;
+
+const tagStyle = {
+    backgroundColor: '#dbdbdb'
+};
 
 //TODO : some of the boxes use the same formatting as UserDashboard.js, best to abstract styles
 
 export default function UserDashboard() {
     const [projectName, setProjectName] = useState(null);
-    const [metadataTags, setMetadataTags] = useState(null);
+    const [metadataTagsInput, setMetadataTagsInput] = useState();
+    const [metadataTags, setMetadataTags] = useState([]);
     const [location, setLocation] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const metadataBoxStyle = {
@@ -20,6 +25,18 @@ export default function UserDashboard() {
         paddingLeft: 2,
         paddingRight: 2,
     };
+
+    const handleMetadataTagClose = (removedTag) => {
+        const newTags = metadataTags.filter((tag) => tag !== removedTag);
+        setMetadataTags(newTags);
+    }
+
+    const handleMetadataTagAdd = () => {
+        if (metadataTagsInput && !metadataTags.includes(metadataTagsInput)) {
+            setMetadataTags([...metadataTags, metadataTagsInput]);
+        }
+        setMetadataTagsInput("");
+    }
 
     return (
         <Box
@@ -139,10 +156,24 @@ export default function UserDashboard() {
                         <Form.Item>
                             <Input
                                 placeholder="ex. bridge"
-                                value={metadataTags}
-                                onChange={(e) => setMetadataTags(e.target.value)}
+                                value={metadataTagsInput}
+                                onChange={(e) => setMetadataTagsInput(e.target.value)}
+                                onPressEnter={() => handleMetadataTagAdd()}
                             />
                         </Form.Item>
+                        <Flex style={{marginBottom: "3%"}} gap="4px 0" wrap>
+                            {metadataTags.map((tag) => (
+                                <Tag
+                                    style={tagStyle}
+                                    key={tag}
+                                    closable={true}
+                                    onClose={() => handleMetadataTagClose(tag)}
+                                >
+                                    {tag}
+                                </Tag>
+                            ))
+                            }
+                        </Flex>
                     </Box>
 
                     {/*Resolution Box*/}
