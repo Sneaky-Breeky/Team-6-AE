@@ -13,21 +13,12 @@ import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import { isAdmin } from '../utils/auth';
 
 // assumption that this is only for users and not admin
-const mainListItems = [
+var mainListItems = [
   { text: 'Dashboard', icon: <HomeRoundedIcon /> },
   { text: 'Project Directory', icon: <BackupTableIcon /> },
   { text: 'Upload Files', icon: <CloudUploadIcon /> },
   { text: 'Activity Log', icon: <AssignmentRoundedIcon /> },
 ];
-
-// additional main list items admins have access to
-const adminListItems = [
-  { text: 'Dashboard', icon: <HomeRoundedIcon /> },
-  { text: 'Project Directory', icon: <BackupTableIcon /> },
-  { text: 'Upload Files', icon: <CloudUploadIcon /> },
-  { text: 'Activity Log', icon: <AssignmentRoundedIcon /> },
-  { text: 'Project Creation', icon: <BackupTableIcon /> }
-]
 
 const secondaryListItems = [
   { text: 'Logout', icon: <PeopleRoundedIcon /> }
@@ -39,17 +30,22 @@ function GetDirectoryPrefix(isAdmin) {
   return ret;
 }
 
+if (isAdmin()) {
+  mainListItems.push(
+    { text: 'Project Creation', icon: <BackupTableIcon /> })
+}
+
 export default function MenuContent() {
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
       <List dense>
-        {(isAdmin() ? adminListItems : mainListItems).map((item, index) => (
+        {mainListItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
             <ListItemButton selected={index === parseInt(sessionStorage.getItem('menu'))}
               onClick={() => {
                 sessionStorage.setItem('menu', index);
                 switch (parseInt(sessionStorage.getItem('menu'))) {
-                  case 0: // update for admin later
+                  case 0:
                     window.location.href = GetDirectoryPrefix(isAdmin()) + 'dashboard';
                     break;
                   case 1:

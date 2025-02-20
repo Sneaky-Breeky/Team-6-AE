@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 
 const { Title } = Typography;
 
-export default function UserDashboard() {
+export default function CreateProjectDirectory() {
     return (
         <Box
             sx={{
@@ -19,7 +19,7 @@ export default function UserDashboard() {
                     padding: 4,
                 }}
             >
-                <Title level={1}>Upload Files</Title>
+                <Title level={1}>Create Project Directories</Title>
             </Box>
 
             {/* Main content */}
