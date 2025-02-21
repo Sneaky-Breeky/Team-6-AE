@@ -143,7 +143,7 @@ export default function UserDashboard() {
 
           <Box
           onClick={() => {
-            sessionStorage.setItem('menu', 2);
+            sessionStorage.setItem('menu', 3);
             window.location.href = '/user/activityLog';
           }}
           sx={{
