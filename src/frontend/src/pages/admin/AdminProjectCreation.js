@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Input, Form, Button, Tag, Flex } from "antd"
+import { Typography, Input, Form, Button, Tag, Flex, message } from "antd"
 import Box from '@mui/material/Box';
 
 const { Title } = Typography;
@@ -12,10 +12,11 @@ export default function ProjectCreation() {
     const [projectName, setProjectName] = useState(null);
     const [description, setDescription] = useState(null);
     const [location, setLocation] = useState(null);
-    const [defaultMetadataInputsInput, setDefaultMetadataInputsInput] = useState();
-    const [defaultMetadataInputs, setDefaultMetadataInputs] = useState([]);
+    const [defaultMetadataFieldsField, setDefaultMetadataFieldsField] = useState();
+    const [defaultMetadataFields, setDefaultMetadataFields] = useState([]);
     const [defaultMetadataTagInput, setDefaultMetadataTagInput] = useState();
     const [defaultMetadataTags, setDefaultMetadataTags] = useState([]);
+    const [messageApi, contextHolder] = message.useMessage();
 
     const handleMetadataTagClose = (removedTag) => {
         const newTags = defaultMetadataTags.filter((tag) => tag !== removedTag);
@@ -29,16 +30,33 @@ export default function ProjectCreation() {
         setDefaultMetadataTagInput("");
     }
 
-    const handleMetadataInputClose = (removedInput) => {
-        const newInputs = defaultMetadataInputs.filter((tag) => tag !== removedInput);
-        setDefaultMetadataInputs(newInputs);
+    const handleMetadataFieldClose = (removedField) => {
+        const newFields = defaultMetadataFields.filter((tag) => tag !== removedField);
+        setDefaultMetadataFields(newFields);
     }
 
-    const handleMetadataInputAdd = () => {
-        if (defaultMetadataInputsInput && !defaultMetadataInputs.includes(defaultMetadataInputsInput)) {
-            setDefaultMetadataInputs([...defaultMetadataInputs, defaultMetadataInputsInput]);
+    const handleMetadataFieldAdd = () => {
+        if (defaultMetadataFieldsField && !defaultMetadataFields.includes(defaultMetadataFieldsField)) {
+            setDefaultMetadataFields([...defaultMetadataFields, defaultMetadataFieldsField]);
         }
-        setDefaultMetadataInputsInput("");
+        setDefaultMetadataFieldsField("");
+    }
+
+    const success = () => {
+        messageApi.open({
+          type: 'success',
+          content: 'Project Added',
+        });
+      };
+
+    const handleAddProjectButton = () => {
+        success();
+        // create new project w current input data, connect w backend here
+        setDefaultMetadataFields([]);
+        setDefaultMetadataTags([]);
+        setProjectName(null);
+        setDescription(null);
+        setLocation(null);
     }
 
     return (
@@ -73,7 +91,7 @@ export default function ProjectCreation() {
                         flexDirection: 'column',
                         justifyContent: 'flex-start',
                         alignItems: 'left',
-                        width: '80%',
+                        width: '50%',
                         height: "fit-content",
                         margin: '20px auto',
                         backgroundColor: '#f5f5f5',
@@ -83,45 +101,46 @@ export default function ProjectCreation() {
                         overflow: 'hidden',
                     }}
                 >
-                    <Title level={5}>Project name:</Title>
-                    <Form.Item>
+                    <Title level={5} style={{ marginTop: '10px' }}>Project name:</Title>
+                    <Form.Item style={{ marginBottom: '0px' }}>
                         <Input
                             value={projectName}
                             onChange={(e) => setProjectName(e.target.value)}
                         />
                     </Form.Item>
 
-                    <Title level={5}>Description:</Title>
-                    <Form.Item>
+                    <Title level={5} style={{ marginTop: '10px' }}>Description:</Title>
+                    <Form.Item style={{ marginBottom: '0px' }}>
                         <Input
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
                     </Form.Item>
 
-                    <Title level={5}>Location:</Title>
-                    <Form.Item>
+                    <Title level={5} style={{ marginTop: '10px' }}>Location:</Title>
+                    <Form.Item style={{ marginBottom: '0px' }}>
                         <Input
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
                         />
                     </Form.Item>
 
-                    <Title level={5}>Default Metadata Inputs:</Title>
+                    <Title level={5} style={{ marginTop: '10px' }}>Default Metadata Fields:</Title>
                     <Form.Item>
                         <Input
-                            value={defaultMetadataInputsInput}
-                            onChange={(e) => setDefaultMetadataInputsInput(e.target.value)}
-                            onPressEnter={(e) => handleMetadataInputAdd(e.target.value)}
+                            placeholder="ex. Date"
+                            value={defaultMetadataFieldsField}
+                            onChange={(e) => setDefaultMetadataFieldsField(e.target.value)}
+                            onPressEnter={(e) => handleMetadataFieldAdd(e.target.value)}
                         />
                     </Form.Item>
                     <Flex gap="4px 0" wrap>
-                        {defaultMetadataInputs.map((tag) => (
+                        {defaultMetadataFields.map((tag) => (
                             <Tag
                                 style={tagStyle}
                                 key={tag}
                                 closable={true}
-                                onClose={() => handleMetadataInputClose(tag)}
+                                onClose={() => handleMetadataFieldClose(tag)}
                             >
                                 {tag}
                             </Tag>
@@ -129,9 +148,10 @@ export default function ProjectCreation() {
                         }
                     </Flex>
 
-                    <Title level={5}>Default Metadata Tags:</Title>
+                    <Title level={5} style={{ marginTop: '10px' }}>Default Metadata Tags:</Title>
                     <Form.Item>
                         <Input
+                            placeholder="ex. bridge"
                             value={defaultMetadataTagInput}
                             onChange={(e) => setDefaultMetadataTagInput(e.target.value)}
                             onPressEnter={(e) => handleMetadataTagAdd(e.target.value)}
@@ -150,8 +170,8 @@ export default function ProjectCreation() {
                         ))
                         }
                     </Flex>
-
-                    <Button style={{ marginTop: "5%", padding: "3%" }} type="primary" htmlType="button" color="cyan" variant="solid" >
+                    {contextHolder}
+                    <Button onClick={handleAddProjectButton} style={{ marginTop: "10px", padding: "3%" }} type="primary" htmlType="button" color="cyan" variant="solid" >
                         Add Project
                     </Button>
                 </Box>
