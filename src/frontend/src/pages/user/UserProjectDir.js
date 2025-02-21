@@ -159,7 +159,7 @@ export default function UserProjectDir() {
                       style={{ height: '80px', objectFit: 'cover' }}
                     />
                   }
-                  onClick={() => alert(`Redirecting to ${project.title}`)}
+                  onClick={() => navigate(`/project-overview/${index}`, { state: { project } })}
                   style={{
                     borderRadius: '10px',
                     overflow: 'hidden',

@@ -6,6 +6,7 @@ import AdminUserManage from './pages/admin/AdminUserManage';
 import UserDashboard from './pages/user/UserDashboard';
 import UserUpload from './pages/user/UserUpload';
 import ProjectDirectory from './pages/user/UserProjectDir';
+import ProjectOverview from './pages/user/UserProjectOverview';
 import ProjectCreation from './pages/admin/AdminProjectCreation';
 import AdminProjectSecurity from './pages/admin/AdminProjectSecurity';
 import ActivityLog from './pages/user/UserActivityLog';
@@ -35,13 +36,15 @@ function App() {
               <Route path="/user/projectDirectory" element={<ProjectDirectory />} />
               <Route path="*" element={<Navigate to="/user/projectDirectory" />} />
 
+              <Route path="/project-overview/:id" element={<ProjectOverview />} />
+
               <Route path="/user/uploadFiles" element={<UserUpload />} />
               <Route path="*" element={<Navigate to="/user/uploadFiles" />} />
 
               <Route path="/user/activityLog" element={<ActivityLog />} />
               <Route path="*" element={<Navigate to="/user/activityLog" />} />
 
-
+                
               {/* admin */}
               <Route path="/admin/projectCreation" element={<ProjectCreation />} />
               <Route path="*" element={<Navigate to="/admin/projectCreation" />} />
@@ -54,8 +57,6 @@ function App() {
 
               <Route path="/admin/projectSecurity" element={<AdminProjectSecurity />} />
               <Route path="*" element={<Navigate to="/admin/projectSecurity" />} />
-
-              
             </Routes>
           </Box>
         </Box>
