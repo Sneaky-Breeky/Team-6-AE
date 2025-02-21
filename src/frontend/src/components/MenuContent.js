@@ -13,57 +13,42 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
 import { isAdmin } from '../utils/auth';
 
-// assumption that this is only for users and not admin
-var mainListItems = [
-  { text: 'Dashboard', icon: <HomeRoundedIcon /> },
-  { text: 'Project Directory', icon: <BackupTableIcon /> },
-  { text: 'Upload Files', icon: <CloudUploadIcon /> },
-  { text: 'Activity Log', icon: <AssignmentRoundedIcon /> },
+
+var userPages = [
+  { text: 'Dashboard', url: 'dashboard', icon: <HomeRoundedIcon /> },
+  { text: 'Project Directory', url: 'projectDirectory', icon: <BackupTableIcon /> },
+  { text: 'Upload Files', url: 'uploadFiles', icon: <CloudUploadIcon /> },
+  { text: 'Activity Log', url: 'activityLog', icon: <AssignmentRoundedIcon /> },
 ];
+
+var adminPages = [
+  { text: 'Dashboard', url: 'dashboard', icon: <HomeRoundedIcon /> },
+  { text: 'Project Creation', url: 'projectCreation', icon: <CreateNewFolderIcon /> },
+  { text: 'User Management', url: 'userManagement', icon: <CloudUploadIcon /> },
+  { text: 'Metadata Management', url: 'metadataManagement', icon: <AssignmentRoundedIcon /> },
+  { text: 'Project Security', url: 'projectSecurity', icon: <AssignmentRoundedIcon /> },
+];
+
 
 const secondaryListItems = [
   { text: 'Logout', icon: <PeopleRoundedIcon /> }
 ];
 
 // TODO: put this in utils?
-function GetDirectoryPrefix(isAdmin) {
-  const ret = isAdmin ? '/admin/' : '/user/';
-  return ret;
-}
+const GetDirectoryPrefix = (isAdmin) => (isAdmin ? '/admin/' : '/user/');
 
-if (isAdmin()) {
-  mainListItems.push(
-    { text: 'Project Creation', icon: <CreateNewFolderIcon /> })
-}
 
 export default function MenuContent() {
+  const menuItems = isAdmin() ? adminPages : userPages;
   return (
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
       <List dense>
-        {mainListItems.map((item, index) => (
+        {menuItems.map((item, index) => (
           <ListItem key={index} disablePadding sx={{ display: 'block' }}>
             <ListItemButton selected={index === parseInt(sessionStorage.getItem('menu'))}
               onClick={() => {
                 sessionStorage.setItem('menu', index);
-                switch (parseInt(sessionStorage.getItem('menu'))) {
-                  case 0:
-                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'dashboard';
-                    break;
-                  case 1:
-                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'projectDirectory';
-                    break;
-                  case 2:
-                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'uploadFiles';
-                    break;
-                  case 3:
-                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'activityLog';
-                    break;
-                  case 4:
-                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'createProjectDirectory';
-                    break;
-                  default:
-                    window.location.href = GetDirectoryPrefix(isAdmin()) + 'dashboard';
-                }
+                window.location.href = GetDirectoryPrefix(isAdmin()) + item.url;
               }}
             >
               <ListItemIcon sx={{ color: 'white' }} >{item.icon}</ListItemIcon>

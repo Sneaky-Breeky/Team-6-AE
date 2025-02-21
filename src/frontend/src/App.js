@@ -6,11 +6,12 @@ import AdminUserManage from './pages/admin/AdminUserManage';
 import UserDashboard from './pages/user/UserDashboard';
 import UserUpload from './pages/user/UserUpload';
 import ProjectDirectory from './pages/user/UserProjectDir';
-import CreateProjectDirectory from './pages/admin/AdminCreateProjectDir';
+import ProjectCreation from './pages/admin/AdminProjectCreation';
+import AdminProjectSecurity from './pages/admin/AdminProjectSecurity';
 import ActivityLog from './pages/user/UserActivityLog';
 import { isAdmin, isLoggedIn } from './utils/auth';
-import SideMenu from './components/SideMenu'; 
-import AppNavbar from './components/AppNavbar'; 
+import SideMenu from './components/SideMenu';
+import AppNavbar from './components/AppNavbar';
 import Box from '@mui/material/Box';
 
 function App() {
@@ -23,13 +24,14 @@ function App() {
             <AppNavbar />
             <Routes>
               {isAdmin() ? (
-                  <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
               ) : (
-                  <Route path="/user/dashboard" element={<UserDashboard />} />
+                <Route path="/user/dashboard" element={<UserDashboard />} />
               )}
               <Route path="/" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
               <Route path="*" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
-              
+
+              {/* user */}
               <Route path="/user/projectDirectory" element={<ProjectDirectory />} />
               <Route path="*" element={<Navigate to="/user/projectDirectory" />} />
 
@@ -39,14 +41,21 @@ function App() {
               <Route path="/user/activityLog" element={<ActivityLog />} />
               <Route path="*" element={<Navigate to="/user/activityLog" />} />
 
-              <Route path="/admin/createProjectDirectory" element={<CreateProjectDirectory />} />
-              <Route path="*" element={<Navigate to="/admin/createProjectDirectory" />} />
+
+              {/* admin */}
+              <Route path="/admin/projectCreation" element={<ProjectCreation />} />
+              <Route path="*" element={<Navigate to="/admin/projectCreation" />} />
+
+              <Route path="/admin/userManagement" element={<AdminUserManage />} />
+              <Route path="*" element={<Navigate to="/admin/userManagement" />} />
 
               <Route path="/admin/metadataManagement" element={<AdminMetadataManage />} />
               <Route path="*" element={<Navigate to="/admin/metadataManagement" />} />
 
-              <Route path="/admin/userManagement" element={<AdminUserManage />} />
-              <Route path="*" element={<Navigate to="/admin/userManagement" />} />
+              <Route path="/admin/projectSecurity" element={<AdminProjectSecurity />} />
+              <Route path="*" element={<Navigate to="/admin/projectSecurity" />} />
+
+              
             </Routes>
           </Box>
         </Box>

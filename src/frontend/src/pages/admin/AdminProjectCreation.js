@@ -8,7 +8,7 @@ const tagStyle = {
     backgroundColor: '#dbdbdb'
 };
 
-export default function CreateProjectDirectory() {
+export default function ProjectCreation() {
     const [projectName, setProjectName] = useState(null);
     const [description, setDescription] = useState(null);
     const [location, setLocation] = useState(null);
