@@ -11,6 +11,9 @@ import BackupTableIcon from '@mui/icons-material/BackupTable';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
 import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import SecurityIcon from '@mui/icons-material/Security';
 import { isAdmin } from '../utils/auth';
 
 
@@ -24,9 +27,9 @@ var userPages = [
 var adminPages = [
   { text: 'Dashboard', url: 'dashboard', icon: <HomeRoundedIcon /> },
   { text: 'Project Creation', url: 'projectCreation', icon: <CreateNewFolderIcon /> },
-  { text: 'User Management', url: 'userManagement', icon: <CloudUploadIcon /> },
-  { text: 'Metadata Management', url: 'metadataManagement', icon: <AssignmentRoundedIcon /> },
-  { text: 'Project Security', url: 'projectSecurity', icon: <AssignmentRoundedIcon /> },
+  { text: 'User Management', url: 'userManagement', icon: <ManageAccountsIcon /> },
+  { text: 'Metadata Management', url: 'metadataManagement', icon: <PostAddIcon /> },
+  { text: 'Project Security', url: 'projectSecurity', icon: <SecurityIcon /> },
 ];
 
 
