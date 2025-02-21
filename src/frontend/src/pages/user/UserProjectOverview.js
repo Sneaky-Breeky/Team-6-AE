@@ -210,8 +210,6 @@ export default function UserProjectOverview() {
 
 
 
-
-
             {/* Main content */}
             <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
                 {/* Edit button */}
@@ -223,40 +221,25 @@ export default function UserProjectOverview() {
 
                 {/* Image gallery*/}
                 <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
-                    <Image.PreviewGroup
-                        preview={{
-                            toolbarRender: (_, { transform: { scale }, actions }) => (
-                                <Space size={12} className="toolbar-wrapper">
-                                    <LeftOutlined onClick={() => actions.onActive?.(-1)} />
-                                    <RightOutlined onClick={() => actions.onActive?.(1)} />
-                                    <DownloadOutlined onClick={onDownload} />
-                                    <SwapOutlined rotate={90} onClick={actions.onFlipY} />
-                                    <SwapOutlined onClick={actions.onFlipX} />
-                                    <RotateLeftOutlined onClick={actions.onRotateLeft} />
-                                    <RotateRightOutlined onClick={actions.onRotateRight} />
-                                    <ZoomOutOutlined disabled={scale === 1} onClick={actions.onZoomOut} />
-                                    <ZoomInOutlined disabled={scale === 50} onClick={actions.onZoomIn} />
-                                    <UndoOutlined onClick={actions.onReset} />
-                                </Space>
-                            ),
-                            onChange: (index) => setCurrent(index),
-                        }}
-                    >
-                        <Space wrap size={16}>
+                    {isEditMode ? (
+                        <Space wrap size={16} style={{ justifyContent: 'center' }}>
                             {imageList.map((image) => (
-                                <div key={image} style={{ position: 'relative', cursor: isEditMode ? 'pointer' : 'default' }}>
+                                <div
+                                    key={image}
+                                    style={{ position: 'relative', cursor: 'pointer' }}
+                                    onClick={() => toggleSelectImage(image)}
+                                >
                                     <Image
                                         src={image}
                                         width={200}
-                                        onClick={() => toggleSelectImage(image)}
+                                        preview={false}
                                         style={{
                                             border: selectedImages.has(image) ? '4px solid red' : 'none',
                                             borderRadius: '8px',
                                             transition: '0.2s ease-in-out',
                                         }}
                                     />
-                                    {/* Delete icon when image is selected */}
-                                    {isEditMode && selectedImages.has(image) && (
+                                    {selectedImages.has(image) && (
                                         <DeleteOutlined
                                             style={{
                                                 position: 'absolute',
@@ -274,8 +257,40 @@ export default function UserProjectOverview() {
                                 </div>
                             ))}
                         </Space>
-                    </Image.PreviewGroup>
+                    ) : (
+                        <Image.PreviewGroup
+                            preview={{
+                                toolbarRender: (_, { transform: { scale }, actions }) => (
+                                    <Space size={12} className="toolbar-wrapper">
+                                        <LeftOutlined onClick={() => actions.onActive?.(-1)} />
+                                        <RightOutlined onClick={() => actions.onActive?.(1)} />
+                                        <DownloadOutlined onClick={onDownload} />
+                                        <SwapOutlined rotate={90} onClick={actions.onFlipY} />
+                                        <SwapOutlined onClick={actions.onFlipX} />
+                                        <RotateLeftOutlined onClick={actions.onRotateLeft} />
+                                        <RotateRightOutlined onClick={actions.onRotateRight} />
+                                        <ZoomOutOutlined disabled={scale === 1} onClick={actions.onZoomOut} />
+                                        <ZoomInOutlined disabled={scale === 50} onClick={actions.onZoomIn} />
+                                        <UndoOutlined onClick={actions.onReset} />
+                                    </Space>
+                                ),
+                                onChange: (index) => setCurrent(index),
+                            }}
+                        >
+                            <Space wrap size={16} style={{ justifyContent: 'center' }}>
+
+                                {imageList.map((image) => (
+                                    <Image
+                                        key={image}
+                                        src={image}
+                                        width={200}
+                                    />
+                                ))}
+                            </Space>
+                        </Image.PreviewGroup>
+                    )}
                 </Box>
+
 
                 {/* Delete button */}
                 {isEditMode && selectedImages.size > 0 && (
