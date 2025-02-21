@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Input, Button, DatePicker, Form, Typography, Card, Row, Col, } from 'antd';
-import { SearchOutlined, CalendarOutlined } from '@ant-design/icons';
+import { SearchOutlined, CalendarOutlined, PlusOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 const { RangePicker } = DatePicker;
@@ -112,7 +112,7 @@ export default function UserDashboard() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
+            justifyContent: 'space-evenly',
             alignItems: 'center',
             gap: 2,
             width: '20%',
@@ -120,20 +120,46 @@ export default function UserDashboard() {
             padding: 2,
           }}
         >
-          <Button variant="solid" style={{ background: "#E0E0E0", borderColor: "9E9E9E"}}
-           onClick={() => {
+
+          <Box
+          onClick={() => {
             sessionStorage.setItem('menu', 2);
             window.location.href = '/user/uploadFiles';
-            }}>
-            Upload Images/Videos
-          </Button>
-          <Button variant="solid" style={{ background: "#E0E0E0", borderColor: "9E9E9E"}}
+          }}
+          sx={{
+            textAlign: 'center',
+            width: 200,
+            height: 160,
+            backgroundColor: 'grey.300',
+            border: 1,
+            borderColor: 'grey.500',
+            borderRadius: '16px',
+            '&:hover': { boxShadow: 3},
+            }}
+          >
+            <PlusOutlined style={{ marginTop: '30px', fontSize: '50px'}}/>
+            <h4>Upload Images/Videos</h4>
+          </Box>
+
+          <Box
           onClick={() => {
-            sessionStorage.setItem('menu', 3);
+            sessionStorage.setItem('menu', 2);
             window.location.href = '/user/activityLog';
-            }}>
-            Activity Log
-          </Button>
+          }}
+          sx={{
+            textAlign: 'center',
+            width: 200,
+            height: 160,
+            backgroundColor: 'grey.300',
+            border: 1,
+            borderColor: 'grey.500',
+            borderRadius: '16px',
+            '&:hover': { boxShadow: 3},
+            }}
+          >
+            <UnorderedListOutlined style={{ marginTop: '30px', fontSize: '50px'}}/>
+            <h4>Activity Log</h4>
+          </Box>
         </Box>
 
 
