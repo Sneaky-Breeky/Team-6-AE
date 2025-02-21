@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import AdminMetadataManage from './pages/admin/AdminMetadataManage';
 import AdminUserManage from './pages/admin/AdminUserManage';
+import AdminMetadataManage from './pages/admin/AdminMetadataManage';
 import UserDashboard from './pages/user/UserDashboard';
 import UserUpload from './pages/user/UserUpload';
 import ProjectDirectory from './pages/user/UserProjectDir';
