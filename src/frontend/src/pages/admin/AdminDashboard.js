@@ -6,10 +6,10 @@ import { PlusOutlined, UserOutlined, SettingOutlined, LockOutlined } from '@ant-
 const { Title } = Typography;
 
 const pages = [
-  {title: 'Create Project Directories', icon: PlusOutlined, url: '/admin/projectDirectory' },
-  {title: 'User Management', icon: UserOutlined, url: '/admin/userManagement' },
-  {title: 'Metadata Management', icon: SettingOutlined, url: '/admin/metadataManagement' },
-  {title: 'Assign Project Security', icon: LockOutlined, url: '/admin/projectSecurity' }
+  {title: 'Create Project Directories', icon: PlusOutlined, url: '/admin/projectCreation', menu: 1 },
+  {title: 'User Management', icon: UserOutlined, url: '/admin/userManagement', menu: 2 },
+  {title: 'Metadata Management', icon: SettingOutlined, url: '/admin/metadataManagement', menu: 3 },
+  {title: 'Assign Project Security', icon: LockOutlined, url: '/admin/projectSecurity', menu: 4 }
 ]
 
 export default function AdminDashboard() {
@@ -49,7 +49,10 @@ export default function AdminDashboard() {
         {pages.map((page) => (
           <Col span={12} align="center">
           <Box
-          onClick={() => alert(`Redirecting to "${page.url}"`)}
+          onClick={() => {
+            sessionStorage.setItem('menu', page.menu);
+            window.location.href = page.url;
+          }}
           sx={{
             textAlign: 'center',
             width: 250,
