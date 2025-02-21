@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Input, Button, DatePicker, Form, Typography, Card, Row, Col, Select, Space, Image } from 'antd';
+import { Input, Button, DatePicker, Form, Typography, Card, Row, Col, Select, Space, Image, Popconfirm } from 'antd';
 import {
     SearchOutlined,
     CalendarOutlined,
@@ -13,7 +13,9 @@ import {
     UndoOutlined,
     ZoomInOutlined,
     ZoomOutOutlined,
-    DeleteOutlined
+    DeleteOutlined,
+    EditOutlined,
+    QuestionCircleOutlined
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -213,10 +215,29 @@ export default function UserProjectOverview() {
             {/* Main content */}
             <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
                 {/* Edit button */}
-                <Box sx={{ textAlign: 'center', padding: 4 }}>
-                    <Button type="primary" onClick={toggleEditMode} danger={isEditMode} style={{ marginTop: '10px' }}>
-                        {isEditMode ? "Cancel Edit Mode" : "Edit Images"}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', padding: 2, paddingLeft: '60px', gap: '10px' }}>
+                    <Button
+                        onClick={toggleEditMode}
+                        danger={isEditMode}
+                        icon={<EditOutlined />}
+                    >
+                        {isEditMode ? "Cancel Edit Mode" : "Edit Gallery"}
                     </Button>
+                    {/* Delete button */}
+                    {isEditMode && selectedImages.size > 0 && (
+                        <Popconfirm
+                        title="Delete Images"
+                        description="Are you sure you want to delete the selected images?"
+                        onConfirm={deleteSelectedImages}
+                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button type="primary" danger icon={<DeleteOutlined />}>
+                            Delete
+                        </Button>
+                    </Popconfirm>
+                    )}
                 </Box>
 
                 {/* Image gallery*/}
@@ -290,16 +311,6 @@ export default function UserProjectOverview() {
                         </Image.PreviewGroup>
                     )}
                 </Box>
-
-
-                {/* Delete button */}
-                {isEditMode && selectedImages.size > 0 && (
-                    <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                        <Button type="primary" danger onClick={deleteSelectedImages}>
-                            Delete Selected Images
-                        </Button>
-                    </Box>
-                )}
             </Box>
         </Box>
     );
