@@ -120,10 +120,18 @@ export default function UserDashboard() {
             padding: 2,
           }}
         >
-          <Button color="cyan" variant="solid">
+          <Button variant="solid" style={{ background: "#E0E0E0", borderColor: "9E9E9E"}}
+           onClick={() => {
+            sessionStorage.setItem('menu', 2);
+            window.location.href = '/user/uploadFiles';
+            }}>
             Upload Images/Videos
           </Button>
-          <Button color="cyan" variant="solid">
+          <Button variant="solid" style={{ background: "#E0E0E0", borderColor: "9E9E9E"}}
+          onClick={() => {
+            sessionStorage.setItem('menu', 3);
+            window.location.href = '/user/activityLog';
+            }}>
             Activity Log
           </Button>
         </Box>
