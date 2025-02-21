@@ -21,3 +21,14 @@ We will use C# for backend. Here is several usefull command:
 
     ## Frontend
 
+`npm install`
+
+`npm start`
+
+To login as user:
+user@gmail.com
+password
+
+To login as admin:
+admin@gmail.com
+password
