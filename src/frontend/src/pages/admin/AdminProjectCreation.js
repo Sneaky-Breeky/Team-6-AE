@@ -9,14 +9,12 @@ const tagStyle = {
 };
 
 export default function ProjectCreation() {
-    const [projectName, setProjectName] = useState(null);
-    const [description, setDescription] = useState(null);
-    const [location, setLocation] = useState(null);
     const [defaultMetadataFieldsField, setDefaultMetadataFieldsField] = useState();
     const [defaultMetadataFields, setDefaultMetadataFields] = useState([]);
     const [defaultMetadataTagInput, setDefaultMetadataTagInput] = useState();
     const [defaultMetadataTags, setDefaultMetadataTags] = useState([]);
     const [messageApi, contextHolder] = message.useMessage();
+    const [form] = Form.useForm();
 
     const handleMetadataTagClose = (removedTag) => {
         const newTags = defaultMetadataTags.filter((tag) => tag !== removedTag);
@@ -44,20 +42,28 @@ export default function ProjectCreation() {
 
     const success = () => {
         messageApi.open({
-          type: 'success',
-          content: 'Project Added',
+            type: 'success',
+            content: 'Project Added',
         });
-      };
+    };
 
-    const handleAddProjectButton = () => {
+    const handleAddProjectButton = (values) => {
+        // send project info to backend here
+        console.log("Submitting data:", values);
+
+        const projectData = {
+            ...values, // projectName, description, location
+            metadataFields: defaultMetadataFields,
+            metadataTags: defaultMetadataTags,
+        };
+
+        console.log("Final Project Data:", projectData);
         success();
-        // create new project w current input data, connect w backend here
+
+        form.resetFields();
         setDefaultMetadataFields([]);
         setDefaultMetadataTags([]);
-        setProjectName(null);
-        setDescription(null);
-        setLocation(null);
-    }
+    };
 
     return (
         <Box
@@ -101,79 +107,102 @@ export default function ProjectCreation() {
                         overflow: 'hidden',
                     }}
                 >
-                    <Title level={5} style={{ marginTop: '10px' }}>Project name:</Title>
-                    <Form.Item style={{ marginBottom: '0px' }}>
-                        <Input
-                            value={projectName}
-                            onChange={(e) => setProjectName(e.target.value)}
-                        />
-                    </Form.Item>
+                    <Form
+                        form={form}
+                        name="project_creation"
+                        layout="vertical"
+                        autoComplete="off"
+                        onFinish={handleAddProjectButton}
+                    >
+                        <Title level={5} style={{ marginTop: '10px' }}>
+                            Project Name <span style={{ color: 'red' }}>*</span>
+                        </Title>
+                        <Form.Item
+                            name="projectName"
+                            rules={[{ required: true, message: "Please enter a project name" }]}
+                        >
+                            <Input placeholder="Enter project name" />
+                        </Form.Item>
 
-                    <Title level={5} style={{ marginTop: '10px' }}>Description:</Title>
-                    <Form.Item style={{ marginBottom: '0px' }}>
-                        <Input
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </Form.Item>
+                        <Title level={5} style={{ marginTop: '10px' }}>
+                            Description <span style={{ color: 'red' }}>*</span>
+                        </Title>
+                        <Form.Item
+                            name="description"
+                            rules={[{ required: true, message: "Please enter a description" }]}
+                        >
+                            <Input placeholder="Enter description" />
+                        </Form.Item>
 
-                    <Title level={5} style={{ marginTop: '10px' }}>Location:</Title>
-                    <Form.Item style={{ marginBottom: '0px' }}>
-                        <Input
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
-                        />
-                    </Form.Item>
+                        <Title level={5} style={{ marginTop: '10px' }}>Location</Title>
+                        <Form.Item name="location">
+                            <Input placeholder="Enter location" />
+                        </Form.Item>
 
-                    <Title level={5} style={{ marginTop: '10px' }}>Default Metadata Fields:</Title>
-                    <Form.Item>
-                        <Input
-                            placeholder="ex. Date"
-                            value={defaultMetadataFieldsField}
-                            onChange={(e) => setDefaultMetadataFieldsField(e.target.value)}
-                            onPressEnter={(e) => handleMetadataFieldAdd(e.target.value)}
-                        />
-                    </Form.Item>
-                    <Flex gap="4px 0" wrap>
-                        {defaultMetadataFields.map((tag) => (
-                            <Tag
-                                style={tagStyle}
-                                key={tag}
-                                closable={true}
-                                onClose={() => handleMetadataFieldClose(tag)}
+                        <Title level={5} style={{ marginTop: '10px' }}>Default Metadata Fields:</Title>
+                        <Form.Item>
+                            <Input
+                                placeholder="ex. Date"
+                                value={defaultMetadataFieldsField}
+                                onChange={(e) => setDefaultMetadataFieldsField(e.target.value)}
+                                onPressEnter={(e) => handleMetadataFieldAdd(e.target.value)}
+                            />
+                        </Form.Item>
+                        <Flex gap="4px 0" wrap>
+                            {defaultMetadataFields.map((tag) => (
+                                <Tag
+                                    style={tagStyle}
+                                    key={tag}
+                                    closable={true}
+                                    onClose={() => handleMetadataFieldClose(tag)}
+                                >
+                                    {tag}
+                                </Tag>
+                            ))
+                            }
+                        </Flex>
+
+                        <Title level={5} style={{ marginTop: '10px' }}>Default Metadata Tags:</Title>
+                        <Form.Item>
+                            <Input
+                                placeholder="ex. bridge"
+                                value={defaultMetadataTagInput}
+                                onChange={(e) => setDefaultMetadataTagInput(e.target.value)}
+                                onPressEnter={(e) => handleMetadataTagAdd(e.target.value)}
+                            />
+                        </Form.Item>
+                        <Flex gap="4px 0" wrap>
+                            {defaultMetadataTags.map((tag) => (
+                                <Tag
+                                    style={tagStyle}
+                                    key={tag}
+                                    closable={true}
+                                    onClose={() => handleMetadataTagClose(tag)}
+                                >
+                                    {tag}
+                                </Tag>
+                            ))
+                            }
+                        </Flex>
+                        {contextHolder}
+
+                        <div style={{ textAlign: "center", marginTop: "10px" }}>
+                            <Button
+                                htmlType="submit"
+                                style={{
+                                    marginTop: "10px",
+                                    padding: "10px 20px",
+                                    backgroundColor: "#00bcd4",
+                                    borderColor: "#00bcd4",
+                                    color: "white",
+                                    fontWeight: "bold",
+                                }}
+                                type="primary"
                             >
-                                {tag}
-                            </Tag>
-                        ))
-                        }
-                    </Flex>
-
-                    <Title level={5} style={{ marginTop: '10px' }}>Default Metadata Tags:</Title>
-                    <Form.Item>
-                        <Input
-                            placeholder="ex. bridge"
-                            value={defaultMetadataTagInput}
-                            onChange={(e) => setDefaultMetadataTagInput(e.target.value)}
-                            onPressEnter={(e) => handleMetadataTagAdd(e.target.value)}
-                        />
-                    </Form.Item>
-                    <Flex gap="4px 0" wrap>
-                        {defaultMetadataTags.map((tag) => (
-                            <Tag
-                                style={tagStyle}
-                                key={tag}
-                                closable={true}
-                                onClose={() => handleMetadataTagClose(tag)}
-                            >
-                                {tag}
-                            </Tag>
-                        ))
-                        }
-                    </Flex>
-                    {contextHolder}
-                    <Button onClick={handleAddProjectButton} style={{ marginTop: "10px", padding: "3%" }} type="primary" htmlType="button" color="cyan" variant="solid" >
-                        Add Project
-                    </Button>
+                                Add Project
+                            </Button>
+                        </div>
+                    </Form>
                 </Box>
             </Box>
         </Box>
