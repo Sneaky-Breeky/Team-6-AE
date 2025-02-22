@@ -23,6 +23,8 @@ const { RangePicker } = DatePicker;
 const { Title } = Typography;
 const { Meta } = Card;
 
+// when connecting backend, each image should have its own id, so then instead we can use
+// the image.id instead of index to map the images and select/delete them.
 const initialImageList = [
     '/images/bridge.webp',
     '/images/highrise.jpg',
@@ -83,20 +85,20 @@ export default function UserProjectOverview() {
         setSelectedImages(new Set());
     };
 
-    const toggleSelectImage = (image) => {
+    const toggleSelectImage = (index) => {
         if (!isEditMode) return;
 
         const updatedSelection = new Set(selectedImages);
-        if (updatedSelection.has(image)) {
-            updatedSelection.delete(image);
+        if (updatedSelection.has(index)) {
+            updatedSelection.delete(index);
         } else {
-            updatedSelection.add(image);
+            updatedSelection.add(index);
         }
         setSelectedImages(updatedSelection);
     };
 
     const deleteSelectedImages = () => {
-        setImageList(imageList.filter((img) => !selectedImages.has(img)));
+        setImageList(imageList.filter((_, index) => !selectedImages.has(index)));
         setSelectedImages(new Set());
         setIsEditMode(false);
     };
@@ -226,17 +228,17 @@ export default function UserProjectOverview() {
                     {/* Delete button */}
                     {isEditMode && selectedImages.size > 0 && (
                         <Popconfirm
-                        title="Delete Images"
-                        description="Are you sure you want to delete the selected images?"
-                        onConfirm={deleteSelectedImages}
-                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
-                        okText="Yes"
-                        cancelText="No"
-                    >
-                        <Button type="primary" danger icon={<DeleteOutlined />}>
-                            Delete
-                        </Button>
-                    </Popconfirm>
+                            title="Delete Images"
+                            description="Are you sure you want to delete the selected images?"
+                            onConfirm={deleteSelectedImages}
+                            icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button type="primary" danger icon={<DeleteOutlined />}>
+                                Delete
+                            </Button>
+                        </Popconfirm>
                     )}
                 </Box>
 
@@ -244,23 +246,23 @@ export default function UserProjectOverview() {
                 <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
                     {isEditMode ? (
                         <Space wrap size={16} style={{ justifyContent: 'center' }}>
-                            {imageList.map((image) => (
+                            {imageList.map((image, index) => (
                                 <div
-                                    key={image}
+                                    key={index}
                                     style={{ position: 'relative', cursor: 'pointer' }}
-                                    onClick={() => toggleSelectImage(image)}
+                                    onClick={() => toggleSelectImage(index)}
                                 >
                                     <Image
                                         src={image}
                                         width={200}
                                         preview={false}
                                         style={{
-                                            border: selectedImages.has(image) ? '4px solid red' : 'none',
+                                            border: selectedImages.has(index) ? '4px solid red' : 'none',
                                             borderRadius: '8px',
                                             transition: '0.2s ease-in-out',
                                         }}
                                     />
-                                    {selectedImages.has(image) && (
+                                    {selectedImages.has(index) && (
                                         <DeleteOutlined
                                             style={{
                                                 position: 'absolute',
@@ -277,6 +279,7 @@ export default function UserProjectOverview() {
                                     )}
                                 </div>
                             ))}
+
                         </Space>
                     ) : (
                         <Image.PreviewGroup
