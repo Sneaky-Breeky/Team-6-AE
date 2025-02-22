@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Input, Button, DatePicker, Form, Typography, Card, Row, Col, Select, Space, Image } from 'antd';
+import { Input, Button, DatePicker, Form, Typography, Card, Row, Col, Select, Space, Image, Popconfirm } from 'antd';
 import {
     SearchOutlined,
     CalendarOutlined,
@@ -13,7 +13,9 @@ import {
     UndoOutlined,
     ZoomInOutlined,
     ZoomOutOutlined,
-    DeleteOutlined
+    DeleteOutlined,
+    EditOutlined,
+    QuestionCircleOutlined
 } from '@ant-design/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -210,53 +212,55 @@ export default function UserProjectOverview() {
 
 
 
-
-
             {/* Main content */}
             <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
                 {/* Edit button */}
-                <Box sx={{ textAlign: 'center', padding: 4 }}>
-                    <Button type="primary" onClick={toggleEditMode} danger={isEditMode} style={{ marginTop: '10px' }}>
-                        {isEditMode ? "Cancel Edit Mode" : "Edit Images"}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', padding: 2, paddingLeft: '60px', gap: '10px' }}>
+                    <Button
+                        onClick={toggleEditMode}
+                        danger={isEditMode}
+                        icon={<EditOutlined />}
+                    >
+                        {isEditMode ? "Cancel Edit Mode" : "Edit Gallery"}
                     </Button>
+                    {/* Delete button */}
+                    {isEditMode && selectedImages.size > 0 && (
+                        <Popconfirm
+                        title="Delete Images"
+                        description="Are you sure you want to delete the selected images?"
+                        onConfirm={deleteSelectedImages}
+                        icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
+                        okText="Yes"
+                        cancelText="No"
+                    >
+                        <Button type="primary" danger icon={<DeleteOutlined />}>
+                            Delete
+                        </Button>
+                    </Popconfirm>
+                    )}
                 </Box>
 
                 {/* Image gallery*/}
                 <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
-                    <Image.PreviewGroup
-                        preview={{
-                            toolbarRender: (_, { transform: { scale }, actions }) => (
-                                <Space size={12} className="toolbar-wrapper">
-                                    <LeftOutlined onClick={() => actions.onActive?.(-1)} />
-                                    <RightOutlined onClick={() => actions.onActive?.(1)} />
-                                    <DownloadOutlined onClick={onDownload} />
-                                    <SwapOutlined rotate={90} onClick={actions.onFlipY} />
-                                    <SwapOutlined onClick={actions.onFlipX} />
-                                    <RotateLeftOutlined onClick={actions.onRotateLeft} />
-                                    <RotateRightOutlined onClick={actions.onRotateRight} />
-                                    <ZoomOutOutlined disabled={scale === 1} onClick={actions.onZoomOut} />
-                                    <ZoomInOutlined disabled={scale === 50} onClick={actions.onZoomIn} />
-                                    <UndoOutlined onClick={actions.onReset} />
-                                </Space>
-                            ),
-                            onChange: (index) => setCurrent(index),
-                        }}
-                    >
-                        <Space wrap size={16}>
+                    {isEditMode ? (
+                        <Space wrap size={16} style={{ justifyContent: 'center' }}>
                             {imageList.map((image) => (
-                                <div key={image} style={{ position: 'relative', cursor: isEditMode ? 'pointer' : 'default' }}>
+                                <div
+                                    key={image}
+                                    style={{ position: 'relative', cursor: 'pointer' }}
+                                    onClick={() => toggleSelectImage(image)}
+                                >
                                     <Image
                                         src={image}
                                         width={200}
-                                        onClick={() => toggleSelectImage(image)}
+                                        preview={false}
                                         style={{
                                             border: selectedImages.has(image) ? '4px solid red' : 'none',
                                             borderRadius: '8px',
                                             transition: '0.2s ease-in-out',
                                         }}
                                     />
-                                    {/* Delete icon when image is selected */}
-                                    {isEditMode && selectedImages.has(image) && (
+                                    {selectedImages.has(image) && (
                                         <DeleteOutlined
                                             style={{
                                                 position: 'absolute',
@@ -274,17 +278,39 @@ export default function UserProjectOverview() {
                                 </div>
                             ))}
                         </Space>
-                    </Image.PreviewGroup>
-                </Box>
+                    ) : (
+                        <Image.PreviewGroup
+                            preview={{
+                                toolbarRender: (_, { transform: { scale }, actions }) => (
+                                    <Space size={12} className="toolbar-wrapper">
+                                        <LeftOutlined onClick={() => actions.onActive?.(-1)} />
+                                        <RightOutlined onClick={() => actions.onActive?.(1)} />
+                                        <DownloadOutlined onClick={onDownload} />
+                                        <SwapOutlined rotate={90} onClick={actions.onFlipY} />
+                                        <SwapOutlined onClick={actions.onFlipX} />
+                                        <RotateLeftOutlined onClick={actions.onRotateLeft} />
+                                        <RotateRightOutlined onClick={actions.onRotateRight} />
+                                        <ZoomOutOutlined disabled={scale === 1} onClick={actions.onZoomOut} />
+                                        <ZoomInOutlined disabled={scale === 50} onClick={actions.onZoomIn} />
+                                        <UndoOutlined onClick={actions.onReset} />
+                                    </Space>
+                                ),
+                                onChange: (index) => setCurrent(index),
+                            }}
+                        >
+                            <Space wrap size={16} style={{ justifyContent: 'center' }}>
 
-                {/* Delete button */}
-                {isEditMode && selectedImages.size > 0 && (
-                    <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                        <Button type="primary" danger onClick={deleteSelectedImages}>
-                            Delete Selected Images
-                        </Button>
-                    </Box>
-                )}
+                                {imageList.map((image) => (
+                                    <Image
+                                        key={image}
+                                        src={image}
+                                        width={200}
+                                    />
+                                ))}
+                            </Space>
+                        </Image.PreviewGroup>
+                    )}
+                </Box>
             </Box>
         </Box>
     );
