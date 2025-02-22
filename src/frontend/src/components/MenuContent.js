@@ -61,15 +61,23 @@ export default function MenuContent() {
         ))}
       </List>
       <List dense>
-        {secondaryListItems.map((item, index) => (
-          <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton>
-              <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} sx={{ color: 'white' }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+  {secondaryListItems.map((item, index) => (
+    <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+      <ListItemButton
+        onClick={() => {
+          if (item.text === 'Logout') {
+            sessionStorage.clear();
+            window.location.href = '/login';
+          }
+        }}
+      >
+        <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
+        <ListItemText primary={item.text} sx={{ color: 'white' }} />
+      </ListItemButton>
+    </ListItem>
+  ))}
+</List>
+
     </Stack>
   );
 }
