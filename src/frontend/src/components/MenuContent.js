@@ -1,10 +1,9 @@
-import * as React from 'react';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Stack from '@mui/material/Stack';
+import React, { useState } from 'react';
+import {
+  List, ListItem, ListItemButton, ListItemIcon, ListItemText, Stack,
+  Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
+  Button
+} from '@mui/material';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
@@ -43,7 +42,16 @@ const GetDirectoryPrefix = (isAdmin) => (isAdmin ? '/admin/' : '/user/');
 
 export default function MenuContent() {
   const menuItems = isAdmin() ? adminPages : userPages;
+  const [open, setOpen] = useState(false);
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    localStorage.removeItem('authToken');
+    window.location.href = '/login';
+  };
+
   return (
+    <>
     <Stack sx={{ flexGrow: 1, p: 1, justifyContent: 'space-between' }}>
       <List dense>
         {menuItems.map((item, index) => (
@@ -61,15 +69,34 @@ export default function MenuContent() {
         ))}
       </List>
       <List dense>
-        {secondaryListItems.map((item, index) => (
-          <ListItem key={index} disablePadding sx={{ display: 'block' }}>
-            <ListItemButton>
-              <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} sx={{ color: 'white' }} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List>
+          {secondaryListItems.map((item, index) => (
+            <ListItem key={index} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton onClick={() => setOpen(true)}>
+                <ListItemIcon sx={{ color: 'white' }}>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} sx={{ color: 'white' }} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
     </Stack>
+
+    {/* Logout confirm popup */}
+    <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Confirm Logout</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to log out?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleLogout} color="error" autoFocus>
+            Logout
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
