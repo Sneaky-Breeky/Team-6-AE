@@ -36,7 +36,7 @@ function App() {
               <Route path="/user/projectDirectory" element={<ProjectDirectory />} />
               <Route path="*" element={<Navigate to="/user/projectDirectory" />} />
 
-              <Route path="/project-overview/:id" element={<ProjectOverview />} />
+              <Route path="/projectDirectory/projectOverview/:id" element={<ProjectOverview />} />
 
               <Route path="/user/uploadFiles" element={<UserUpload />} />
               <Route path="*" element={<Navigate to="/user/uploadFiles" />} />
