@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography, Button, Popover, Radio, Form, Input, Checkbox } from 'antd';
-import { PlusOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons';
+import { SearchOutlined, EditOutlined} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -119,6 +119,7 @@ function popupForm() {
 }
 
 export default function AdminProjectSecurity() {
+  const [searchQuery, setSearchQuery] = useState('');
   const [isPopupFormOpen, setPopupFormOpen] = useState(false);
 
   return (
@@ -159,18 +160,39 @@ export default function AdminProjectSecurity() {
   <Box
     sx={{
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'left',
       width: '50%',
       margin: '20px auto',
-      backgroundColor: '#f5f5f5',
       borderRadius: '10px',
-      padding: '20px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      overflow: 'auto',
     }}
   >
+    <Input
+      placeholder="Search for a project.."
+      prefix={<SearchOutlined />}
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      style={{ width: '300px' }}
+    />
+
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'left',
+        width: '100%',
+        height: '100%',
+        margin: '20px auto',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '10px',
+        padding: '20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        overflow: 'auto',
+      }}
+    >
+
     <div style={{overflowY: 'auto', width: '100%', height: '100%'}}>
     <table style={{ width: '100%', borderCollapse: 'collapse', borderSpacing: '10px'}}>
       <tr style={{height: '50px'}}>
@@ -200,6 +222,7 @@ export default function AdminProjectSecurity() {
           ))}
   </table>
   </div>
+  </Box>
   </Box>
 
   {/* right container with new users */}
