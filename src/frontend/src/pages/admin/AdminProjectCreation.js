@@ -113,6 +113,11 @@ export default function ProjectCreation() {
                         layout="vertical"
                         autoComplete="off"
                         onFinish={handleAddProjectButton}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                            }
+                        }}
                     >
                         <Title level={5} style={{ marginTop: '10px' }}>
                             Project Name <span style={{ color: 'red' }}>*</span>
