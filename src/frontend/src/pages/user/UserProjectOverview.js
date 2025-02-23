@@ -25,19 +25,20 @@ const { Meta } = Card;
 
 // when connecting backend, each image should have its own id, so then instead we can use
 // the image.id instead of index to map the images and select/delete them.
-const initialImageList = [
-    '/images/bridge.webp',
-    '/images/highrise.jpg',
-    '/images/highway.jpg',
-    '/images/pipeline.jpg',
-    '/images/park.jpeg',
-    '/images/school.png',
-    '/images/bridge.webp',
-    '/images/highrise.jpg',
-    '/images/highway.jpg',
-    '/images/pipeline.jpg',
-    '/images/park.jpeg',
-    '/images/school.png',
+
+const files = [
+    { Id: 0, FileName: "Bridge Construction", FilePath: '/images/bridge.webp', Metadata: ["bridge", "construction"], ProjectId: 0 },
+    { Id: 1, FileName: "High-Rise Development", FilePath: '/images/highrise.jpg', Metadata: ["high-rise", "high rise", "highrise", "construction"], ProjectId: 0 },
+    { Id: 2, FileName: "Highway Expansion", FilePath: '/images/highway.jpg', Metadata: ["highway", "expansion", "road"], ProjectId: 0 },
+    { Id: 3, FileName: "Oil Pipeline Repair", FilePath: '/images/pipeline.jpg', Metadata: ["oil", "pipeline", "pipeline repair"], ProjectId: 1 },
+    { Id: 4, FileName: "Park Restoration", FilePath: '/images/park.jpeg', Metadata: ["park", "construction"], ProjectId: 1 },
+    { Id: 5, FileName: "School Construction", FilePath: '/images/school.png', Metadata: ["school", "construction"], ProjectId: 2 },
+    { Id: 6, FileName: "Bridge Construction", FilePath: '/images/bridge.webp', Metadata: ["bridge", "construction"], ProjectId: 2 },
+    { Id: 7, FileName: "High-Rise Development", FilePath: '/images/highrise.jpg', Metadata: ["high-rise", "high rise", "highrise", "construction"], ProjectId: 2 },
+    { Id: 8, FileName: "Highway Expansion", FilePath: '/images/highway.jpg', Metadata: ["highway", "expansion", "road"], ProjectId: 2 },
+    { Id: 9, FileName: "Oil Pipeline Repair", FilePath: '/images/pipeline.jpg', Metadata: ["oil", "pipeline", "pipeline repair"], ProjectId: 3 },
+    { Id: 10, FileName: "Park Restoration", FilePath: '/images/park.jpeg', Metadata: ["park", "construction"], ProjectId: 3 },
+    { Id: 11, FileName: "School Construction", FilePath: '/images/school.png', Metadata: ["school", "construction"], ProjectId: 3 }
 ];
 
 
@@ -47,7 +48,7 @@ export default function UserProjectOverview() {
     const navigate = useNavigate();
     const [current, setCurrent] = React.useState(0);
     const { state } = useLocation();
-    const [imageList, setImageList] = useState(initialImageList);
+    const [imageList, setImageList] = useState(files);
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedImages, setSelectedImages] = useState(new Set());
 
@@ -246,23 +247,23 @@ export default function UserProjectOverview() {
                 <Box sx={{ display: 'flex', justifyContent: 'center', padding: 2 }}>
                     {isEditMode ? (
                         <Space wrap size={16} style={{ justifyContent: 'center' }}>
-                            {imageList.map((image, index) => (
+                            {imageList.map((file) => (
                                 <div
-                                    key={index}
+                                    key={file.Id}
                                     style={{ position: 'relative', cursor: 'pointer' }}
-                                    onClick={() => toggleSelectImage(index)}
+                                    onClick={() => toggleSelectImage(file.Id)}
                                 >
                                     <Image
-                                        src={image}
+                                        src={file.FilePath}
                                         width={200}
                                         preview={false}
                                         style={{
-                                            border: selectedImages.has(index) ? '4px solid red' : 'none',
+                                            border: selectedImages.has(file.Id) ? '4px solid red' : 'none',
                                             borderRadius: '8px',
                                             transition: '0.2s ease-in-out',
                                         }}
                                     />
-                                    {selectedImages.has(index) && (
+                                    {selectedImages.has(file.Id) && (
                                         <DeleteOutlined
                                             style={{
                                                 position: 'absolute',
@@ -303,10 +304,10 @@ export default function UserProjectOverview() {
                         >
                             <Space wrap size={16} style={{ justifyContent: 'center' }}>
 
-                                {imageList.map((image) => (
+                                {imageList.map((file) => (
                                     <Image
-                                        key={image}
-                                        src={image}
+                                        key={file.Id}
+                                        src={file.FilePath}
                                         width={200}
                                     />
                                 ))}
