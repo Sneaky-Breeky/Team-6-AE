@@ -17,7 +17,7 @@ function popupForm() {
         justifyContent: 'flex-start',
         alignItems: 'left',
         width: '80%',
-        height: '45%',
+        height: '30%',
         margin: '20px auto',
         backgroundColor: '#f5f5f5',
         borderRadius: '10px',
@@ -36,20 +36,6 @@ function popupForm() {
         size='small'
         autoComplete="off"
       >
-
-      <Form.Item
-        label={<p style={{fontSize:'12px', margin: '0px'}}>Metadata Name</p>}
-        name="name"
-        rules={[
-          {
-            required: true,
-            message:<p style={{fontSize:'12px', margin: '0px'}}>Please select the metadat's name!</p>,
-          },
-        ]}
-        style={{ padding: "0px", marginBottom: "5px", marginTop: "0px"  }}
-      >
-        <Input/>
-      </Form.Item>
 
       <Form.Item 
         label={<p style={{fontSize:'12px', margin: '0px'}}>Active Status</p>}
@@ -143,9 +129,10 @@ export default function AdminMetadataManage() {
               // reload if status input differs from original user.status
               <Popover
               content={
-                <><Checkbox value="A">Delete</Checkbox>
-                <br />
-                <Checkbox value="B">Deactivate</Checkbox></>}
+                <Radio.Group style={{display: 'flex', flexDirection: 'column'}}>
+                  <Radio value="1">Activate</Radio>
+                  <Radio value="2">Deactivate</Radio>
+                </Radio.Group>}
                 trigger="click"
               >
               <Button color="default" variant="text" size={"default"} icon={<EditOutlined />}/>   
@@ -172,7 +159,7 @@ export default function AdminMetadataManage() {
     }}
   >
 
-    <Box
+    {/* <Box
       onClick={() => 
         {setPopupFormOpen(isPopupFormOpen ? false : true)}
       }
@@ -191,7 +178,8 @@ export default function AdminMetadataManage() {
         {isPopupFormOpen ? 
         <h5 style={{margin: '15px'}}>Close</h5>
         : <h5 style={{margin: '15px'}}>Add Metadata</h5>}
-    </Box>
+    </Box>*/}
+    
 
     {isPopupFormOpen && popupForm()}
   </Box>
