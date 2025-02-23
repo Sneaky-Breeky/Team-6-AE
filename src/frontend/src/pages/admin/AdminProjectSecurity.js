@@ -20,14 +20,6 @@ const users = [
 const metadata = ["Project Name", "Location", "Date", "Image Description", "Tags"];
 
 function PopupAccess(project) {
-  const [disabled, setDisabled] = useState(project.accessLevel === 'Admins Only');
-  const [indDisabled, setIndDisabled] = useState(project.accessLevel === 'Everyone');
-  const toggleAdminChecked = () => {
-    setDisabled(!disabled);
-  };
-  const toggleAllChecked = () => {
-    setIndDisabled(!indDisabled);
-  };
   const onChange = (e) => {
     // change access level here
     console.log(`checked = ${e.target.checked}`);
@@ -38,7 +30,7 @@ function PopupAccess(project) {
       <tr style={{height: '50px'}}>
         <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
           <Checkbox defaultChecked={project.accessLevel === 'Admins Only'}
-            onChange={toggleAdminChecked}>
+            onChange={onChange}>
               Admin Only
           </Checkbox>
           </td>
@@ -46,8 +38,7 @@ function PopupAccess(project) {
       <tr style={{height: '50px'}}>
         <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
           <Checkbox defaultChecked={project.accessLevel === 'Everyone' ? true : false} 
-          disabled={disabled} 
-          onChange={toggleAllChecked}>
+          onChange={onChange}>
             Everyone
         </Checkbox>
           </td>
@@ -56,7 +47,6 @@ function PopupAccess(project) {
         <tr style={{height: '50px'}}>
           <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
             <Checkbox defaultChecked={(project.listUsers).includes(user.name) ? true : false} 
-              disabled={disabled || indDisabled}
               onChange={onChange}>
                 {user.name}
             </Checkbox>
