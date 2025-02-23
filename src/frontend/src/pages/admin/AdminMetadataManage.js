@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Typography, Switch, Popover, Radio, Form, Input, Checkbox } from 'antd';
-import { PlusOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons';
+import { Typography, Switch, Input } from 'antd';
+import { SearchOutlined} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -55,6 +55,7 @@ function popupForm(projName) {
 }
 
 export default function AdminMetadataManage() {
+  const [searchQuery, setSearchQuery] = useState('');
   const [isPopupFormOpen, setPopupFormOpen] = useState(false);
   const [projectName, setProjectName] = useState(null);
 
@@ -75,7 +76,7 @@ export default function AdminMetadataManage() {
       >
         <Title level={1}>Metadata Management</Title>
       </Box>
-        
+       
 <Box
   sx={{
     display: 'flex',
@@ -85,6 +86,7 @@ export default function AdminMetadataManage() {
     height: '100vh',
     width: '80%',
     margin: '20px auto',
+    marginTop: '0',
     borderRadius: '10px',
     padding: '20px',
     overflow: 'auto',
@@ -95,23 +97,45 @@ export default function AdminMetadataManage() {
   <Box
     sx={{
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'left',
       width: '50%',
-      backgroundColor: '#f5f5f5',
+      margin: '20px auto',
       borderRadius: '10px',
-      padding: '20px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      overflow: 'auto',
     }}
   >
+    <Input
+      placeholder="Search for a project.."
+      prefix={<SearchOutlined />}
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      style={{ width: '300px' }}
+    />
+
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'left',
+        width: '100%',
+        height: '100%',
+        margin: '20px auto',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '10px',
+        padding: '20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        overflow: 'auto',
+      }}
+    >
+
     <div style={{overflowY: 'auto', width: '100%', height: '100%'}}>
     <table style={{width: '100%', borderCollapse: 'collapse'}}>
         <tr>
             <th colspan="2" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} ><h3>Projects</h3></th>
         </tr>
-        {projects.map((project) => (
+        {(projects.filter(p => {return p.toLowerCase().includes(searchQuery.toLowerCase())})).map((project) => (
           <tr onClick={() => {setPopupFormOpen(isPopupFormOpen ? false : true);
             setProjectName(project)
           }} style={{height: '50px'}}
@@ -123,6 +147,7 @@ export default function AdminMetadataManage() {
     </table>
     </div>
 
+  </Box>
   </Box>
 
   {/* right container to add metadata*/}
