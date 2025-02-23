@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Typography, Button, Popover, Radio, Form, Input, Checkbox } from 'antd';
-import { PlusOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons';
+import { Typography, Switch, Input } from 'antd';
+import { SearchOutlined} from '@ant-design/icons';
 
 const { Title } = Typography;
 
+const projects = ["School Construction", "Bridge Construction", "High-rise Development", "Highway Expansion", "Oil Pipeline Repair", "Park Restoration"];
+
 const metadata = ["Project Name", "Location", "Date", "Image Description", "Tags"];
 
-function popupForm() {
+function popupForm(projName) {
+  const onChange = (checked) => {
+    console.log(`switch to ${checked}`);
+  };
 
   return (
     <Box
@@ -17,8 +22,7 @@ function popupForm() {
         justifyContent: 'flex-start',
         alignItems: 'left',
         width: '80%',
-        height: '30%',
-        margin: '20px auto',
+        height: '85%',
         backgroundColor: '#f5f5f5',
         borderRadius: '10px',
         padding: '20px',
@@ -27,47 +31,33 @@ function popupForm() {
         overflow: 'auto'
       }}
     >
-      <Form
-        name="basic"
-        layout="vertical"
-        initialValues={{
-          remember: true,
-        }}
-        size='small'
-        autoComplete="off"
-      >
 
-      <Form.Item 
-        label={<p style={{fontSize:'12px', margin: '0px'}}>Active Status</p>}
-        name="status"
-        rules={[
-          {
-            required: true,
-            message:<p style={{fontSize:'12px', margin: '0px'}}>Please select a status!</p>,
-          },
-        ]}
-        style={{ marginBottom: "10px" }}
-      >
-        <Radio.Group style={{ marginTop: "0px" }}>
-          <Radio value="active"> <p style={{fontSize:'12px', margin: '0px'}}>Active</p> </Radio>
-          <Radio value="inactive"> <p style={{fontSize:'12px', margin: '0px'}}>Inactive</p> </Radio>
-        </Radio.Group>
-      </Form.Item>
-
-      <Form.Item 
-        label={null}
-        style={{ marginBottom: "5px" }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item >
-    </Form>
+    <div style={{overflowY: 'auto', width: '100%', height: '100%'}}>
+      <table style={{width: '100%', borderCollapse: 'collapse'}}>
+          <tr style={{paddingTop: '0'}}>
+              <th colspan="2" style={{height: '40px', textAlign: 'center', padding: '0px'}} ><h3 style={{ margin:'0'}}>Current Metadata</h3></th>
+          </tr>
+          <tr style={{paddingTop: '0'}}>
+              <th colspan="2" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} ><h5 style={{ margin:'0'}}>{projName}</h5></th>
+          </tr>
+          {metadata.map((md) => (
+            <tr style={{height: '50px'}}>
+              <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >{md}</td>
+              <td style={{ fontSize: '12px', textAlign: 'right', borderBottom:'1px solid black'}} >
+              <Switch onChange={onChange} />
+              </td>
+            </tr>
+          ))}
+      </table>
+    </div>
   </Box>
   );
 }
 
 export default function AdminMetadataManage() {
+  const [searchQuery, setSearchQuery] = useState('');
   const [isPopupFormOpen, setPopupFormOpen] = useState(false);
+  const [projectName, setProjectName] = useState(null);
 
   return (
     <Box
@@ -86,7 +76,7 @@ export default function AdminMetadataManage() {
       >
         <Title level={1}>Metadata Management</Title>
       </Box>
-        
+       
 <Box
   sx={{
     display: 'flex',
@@ -96,6 +86,7 @@ export default function AdminMetadataManage() {
     height: '100vh',
     width: '80%',
     margin: '20px auto',
+    marginTop: '0',
     borderRadius: '10px',
     padding: '20px',
     overflow: 'auto',
@@ -106,43 +97,57 @@ export default function AdminMetadataManage() {
   <Box
     sx={{
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'left',
       width: '50%',
-      backgroundColor: '#f5f5f5',
+      margin: '20px auto',
       borderRadius: '10px',
-      padding: '20px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      overflow: 'auto',
     }}
   >
+    <Input
+      placeholder="Search for a project.."
+      prefix={<SearchOutlined />}
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      style={{ width: '300px' }}
+    />
+
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'left',
+        width: '100%',
+        height: '100%',
+        margin: '20px auto',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '10px',
+        padding: '20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        overflow: 'auto',
+      }}
+    >
+
     <div style={{overflowY: 'auto', width: '100%', height: '100%'}}>
     <table style={{width: '100%', borderCollapse: 'collapse'}}>
         <tr>
-            <th colspan="2" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} ><h3>Current Metadata</h3></th>
+            <th colspan="2" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} ><h3>Projects</h3></th>
         </tr>
-        {metadata.map((md) => (
-          <tr style={{height: '50px'}}>
-            <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >{md}</td>
-            <td style={{ fontSize: '12px', width: '5%', textAlign: 'left', borderBottom:'1px solid black'}} >{
-              // reload if status input differs from original user.status
-              <Popover
-              content={
-                <Radio.Group style={{display: 'flex', flexDirection: 'column'}}>
-                  <Radio value="1">Activate</Radio>
-                  <Radio value="2">Deactivate</Radio>
-                </Radio.Group>}
-                trigger="click"
-              >
-              <Button color="default" variant="text" size={"default"} icon={<EditOutlined />}/>   
-              </Popover>          
-              }</td>
+        {(projects.filter(p => {return p.toLowerCase().includes(searchQuery.toLowerCase())})).map((project) => (
+          <tr onClick={() => {setPopupFormOpen(isPopupFormOpen ? false : true);
+            setProjectName(project)
+          }} style={{height: '50px'}}
+            onMouseEnter={(e) => {e.currentTarget.style.backgroundColor = '#fcfcfc';}}
+            onMouseLeave={(e) => {e.currentTarget.style.backgroundColor = '';}}>
+            <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >{project}</td>
           </tr>
         ))}
     </table>
     </div>
 
+  </Box>
   </Box>
 
   {/* right container to add metadata*/}
@@ -153,8 +158,9 @@ export default function AdminMetadataManage() {
       justifyContent: 'flex-Center',
       alignItems: 'center',
       width: '40%',
+      height: '90%',
       borderRadius: '10px',
-      padding: '20px',
+      padding: '10px',
       overflow: 'auto',
     }}
   >
@@ -181,7 +187,7 @@ export default function AdminMetadataManage() {
     </Box>*/}
     
 
-    {isPopupFormOpen && popupForm()}
+    {isPopupFormOpen && popupForm(projectName)}
   </Box>
 
 </Box>
