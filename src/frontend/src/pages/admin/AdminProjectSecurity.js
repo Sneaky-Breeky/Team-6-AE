@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Typography, Button, Popover, Radio, Form, Input } from 'antd';
-import { PlusOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons';
+import { Typography, Button, Popover, Radio, Form, Input, Checkbox } from 'antd';
+import { SearchOutlined, EditOutlined} from '@ant-design/icons';
 
 const { Title } = Typography;
 
@@ -17,6 +17,57 @@ const users = [
   {name: 'Michael Johnson', role: 'User', status: 'Inactive'}
 ];
 
+const metadata = ["Project Name", "Location", "Date", "Image Description", "Tags"];
+
+function PopupAccess(project) {
+  const [disabled, setDisabled] = useState(project.accessLevel === 'Admins Only');
+  const [indDisabled, setIndDisabled] = useState(project.accessLevel === 'Everyone');
+  const toggleAdminChecked = () => {
+    setDisabled(!disabled);
+  };
+  const toggleAllChecked = () => {
+    setIndDisabled(!indDisabled);
+  };
+  const onChange = (e) => {
+    // change access level here
+    console.log(`checked = ${e.target.checked}`);
+  };
+  return (
+    <div onClick={(e) => e.stopPropagation()}>
+    <table style={{width: '100%', borderCollapse: 'collapse'}}>
+      <tr style={{height: '50px'}}>
+        <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
+          <Checkbox defaultChecked={project.accessLevel === 'Admins Only'}
+            onChange={toggleAdminChecked}>
+              Admin Only
+          </Checkbox>
+          </td>
+      </tr>
+      <tr style={{height: '50px'}}>
+        <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
+          <Checkbox defaultChecked={project.accessLevel === 'Everyone' ? true : false} 
+          disabled={disabled} 
+          onChange={toggleAllChecked}>
+            Everyone
+        </Checkbox>
+          </td>
+      </tr>
+      {users.map((user) => (
+        <tr style={{height: '50px'}}>
+          <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
+            <Checkbox defaultChecked={(project.listUsers).includes(user.name) ? true : false} 
+              disabled={disabled || indDisabled}
+              onChange={onChange}>
+                {user.name}
+            </Checkbox>
+            </td>
+        </tr>
+      ))}
+    </table>
+    </div>
+  );
+}
+
 function popupForm() {
   
   return (
@@ -27,7 +78,7 @@ function popupForm() {
         justifyContent: 'flex-start',
         alignItems: 'left',
         width: '80%',
-        height: '70%',
+        height: '100%',
         margin: '20px auto',
         backgroundColor: '#f5f5f5',
         borderRadius: '10px',
@@ -37,91 +88,38 @@ function popupForm() {
         overflow: 'auto'
       }}
     >
-      <Form
-        name="basic"
-        layout="vertical"
-        initialValues={{
-          remember: true,
-        }}
-        size='small'
-        autoComplete="off"
-      >
-
-      <Form.Item
-        label={<p style={{fontSize:'12px', margin: '0px'}}>User Name</p>}
-        name="name"
-        rules={[
-          {
-            required: true,
-            message:<p style={{fontSize:'12px', margin: '0px'}}>Please select the new user's name!</p>,
-          },
-        ]}
-        style={{ padding: "0px", marginBottom: "5px", marginTop: "0px"  }}
-      >
-        <Input/>
-      </Form.Item>
-
-      <Form.Item
-        label={<p style={{fontSize:'12px', margin: '0px'}}>User Email</p>}
-        name="email"
-        rules={[
-          {
-            required: true,
-            message:<p style={{fontSize:'12px', margin: '0px'}}>Please select the new user's email!</p>,
-          },
-        ]}
-        style={{ marginBottom: "5px" }}
-      >
-        <Input/>
-      </Form.Item>
-
-        <Form.Item 
-          label={<p style={{fontSize:'12px', margin: '0px'}}>User Role</p>}
-          name="role"
-          rules={[
-            {
-              required: true,
-              message:<p style={{fontSize:'12px', margin: '0px'}}>Please select the new user's role!</p>,
-            },
-          ]}
-          style={{ marginBottom: "5px" }}
-        >
-          <Radio.Group style={{ marginTop: "0px" }}>
-            <Radio value="user"> <p style={{fontSize:'12px', margin: '0px'}}>User</p> </Radio>
-            <Radio value="admin"> <p style={{fontSize:'12px', margin: '0px'}}>Admin</p> </Radio>
-          </Radio.Group>
-        </Form.Item>
-
-        <Form.Item 
-          label={<p style={{fontSize:'12px', margin: '0px'}}>User Status</p>}
-          name="status"
-          rules={[
-            {
-              required: true,
-              message:<p style={{fontSize:'12px', margin: '0px'}}>Please select the new user's status!</p>,
-            },
-          ]}
-          style={{ marginBottom: "10px" }}
-        >
-          <Radio.Group style={{ marginTop: "0px" }}>
-            <Radio value="active"> <p style={{fontSize:'12px', margin: '0px'}}>Active</p> </Radio>
-            <Radio value="inactive"> <p style={{fontSize:'12px', margin: '0px'}}>Inactive</p> </Radio>
-          </Radio.Group>
-        </Form.Item>
-
-      <Form.Item 
-        label={null}
-        style={{ marginBottom: "5px" }}>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item >
-    </Form>
+      <div style={{overflowY: 'auto', width: '100%', height: '100%'}}>
+    <table style={{width: '100%', borderCollapse: 'collapse'}}>
+        <tr>
+            <th colspan="2" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} >
+              <h4>Edit Project Metadata Viewing</h4></th>
+        </tr>
+        {metadata.map((md) => (
+          <tr style={{height: '50px'}}>
+            <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >{md}</td>
+            <td style={{ fontSize: '12px', width: '5%', textAlign: 'left', borderBottom:'1px solid black'}} >{
+              // reload if status input differs from original user.status
+              <Popover
+              content={
+                <Radio.Group style={{ display: 'flex', flexDirection: 'column', marginTop: "0px" }}>
+                  <Radio value="admin"> <p style={{fontSize:'12px', margin: '0px'}}>Admin Only</p> </Radio>
+                  <Radio value="everyone"> <p style={{fontSize:'12px', margin: '0px'}}>Everyone</p> </Radio>
+                </Radio.Group>}
+                trigger="click"
+              >
+              <Button color="default" variant="text" size={"default"} icon={<EditOutlined />}/>   
+              </Popover>          
+              }</td>
+          </tr>
+        ))}
+    </table>
+    </div>
   </Box>
   );
 }
 
 export default function AdminProjectSecurity() {
+  const [searchQuery, setSearchQuery] = useState('');
   const [isPopupFormOpen, setPopupFormOpen] = useState(false);
 
   return (
@@ -162,50 +160,69 @@ export default function AdminProjectSecurity() {
   <Box
     sx={{
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'left',
-      width: '60%',
+      width: '50%',
       margin: '20px auto',
-      backgroundColor: '#f5f5f5',
       borderRadius: '10px',
-      padding: '20px',
-      boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-      overflow: 'auto',
     }}
   >
+    <Input
+      placeholder="Search for a project.."
+      prefix={<SearchOutlined />}
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      style={{ width: '300px' }}
+    />
+
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'left',
+        width: '100%',
+        height: '100%',
+        margin: '20px auto',
+        backgroundColor: '#f5f5f5',
+        borderRadius: '10px',
+        padding: '20px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        overflow: 'auto',
+      }}
+    >
+
     <div style={{overflowY: 'auto', width: '100%', height: '100%'}}>
     <table style={{ width: '100%', borderCollapse: 'collapse', borderSpacing: '10px'}}>
       <tr style={{height: '50px'}}>
           <th style={{ width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >Project</th>
           <th colSpan="2" style={{ width: '15%', textAlign: 'left', borderBottom:'1px solid black'}} >Access Level</th>
       </tr>
-          {projects.map((user) => (
-              <tr style={{height: '50px'}}>
-                  <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{user.name}</td>
-                  <td style={{ fontSize: '12px', width: '30%', textAlign: 'left', borderBottom:'1px solid black'}} >{user.accessLevel}</td>
+          {projects.map((project) => (
+              <tr onClick={() => {setPopupFormOpen(isPopupFormOpen ? false : true)}} style={{height: '50px'}}
+               onMouseEnter={(e) => {e.currentTarget.style.backgroundColor = '#fcfcfc';}}
+                onMouseLeave={(e) => {e.currentTarget.style.backgroundColor = '';}}>
+                  <td style={{ fontSize: '12px', width: '40%', textAlign: 'left', borderBottom:'1px solid black'}} >{project.name}</td>
+                  <td style={{ fontSize: '12px', width: '30%', textAlign: 'left', borderBottom:'1px solid black'}} >{project.accessLevel}</td>
                   <td style={{ fontSize: '12px', width: '5%', textAlign: 'left', borderBottom:'1px solid black'}} >{
                     // reload if status input differs from original user.status
                     <Popover
-                      content={(user.status==='Active') ? 
-                        <Radio.Group defaultValue="1">
-                        <Radio value="1">Activate</Radio>
-                        <Radio value="2">Deactivate</Radio>
-                        </Radio.Group>
-                      : <Radio.Group defaultValue="2">
-                        <Radio value="1">Activate</Radio>
-                        <Radio value="2">Deactivate</Radio>
-                        </Radio.Group> }
-                      title={(user.status==='Active') ? "User Activated" : "User Deactivated"}
+                      content={PopupAccess(project)}
                       trigger="click"
                     >
-                    <Button color="default" variant="text" size={"default"} icon={<EditOutlined />}/>   
+                    <Button onClick={(e) => {
+                        e.stopPropagation();
+                        setPopupFormOpen(false);
+                      }} 
+                      color="default" variant="text" size={"default"} icon={<EditOutlined />}/>   
                     </Popover>          
                     }</td>
               </tr>
           ))}
   </table>
   </div>
+  </Box>
   </Box>
 
   {/* right container with new users */}
@@ -215,32 +232,11 @@ export default function AdminProjectSecurity() {
       flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      width: '30%',
+      width: '40%',
       padding: '20px',
 
     }}
   >
-    <Box
-      onClick={() => 
-        {setPopupFormOpen(isPopupFormOpen ? false : true)}
-      }
-      sx={{
-        textAlign: 'center',
-        width: 150,
-        height: 80,
-        border: 1,
-        borderRadius: '16px',
-        '&:hover': { boxShadow: 3},
-        }}
-      >
-        {isPopupFormOpen ? 
-        <CloseOutlined style={{ marginTop: '10px', fontSize: '30px'}}/>
-        : <PlusOutlined style={{ marginTop: '10px', fontSize: '30px'}}/>}
-        {isPopupFormOpen ? 
-        <h5 style={{margin: '15px'}}>Close</h5>
-        : <h5 style={{margin: '15px'}}>Add User</h5>}
-    </Box>
-
     {isPopupFormOpen && popupForm()}
 
   </Box>
