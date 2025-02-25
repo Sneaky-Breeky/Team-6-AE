@@ -33,10 +33,21 @@ export default function SideMenu() {
       <Box
         sx={{
           display: 'flex',
-          mt: 'calc(var(--template-frame-height, 0px) + 120px)',
-          p: 1.5,
+          justifyContent: 'center',
+          alignItems: 'center',
+          paddingTop: '20px',
+          paddingBottom: '40px',
         }}
       >
+        <img
+          src="/images/AE_logo.png"
+          alt="AE Logo"
+          style={{
+            width: '150px',
+            height: 'auto',
+            display: 'block',
+          }}
+        />
       </Box>
       <Divider />
       <Box

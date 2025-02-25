@@ -71,8 +71,7 @@ export default function Login() {
       return;
     }
     
-    localStorage.setItem('userRole', user.role);
-    navigate(user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard');
+    window.location.href = user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
     
   };
   
