@@ -25,45 +25,45 @@ function App() {
             <AppNavbar />
             <Routes>
               {isAdmin() ? (
-                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                <Route path="/Team-6-AE/admin/dashboard" element={<AdminDashboard />} />
               ) : (
-                <Route path="/user/dashboard" element={<UserDashboard />} />
+                <Route path="/Team-6-AE/user/dashboard" element={<UserDashboard />} />
               )}
-              <Route path="/" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
-              <Route path="*" element={<Navigate to={isAdmin() ? '/admin/dashboard' : '/user/dashboard'} />} />
+              <Route path="/" element={<Navigate to={isAdmin() ? '/Team-6-AE/admin/dashboard' : '/Team-6-AE/user/dashboard'} />} />
+              <Route path="*" element={<Navigate to={isAdmin() ? '/Team-6-AE/admin/dashboard' : '/Team-6-AE/user/dashboard'} />} />
 
               {/* user */}
-              <Route path="/user/projectDirectory" element={<ProjectDirectory />} />
-              <Route path="*" element={<Navigate to="/user/projectDirectory" />} />
+              <Route path="/Team-6-AE/user/projectDirectory" element={<ProjectDirectory />} />
+              <Route path="*" element={<Navigate to="/Team-6-AE/user/projectDirectory" />} />
 
-              <Route path="/projectDirectory/projectOverview/:id" element={<ProjectOverview />} />
+              <Route path="/Team-6-AE/projectDirectory/projectOverview/:id" element={<ProjectOverview />} />
 
-              <Route path="/user/uploadFiles" element={<UserUpload />} />
-              <Route path="*" element={<Navigate to="/user/uploadFiles" />} />
+              <Route path="/Team-6-AE/user/uploadFiles" element={<UserUpload />} />
+              <Route path="*" element={<Navigate to="/Team-6-AE/user/uploadFiles" />} />
 
-              <Route path="/user/activityLog" element={<ActivityLog />} />
-              <Route path="*" element={<Navigate to="/user/activityLog" />} />
+              <Route path="/Team-6-AE/user/activityLog" element={<ActivityLog />} />
+              <Route path="*" element={<Navigate to="/Team-6-AE/user/activityLog" />} />
 
                 
               {/* admin */}
-              <Route path="/admin/projectCreation" element={<ProjectCreation />} />
-              <Route path="*" element={<Navigate to="/admin/projectCreation" />} />
+              <Route path="/Team-6-AE/admin/projectCreation" element={<ProjectCreation />} />
+              <Route path="*" element={<Navigate to="/Team-6-AE/admin/projectCreation" />} />
 
-              <Route path="/admin/userManagement" element={<AdminUserManage />} />
-              <Route path="*" element={<Navigate to="/admin/userManagement" />} />
+              <Route path="/Team-6-AE/admin/userManagement" element={<AdminUserManage />} />
+              <Route path="*" element={<Navigate to="/Team-6-AE/admin/userManagement" />} />
 
-              <Route path="/admin/metadataManagement" element={<AdminMetadataManage />} />
-              <Route path="*" element={<Navigate to="/admin/metadataManagement" />} />
+              <Route path="/Team-6-AE/admin/metadataManagement" element={<AdminMetadataManage />} />
+              <Route path="*" element={<Navigate to="/Team-6-AE/admin/metadataManagement" />} />
 
-              <Route path="/admin/projectSecurity" element={<AdminProjectSecurity />} />
-              <Route path="*" element={<Navigate to="/admin/projectSecurity" />} />
+              <Route path="/Team-6-AE/admin/projectSecurity" element={<AdminProjectSecurity />} />
+              <Route path="*" element={<Navigate to="/Team-6-AE/admin/projectSecurity" />} />
             </Routes>
           </Box>
         </Box>
       ) : (
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login" />} />
+          <Route path="/Team-6-AE/login" element={<Login />} />
+          <Route path="*" element={<Navigate to="/Team-6-AE/login" />} />
         </Routes>
       )}
     </Router>
