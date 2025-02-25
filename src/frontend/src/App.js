@@ -44,7 +44,7 @@ function App() {
               <Route path="/Team-6-AE/user/activityLog" element={<ActivityLog />} />
               <Route path="*" element={<Navigate to="/Team-6-AE/user/activityLog" />} />
 
-
+                
               {/* admin */}
               <Route path="/Team-6-AE/admin/projectCreation" element={<ProjectCreation />} />
               <Route path="*" element={<Navigate to="/Team-6-AE/admin/projectCreation" />} />

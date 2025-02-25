@@ -124,7 +124,7 @@ export default function UserDashboard() {
           <Box
             onClick={() => {
               sessionStorage.setItem('menu', 2);
-              window.location.href = '/Team-6-AE/user/uploadFiles';
+              window.location.href = '/user/uploadFiles';
             }}
             sx={{
               textAlign: 'center',
@@ -144,7 +144,7 @@ export default function UserDashboard() {
           <Box
             onClick={() => {
               sessionStorage.setItem('menu', 3);
-              window.location.href = '/Team-6-AE/user/activityLog';
+              window.location.href = '/user/activityLog';
             }}
             sx={{
               textAlign: 'center',
@@ -168,7 +168,7 @@ export default function UserDashboard() {
         <Box
           onClick={() => {
             sessionStorage.setItem('menu', 1);
-            window.location.href = '/Team-6-AE/user/projectDirectory';
+            window.location.href = '/user/projectDirectory';
           }}
           sx={{
             display: 'flex',

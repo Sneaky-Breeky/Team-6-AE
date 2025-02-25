@@ -37,7 +37,7 @@ const secondaryListItems = [
 ];
 
 // TODO: put this in utils?
-const GetDirectoryPrefix = (isAdmin) => (isAdmin ? '/Team-6-AE/admin/' : '/Team-6-AE/user/');
+const GetDirectoryPrefix = (isAdmin) => (isAdmin ? '/admin/' : '/user/');
 
 
 export default function MenuContent() {
@@ -47,7 +47,7 @@ export default function MenuContent() {
   const handleLogout = () => {
     sessionStorage.clear();
     localStorage.removeItem('authToken');
-    window.location.href = '/Team-6-AE/login';
+    window.location.href = '/login';
   };
 
   return (

@@ -71,7 +71,7 @@ export default function Login() {
       return;
     }
     
-    window.location.href = user.role === 'admin' ? '/Team-6-AE/admin/dashboard' : '/Team-6-AE/user/dashboard';
+    window.location.href = user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
     
   };
   
