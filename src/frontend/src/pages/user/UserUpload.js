@@ -6,7 +6,9 @@ import { CalendarOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
 const tagStyle = {
-    backgroundColor: '#dbdbdb'
+    backgroundColor: '#dbdbdb',
+    padding: '5px 10px',
+    margin: '3px'
 };
 
 //TODO : some of the boxes use the same formatting as UserDashboard.js, best to abstract styles
@@ -42,7 +44,32 @@ export default function UserDashboard() {
 
     const handleFileChange = (event) => {
         const selectedFiles = Array.from(event.target.files);
-        setFiles(selectedFiles);
+        setFiles((prevFiles) => {
+            const existingFileNames = new Set(prevFiles.map(file => file.name));
+
+            // Separate duplicates from new files
+            const newFiles = [];
+            const duplicateFiles = [];
+
+            selectedFiles.forEach(file => {
+                if (existingFileNames.has(file.name)) {
+                    duplicateFiles.push(file.name);
+                } else {
+                    newFiles.push(file);
+                }
+            });
+
+            // Show alert for duplicates
+            if (duplicateFiles.length > 0) {
+                alert(`Duplicate files ignored: ${duplicateFiles.join(", ")}`);
+            }
+
+            return [...prevFiles, ...newFiles];
+        });
+    };
+
+    const removeFile = (fileName) => {
+        setFiles((prevFiles) => prevFiles.filter(file => file.name !== fileName));
     };
 
     const openFileWindow = () => {
@@ -129,12 +156,17 @@ export default function UserDashboard() {
                             </Button>
                             {/* File list display */}
                             <Flex wrap="wrap" style={{ marginTop: '15px', maxWidth: '100%', overflow: 'auto' }}>
-                                {files.map((file, index) => (
+                                {files.map((file) => (
                                     <Tag
-                                        key={index}
+                                        key={file.name}
+                                        closable
+                                        onClose={() => removeFile(file.name)}
                                         style={tagStyle}
                                     >
-                                        {file.name}
+                                        <strong>{file.name}</strong><br/>
+                                        File size: {(file.size / (1024 * 1024)).toFixed(2) + " MB"}, <br/>
+                                        File type: {file.type || "Unknown"}, <br/>
+                                        Last modified: {new Date(file.lastModified).toLocaleString()}
                                     </Tag>
                                 ))}
                             </Flex>
