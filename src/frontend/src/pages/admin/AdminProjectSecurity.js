@@ -20,25 +20,54 @@ const users = [
 const metadata = ["Project Name", "Location", "Date", "Image Description", "Tags"];
 
 function PopupAccess(project) {
+  const [adminChecked, setAdminChecked] = useState(project.accessLevel === 'Admins Only');
+  const [allChecked, setAllChecked] = useState(project.accessLevel === 'Everyone');
+  const [listUsers, setListUsers] = useState(project.listUsers || []);
+
   const onChange = (e) => {
     // change access level here
     console.log(`checked = ${e.target.checked}`);
   };
+
+  const toggleAdminChecked = () => {
+    setAdminChecked(!adminChecked);
+    setAllChecked(false);
+    setListUsers([]);
+  };
+
+  const toggleAllChecked = () => {
+    setAllChecked(!allChecked);
+    setAdminChecked(false);
+    setListUsers([]);
+  };
+
+  const toggleUserChecked = (e, userName) => {
+    const updatedUsers = e.target.checked
+      ? [...listUsers, userName]
+      : listUsers.filter((name) => name !== userName);
+    
+    setAdminChecked(false);
+    setAllChecked(false);
+
+    setListUsers(updatedUsers);
+  };
+
   return (
     <div onClick={(e) => e.stopPropagation()}>
     <table style={{width: '100%', borderCollapse: 'collapse'}}>
       <tr style={{height: '50px'}}>
         <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
-          <Checkbox defaultChecked={project.accessLevel === 'Admins Only'}
-            onChange={onChange}>
+          <Checkbox checked={adminChecked}
+            onChange={toggleAdminChecked}>
               Admin Only
           </Checkbox>
           </td>
       </tr>
       <tr style={{height: '50px'}}>
         <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
-          <Checkbox defaultChecked={project.accessLevel === 'Everyone' ? true : false} 
-          onChange={onChange}>
+          <Checkbox checked={allChecked && !adminChecked} 
+          onChange={
+            toggleAllChecked}>
             Everyone
         </Checkbox>
           </td>
@@ -46,8 +75,8 @@ function PopupAccess(project) {
       {users.map((user) => (
         <tr style={{height: '50px'}}>
           <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
-            <Checkbox defaultChecked={(project.listUsers).includes(user.name) ? true : false} 
-              onChange={onChange}>
+            <Checkbox checked={listUsers.includes(user.name) && !allChecked && !adminChecked} 
+              onChange={(e) => toggleUserChecked(e, user.name)}>
                 {user.name}
             </Checkbox>
             </td>
