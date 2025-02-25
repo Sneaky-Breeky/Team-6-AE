@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import { Input, Typography, DatePicker, Button, Form, Select, Tag, Flex } from "antd";
 import { CalendarOutlined } from '@ant-design/icons';
@@ -17,6 +17,8 @@ export default function UserDashboard() {
     const [metadataTags, setMetadataTags] = useState([]);
     const [location, setLocation] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [files, setFiles] = useState([]);
+    const fileInputRef = useRef(null);
     const metadataBoxStyle = {
         textAlign: 'left',
         backgroundColor: '#f5f5f5',
@@ -37,6 +39,15 @@ export default function UserDashboard() {
         }
         setMetadataTagsInput("");
     }
+
+    const handleFileChange = (event) => {
+        const selectedFiles = Array.from(event.target.files);
+        setFiles(selectedFiles);
+    };
+
+    const openFileWindow = () => {
+        fileInputRef.current.click();
+    };
 
     return (
         <Box
@@ -105,9 +116,28 @@ export default function UserDashboard() {
                             <Title level={4}>
                                 or
                             </Title>
-                            <Button style={{ margin: '10%' }} type="primary" htmlType="button" color="cyan" variant="solid" >
+                            <input
+                                type="file"
+                                multiple
+                                accept=".jpeg,.png,.mp4,.raw"
+                                ref={fileInputRef}
+                                onChange={handleFileChange}
+                                style={{ display: 'none' }}
+                            />
+                            <Button style={{ margin: '10%' }} type="primary" htmlType="button" color="cyan" variant="solid" onClick={openFileWindow}>
                                 + Add Files
                             </Button>
+                            {/* File list display */}
+                            <Flex wrap="wrap" style={{ marginTop: '15px', maxWidth: '100%', overflow: 'auto' }}>
+                                {files.map((file, index) => (
+                                    <Tag
+                                        key={index}
+                                        style={tagStyle}
+                                    >
+                                        {file.name}
+                                    </Tag>
+                                ))}
+                            </Flex>
                         </Box>
                         {/*Constraint Info*/}
                         <Box
@@ -161,7 +191,7 @@ export default function UserDashboard() {
                                 onPressEnter={() => handleMetadataTagAdd()}
                             />
                         </Form.Item>
-                        <Flex style={{marginBottom: "3%"}} gap="4px 0" wrap>
+                        <Flex style={{ marginBottom: "3%" }} gap="4px 0" wrap>
                             {metadataTags.map((tag) => (
                                 <Tag
                                     style={tagStyle}
