@@ -1,38 +1,10 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography, } from 'antd';
+import { logs } from '../../utils/dummyData.js';
 
 const { Title } = Typography;
 
-// const logs = [
-//   { time: new Date('Feb 3, 2025 7:59am'), action: 'File uploaded' },
-//   { time: new Date('Feb 3, 2025 7:53am'), action: 'Files submitted to a project' },
-//   { time: new Date('Feb 2, 2025 6:30pm'), action: 'Project metadata updated' },
-//   { time: new Date('Feb 2, 2025 4:12pm'), action: 'File downloaded' },
-//   { time: new Date('Feb 2, 2025 12:02pm'), action: 'Files shared' },
-//   { time: new Date('Feb 1, 2025 1:03pm'), action: 'File uploaded' },
-//   { time: new Date('Jan 31, 2025 11:45am'), action: 'Files submitted to a project' },
-//   { time: new Date('Jan 30, 2025 3:50pm'), action: 'Project metadata updated' },
-//   { time: new Date('Jan 30, 2025 10:27am'), action: 'File downloaded' },
-//   { time: new Date('Jan 29, 2025 7:22am'), action: 'Files shared' },
-//   { time: new Date('Jan 27, 2025 2:14pm'), action: 'Files shared' },
-//   { time: new Date('Jan 26, 2025 8:15am'), action: 'File uploaded' },
-// ];
-
-const logs = [
-  { time: new Date(2025, 1, 3, 7, 59), action: 'File uploaded' }, 
-  { time: new Date(2025, 1, 3, 7, 53), action: 'Files submitted to a project' },
-  { time: new Date(2025, 1, 2, 18, 30), action: 'Project metadata updated' },
-  { time: new Date(2025, 1, 2, 16, 12), action: 'File downloaded' },
-  { time: new Date(2025, 1, 2, 12, 2), action: 'Files shared' },
-  { time: new Date(2025, 1, 1, 13, 3), action: 'File uploaded' },
-  { time: new Date(2025, 0, 31, 11, 45), action: 'Files submitted to a project' },
-  { time: new Date(2025, 0, 30, 15, 50), action: 'Project metadata updated' },
-  { time: new Date(2025, 0, 30, 10, 27), action: 'File downloaded' },
-  { time: new Date(2025, 0, 29, 7, 22), action: 'Files shared' },
-  { time: new Date(2025, 0, 27, 14, 14), action: 'Files shared' },
-  { time: new Date(2025, 0, 26, 8, 15), action: 'File uploaded' },
-];
 
 
 // change dates to string
