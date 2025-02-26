@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography, Button, Popover, Radio, Form, Input } from 'antd';
 import { PlusOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons';
+import { users } from '../../utils/dummyData.js';
 
 const { Title } = Typography;
 
-const users = [
+/*const users = [
   {name: 'John Doe', email: 'johndoe123@example.com', role: 'User', status: 'Active'},
   {name: 'Sarah Brown', email: 'sarah.brown@example.com', role: 'Admin', status: 'Active'},
   {name: 'Michael Johnson', email: 'michael.j2009@example.com', role: 'User', status: 'Inactive'}
-];
+];*/
+
 
 function popupForm() {
   

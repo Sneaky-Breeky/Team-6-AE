@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Typography, Input, Form, Button, Tag, Flex, message } from "antd"
 import Box from '@mui/material/Box';
+import dayjs from 'dayjs';
+import { projects, files, logs } from '../../utils/dummyData.js';
 
 const { Title } = Typography;
 
@@ -57,7 +59,41 @@ export default function ProjectCreation() {
             metadataTags: defaultMetadataTags,
         };
 
-        console.log("Final Project Data:", projectData);
+        const project = {
+            id: projects.length,
+            name: values.projectName, 
+            location: values.location, 
+            date: dayjs(),
+            thumbnail: null, 
+            accessLevel: 'Admins Only', 
+            listUsers: [], 
+            status: null,
+            phase: null,
+            lastUpdated: dayjs(),
+            files: files
+        };
+
+        const projectFile = {
+            Id: files.length, 
+            FileName: project.name, 
+            FilePath: null, 
+            Metadata: defaultMetadataTags, 
+            ProjectId: project.id, 
+            Status: "Active", 
+            Date: dayjs() 
+       };
+
+       const projectLog = {
+            time: dayjs(), 
+            action: 'Project created' 
+       };
+
+       projects.push(project);
+       files.push(projectFile);
+       logs.push(projectLog);
+        //
+
+        console.log("Final Project Data:", projects.at(-1));
         success();
 
         form.resetFields();

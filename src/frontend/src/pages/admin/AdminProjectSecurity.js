@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography, Button, Popover, Radio, Form, Input, Checkbox } from 'antd';
 import { SearchOutlined, EditOutlined} from '@ant-design/icons';
+import { users } from '../../utils/dummyData.js';
 
 const { Title } = Typography;
 
@@ -11,11 +12,12 @@ const projects = [
   {name: 'Highway Expansion', accessLevel: 'Selected Users', metadata: ['Project Name', 'Location', 'Date'], status: 'Inactive', listUsers: ['John Doe', 'Sarah Brown']}
 ];
 
+/*
 const users = [
   {name: 'John Doe', role: 'User', status: 'Active'},
   {name: 'Sarah Brown', role: 'Admin', status: 'Active'},
   {name: 'Michael Johnson', role: 'User', status: 'Inactive'}
-];
+];*/
 
 const metadata = ["Project Name", "Location", "Date", "Image Description", "Tags"];
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography, } from 'antd';
 import { logs } from '../../utils/dummyData.js';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
@@ -69,7 +70,7 @@ export default function ActivityLog() {
         </tr>
             {logs.map((log) => (
                 <tr>
-                    <td style={{width: '40%', textAlign: 'left', borderBottom:'1px solid black'}} >{logTime(log.time)}</td>
+                    <td style={{width: '40%', textAlign: 'left', borderBottom:'1px solid black'}} >{dayjs(log.time).format('MMM DD, YYYY h:mma')}</td>
                     <td style={{width: '60%', textAlign: 'left', borderBottom:'1px solid black'}} >{log.action}</td>
                 </tr>
             ))}

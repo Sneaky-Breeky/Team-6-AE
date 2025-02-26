@@ -12,8 +12,8 @@ const files = [
     { Id: 7, FileName: "Hospital Renovation", FilePath: '/images/hospital.jpg', Metadata: ["hospital", "renovation"], ProjectId: 7, Status: "Inactive", Date: dayjs("2024-09-30 00:16:01") },
     { Id: 8, FileName: "Railway Modernization", FilePath: '/images/railway.jpeg', Metadata: ["railway", "modernization"], ProjectId: 8, Status: "Active", Date: dayjs("2024-07-10 00:16:01") },
     { Id: 9, FileName: "Water Treatment Plant", FilePath: '/images/waterTreatment.webp', Metadata: ["water", "treatment", "plant"], ProjectId: 9, Status: "Inactive", Date: dayjs("2024-06-22 00:16:01") },
-    { Id: 10, FileName: "Underground Parking Facility", FilePath: '/images/undergroundParking.jpg', Metadata: ["parking", "underground"], ProjectId: 11, Status: "Active", Date: dayjs("2024-05-05 00:16:01") },
-    { Id: 11, FileName: "Renewable Energy Farm", FilePath: '/images/energyFarm.png', Metadata: ["renewable", "energy", "farm"], ProjectId: 12, Status: "Active", Date: dayjs("2024-04-12 00:16:01") }
+    { Id: 10, FileName: "Underground Parking Facility", FilePath: '/images/undergroundParking.jpg', Metadata: ["parking", "underground"], ProjectId: 10, Status: "Active", Date: dayjs("2024-05-05 00:16:01") },
+    { Id: 11, FileName: "Renewable Energy Farm", FilePath: '/images/energyFarm.png', Metadata: ["renewable", "energy", "farm"], ProjectId: 11, Status: "Active", Date: dayjs("2024-04-12 00:16:01") }
 ];
 
 
@@ -149,7 +149,7 @@ const projects = [
         files: files
     },
     {
-        id: 11,
+        id: 10,
         name: 'Underground Parking Facility',
         location: 'Mississauga',
         date: dayjs("2024-05-05 00:16:01"),
@@ -162,7 +162,7 @@ const projects = [
         files: files
     },
     {
-        id: 12,
+        id: 11,
         name: 'Renewable Energy Farm',
         location: 'Saskatoon',
         date: dayjs("2024-04-12 00:16:01"),
@@ -178,18 +178,18 @@ const projects = [
 
 
 const logs = [
-    { time: new Date(2025, 1, 3, 7, 59), action: 'File uploaded' },
-    { time: new Date(2025, 1, 3, 7, 53), action: 'Files submitted to a project' },
-    { time: new Date(2025, 1, 2, 18, 30), action: 'Project metadata updated' },
-    { time: new Date(2025, 1, 2, 16, 12), action: 'File downloaded' },
-    { time: new Date(2025, 1, 2, 12, 2), action: 'Files shared' },
-    { time: new Date(2025, 1, 1, 13, 3), action: 'File uploaded' },
-    { time: new Date(2025, 0, 31, 11, 45), action: 'Files submitted to a project' },
-    { time: new Date(2025, 0, 30, 15, 50), action: 'Project metadata updated' },
-    { time: new Date(2025, 0, 30, 10, 27), action: 'File downloaded' },
-    { time: new Date(2025, 0, 29, 7, 22), action: 'Files shared' },
-    { time: new Date(2025, 0, 27, 14, 14), action: 'Files shared' },
-    { time: new Date(2025, 0, 26, 8, 15), action: 'File uploaded' },
+    { time: dayjs("2025-02-03 00:07:59"), action: 'File uploaded' },
+    { time: dayjs("2025-02-03 00:07:53"), action: 'Files submitted to a project' },
+    { time: dayjs("2025-02-02 00:18:30"), action: 'Project metadata updated' },
+    { time: dayjs("2025-02-02 00:16:12"), action: 'File downloaded' },
+    { time: dayjs("2025-02-02 00:12:02"), action: 'Files shared' },
+    { time: dayjs("2025-02-01 00:13:03"), action: 'File uploaded' },
+    { time: dayjs("2025-01-31 00:11:45"), action: 'Files submitted to a project' },
+    { time: dayjs("2025-01-30 00:15:50"), action: 'Project metadata updated' },
+    { time: dayjs("2025-01-30 00:10:27"), action: 'File downloaded' },
+    { time: dayjs("2025-01-29 00:07:22"), action: 'Files shared' },
+    { time: dayjs("2025-01-27 00:14:14"), action: 'Files shared' },
+    { time: dayjs("2025-01-26 00:08:15"), action: 'File uploaded' },
 ];
 
 
