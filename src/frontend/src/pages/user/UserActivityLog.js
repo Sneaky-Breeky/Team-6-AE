@@ -6,25 +6,6 @@ import dayjs from 'dayjs';
 
 const { Title } = Typography;
 
-
-
-// change dates to string
-function logTime(date) {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  let month = months[date.getMonth()];
-  let day = date.getDate();
-  let year = date.getFullYear();
-  let hours = date.getHours();
-  let minutes = date.getMinutes().toString().padStart(2, '0');
-  let period = hours >= 12 ? "pm" : "am";
-
-  if (hours === 0) hours = 12;
-  else if (hours > 12) hours -= 12;
-
-  return `${month} ${day}, ${year} ${hours}:${minutes}${period} PST`;
-}
-
-
 export default function ActivityLog() {
 
   return (

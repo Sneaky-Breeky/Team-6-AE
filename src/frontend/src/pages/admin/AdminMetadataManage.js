@@ -3,20 +3,13 @@ import Box from '@mui/material/Box';
 import { Typography, Button, Input } from 'antd';
 import { SearchOutlined, EditOutlined} from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { projectsRenameToProjectsAfterUpdates } from '../../utils/dummyData.js';
+import { projects } from '../../utils/dummyData.js';
 
 const { Title } = Typography;
 
-const projects = [
-  {name: "School Construction", location: "Quebec City", date: dayjs("2024-12-18 00:16:01"), status: "", dept: ""},
-  {name: "Bridge Construction", location: "Toronto", date: dayjs("2024-09-10 00:16:01"), status: "", dept: ""},
-  {name: "High-rise Development", location: "Vancouver", date: dayjs("2024-12-28 00:16:01"), status: "", dept: ""},
-  {name: "Highway Expansion", location: "Montreal", date: dayjs("2024-10-14 00:16:01"), status: "", dept: ""},
-  {name: "Oil Pipeline Repair", location: "Alberta", date: dayjs("2024-11-07 00:16:01"), status: "", dept: ""},
-  {name: "Park Restoration", location: "Ottawa", date: dayjs("2025-01-31 00:16:01"), status: "", dept: ""}
-];
+const project = {name: "", location: "", date: dayjs(), status: null, phase: null};
 
-const metadata = ["Project Name", "Location", "Date", "Status", "Department"];
+const labels = ["Project Name", "Location", "Date", "Status", "Phase"];
 
 function EditMD(md, label, i, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen) {
   searchEditQuery = md;
@@ -28,14 +21,14 @@ function EditMD(md, label, i, searchEditQuery, setSearchEditQuery, editOpen, set
         { editOpen === i?
           <Input
             size="small"
-            defaultValue={md === '' ? "Enter a " + label : searchEditQuery}
+            defaultValue={md === null || md === '' ? "": searchEditQuery}
             onChange={(e) => setSearchEditQuery(e.target.value)}
             style={{ width: '90%'}}
           />
           :md}
         </td>
       <td style={{ fontSize: '12px', width: '10%', textAlign: 'right', borderBottom:'1px solid black'}} >
-        {md === '' ? 
+        {md === null || md === '' ? 
           <Button type="primary" size={"small"} onClick={() => {setEditOpen(editOpen === null ? i : null)}}>Create</Button>
           : <Button color="default" variant="text" size={"default"} icon={<EditOutlined />}
             onClick={() => {setEditOpen(editOpen === null ? i : null)}}/>}
@@ -49,7 +42,13 @@ function popupForm(proj, searchEditQuery, setSearchEditQuery, editOpen, setEditO
     console.log(`switch to ${checked}`);
   };
 
-  proj[2] = dayjs(proj[2]).format('MMM DD, YYYY');
+  project.name = proj.name;
+  project.location = proj.location;
+  project.date = dayjs(proj.date).format('MMM DD, YYYY');
+  project.status = proj.status;
+  project.phase = proj.phase;
+
+  var p = Object.values(project);
 
   return (
     <Box
@@ -78,12 +77,12 @@ function popupForm(proj, searchEditQuery, setSearchEditQuery, editOpen, setEditO
           </tr>
           <tr style={{paddingTop: '0'}}>
               <th colspan="3" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} ><h5 style={{ margin:'0'}}>
-                {proj[0] + " Project"}
+                {proj.name + " Project"}
                 
                 </h5></th>
           </tr>
-          {metadata.map((label, index) => (
-            EditMD(proj[index], label, index, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)
+          {labels.map((label, index) => (
+            EditMD(p[index], label, index, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)
           ))}
       </table>
     </div>
@@ -176,13 +175,14 @@ export default function AdminMetadataManage() {
         <tr>
             <th colspan="2" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} ><h3>Projects</h3></th>
         </tr>
-        {(projects.filter(p => {return p.name.toLowerCase().includes(searchQuery.toLowerCase())})).map((project) => (
-          <tr onClick={() => {setPopupFormOpen(isPopupFormOpen ? false : true);
-            setProjectName(project)
+        {(projects.filter(p => {return p.name.toLowerCase().includes(searchQuery.toLowerCase())})).map((p) => (
+          <tr onClick={() => {
+            setPopupFormOpen(isPopupFormOpen ? false : true);
+            setProjectName(p)
           }} style={{height: '50px'}}
             onMouseEnter={(e) => {e.currentTarget.style.backgroundColor = '#fcfcfc';}}
             onMouseLeave={(e) => {e.currentTarget.style.backgroundColor = '';}}>
-            <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >{project.name}</td>
+            <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >{p.name}</td>
           </tr>
         ))}
     </table>
@@ -227,8 +227,8 @@ export default function AdminMetadataManage() {
         : <h5 style={{margin: '15px'}}>Add Metadata</h5>}
     </Box>*/}
     
-
-    {isPopupFormOpen && popupForm(Object.values(projectName), searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)}
+    {/*Object.values(projectName) */}
+    {isPopupFormOpen && popupForm(projectName, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)}
   </Box>
 
 </Box>
