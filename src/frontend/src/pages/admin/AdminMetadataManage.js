@@ -16,7 +16,7 @@ function EditMD(md, i, searchEditQuery, setSearchEditQuery, editOpen, setEditOpe
 
   return (
       <><td style={{ fontSize: '12px', width: '50%', textAlign: 'left', borderBottom: '1px solid black' }}>
-      {editOpen === i ?
+      {editOpen ?
         <Input
           size="small"
           onChange={handleChange}
@@ -30,16 +30,17 @@ function EditMD(md, i, searchEditQuery, setSearchEditQuery, editOpen, setEditOpe
         : searchEditQuery}
     </td><td style={{ fontSize: '12px', width: '15%', textAlign: 'right', borderBottom: '1px solid black' }}>
         {searchEditQuery === null || searchEditQuery === '' ?
-          <Button size={"small"} onClick={() => { setEditOpen(editOpen === i ? null : i); } }>
-            {editOpen === i ? 'Close' :
+          <Button size={"small"} onClick={() => { setEditOpen(editOpen ? false : true); } }>
+            {editOpen ? 'Close' :
               'Create'}</Button>
-          : <Button color="default" variant="text" size={"default"} icon={editOpen === i ? <CloseOutlined /> : <EditOutlined />}
-            onClick={() => { setEditOpen(editOpen === i ? null : i); } } />}
+          : <Button color="default" variant="text" size={"default"} icon={editOpen ? <CloseOutlined /> : <EditOutlined />}
+            onClick={() => { setEditOpen(editOpen ? false : true); } } />}
       </td></>
   );
 }
 
-function popupForm(proj, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen, setPopupFormOpen) {
+function popupForm(proj, searchEditQuery, setSearchEditQuery, setPopupFormOpen,
+  editNameOpen, setEditNameOpen, editLocOpen, setEditLocOpen, editDateOpen, setEditDateOpen, editStateOpen, setEditStateOpen, editPhaseOpen, setEditPhaseOpen) {
 
   return (
     <Box
@@ -79,23 +80,23 @@ function popupForm(proj, searchEditQuery, setSearchEditQuery, editOpen, setEditO
 
           <tr style={{height: '50px'}}>
             <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Project Name: "}</td>
-            {EditMD(proj.name, 0, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)}
+            {EditMD(proj.name, 0, searchEditQuery, setSearchEditQuery, editNameOpen, setEditNameOpen)}
           </tr>
           <tr style={{height: '50px'}}>
             <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Location: "}</td>
-            {EditMD(proj.location, 1, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)}
+            {EditMD(proj.location, 1, searchEditQuery, setSearchEditQuery, editLocOpen, setEditLocOpen)}
           </tr>
           <tr style={{height: '50px'}}>
             <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Date: "}</td>
-            {EditMD(dayjs(proj.date).format('MMM DD, YYYY'), 2, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)}
+            {EditMD(dayjs(proj.date).format('MMM DD, YYYY'), 2, searchEditQuery, setSearchEditQuery, editDateOpen, setEditDateOpen)}
           </tr>
           <tr style={{height: '50px'}}>
             <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Status: "}</td>
-            {EditMD(proj.status, 3, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)}
+            {EditMD(proj.status, 3, searchEditQuery, setSearchEditQuery, editStateOpen, setEditStateOpen)}
           </tr>
           <tr style={{height: '50px'}}>
             <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Phase: "}</td>
-            {EditMD(proj.phase, 4, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)}
+            {EditMD(proj.phase, 4, searchEditQuery, setSearchEditQuery, editPhaseOpen, setEditPhaseOpen)}
           </tr>
           
       </table>
@@ -123,7 +124,11 @@ export default function AdminMetadataManage() {
   const [isPopupFormOpen, setPopupFormOpen] = useState(false);
   const [project, setProject] = useState(null);
   const [searchEditQuery, setSearchEditQuery] = useState('');
-  const [editOpen, setEditOpen] = useState(null);
+  const [editNameOpen, setEditNameOpen] = useState(false);
+  const [editLocOpen, setEditLocOpen] = useState(false);
+  const [editDateOpen, setEditDateOpen] = useState(false);
+  const [editStateOpen, setEditStateOpen] = useState(false);
+  const [editPhaseOpen, setEditPhaseOpen] = useState(false);
 
   return (
     <Box
@@ -206,6 +211,11 @@ export default function AdminMetadataManage() {
         {(projects.filter(p => {return p.name.toLowerCase().includes(searchQuery.toLowerCase())})).map((p) => (
           <tr onClick={() => {
             setPopupFormOpen(true);
+            setEditNameOpen(false);
+            setEditLocOpen(false);
+            setEditDateOpen(false);
+            setEditStateOpen(false);
+            setEditPhaseOpen(false);
             setProject(p)
           }} style={{height: '50px'}}
             onMouseEnter={(e) => {e.currentTarget.style.backgroundColor = '#fcfcfc';}}
@@ -236,7 +246,9 @@ export default function AdminMetadataManage() {
     }}
   > 
 
-    {isPopupFormOpen && popupForm(project, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen, setPopupFormOpen)}
+    {isPopupFormOpen && popupForm(project, searchEditQuery, setSearchEditQuery, setPopupFormOpen,
+      editNameOpen, setEditNameOpen, editLocOpen, setEditLocOpen, editDateOpen, setEditDateOpen, editStateOpen, setEditStateOpen, editPhaseOpen, setEditPhaseOpen
+    )}
   </Box>
   </Box>
     </Box>
