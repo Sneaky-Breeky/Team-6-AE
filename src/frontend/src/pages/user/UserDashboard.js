@@ -3,25 +3,12 @@ import Box from '@mui/material/Box';
 import { Input, Button, DatePicker, Form, Typography, Card, Row, Col, } from 'antd';
 import { SearchOutlined, CalendarOutlined, PlusOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { projects } from '../../utils/dummyData.js';
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
 const { Meta } = Card;
 
-const projects = [
-  { title: 'Bridge Construction', location: 'Toronto', image: '/images/bridge.webp', id: 0 },
-  { title: 'High-Rise Development', location: 'Vancouver', image: '/images/highrise.jpg', id: 1 },
-  { title: 'Highway Expansion', location: 'Montreal', image: '/images/highway.jpg', id: 2 },
-  { title: 'Oil Pipeline Repair', location: 'Alberta', image: '/images/pipeline.jpg', id: 3 },
-  { title: 'Park Restoration', location: 'Ottawa', image: '/images/park.jpeg', id: 4 },
-  { title: 'School Construction', location: 'Quebec City', image: '/images/school.png', id: 5 },
-  { title: 'Bridge Construction', location: 'Toronto', image: '/images/bridge.webp', id: 6 },
-  { title: 'High-Rise Development', location: 'Vancouver', image: '/images/highrise.jpg', id: 7 },
-  { title: 'Highway Expansion', location: 'Montreal', image: '/images/highway.jpg', id: 8 },
-  { title: 'Oil Pipeline Repair', location: 'Alberta', image: '/images/pipeline.jpg', id: 9 },
-  { title: 'Park Restoration', location: 'Ottawa', image: '/images/park.jpeg', id: 10 },
-  { title: 'School Construction', location: 'Quebec City', image: '/images/school.png', id: 11 }
-];
 
 export default function UserDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -204,8 +191,8 @@ export default function UserDashboard() {
                     hoverable
                     cover={
                       <img
-                        alt={project.title}
-                        src={project.image}
+                        alt={project.name}
+                        src={project.thumbnail}
                         style={{ height: '80px', objectFit: 'cover' }}
                       />
                     }
@@ -221,7 +208,7 @@ export default function UserDashboard() {
                     }}
                   >
                     <Meta
-                      title={project.title}
+                      title={project.name}
                       description={project.location}
                       style={{ textAlign: 'center' }}
                     />
