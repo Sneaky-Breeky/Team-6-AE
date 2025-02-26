@@ -6,15 +6,7 @@ import { users } from '../../utils/dummyData.js';
 
 const { Title } = Typography;
 
-/*const users = [
-  {name: 'John Doe', email: 'johndoe123@example.com', role: 'User', status: 'Active'},
-  {name: 'Sarah Brown', email: 'sarah.brown@example.com', role: 'Admin', status: 'Active'},
-  {name: 'Michael Johnson', email: 'michael.j2009@example.com', role: 'User', status: 'Inactive'}
-];*/
-
-
-function popupForm() {
-  
+function popupForm() {  
   return (
     <Box
       sx={{

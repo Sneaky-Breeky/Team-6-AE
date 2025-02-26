@@ -47,8 +47,8 @@ function PopupAccess(project) {
   };
 
   const toggleUserChecked = (e, userName) => {
-    const updatedUsers = e.target.checked
-      ? [...listUsers, userName]
+    const updatedUsers = e.target.checked ? 
+      [...listUsers, userName]
       : listUsers.filter((name) => name !== userName);
     
     setSelectedChecked(!selectedChecked);
