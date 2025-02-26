@@ -1,55 +1,46 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography, Button, Input } from 'antd';
-import { SearchOutlined, EditOutlined} from '@ant-design/icons';
+import { SearchOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons';
 import dayjs from 'dayjs';
-import { projectsRenameToProjectsAfterUpdates } from '../../utils/dummyData.js';
+import { projects } from '../../utils/dummyData.js';
 
 const { Title } = Typography;
 
-const projects = [
-  {name: "School Construction", location: "Quebec City", date: dayjs("2024-12-18 00:16:01"), status: "", dept: ""},
-  {name: "Bridge Construction", location: "Toronto", date: dayjs("2024-09-10 00:16:01"), status: "", dept: ""},
-  {name: "High-rise Development", location: "Vancouver", date: dayjs("2024-12-28 00:16:01"), status: "", dept: ""},
-  {name: "Highway Expansion", location: "Montreal", date: dayjs("2024-10-14 00:16:01"), status: "", dept: ""},
-  {name: "Oil Pipeline Repair", location: "Alberta", date: dayjs("2024-11-07 00:16:01"), status: "", dept: ""},
-  {name: "Park Restoration", location: "Ottawa", date: dayjs("2025-01-31 00:16:01"), status: "", dept: ""}
-];
-
-const metadata = ["Project Name", "Location", "Date", "Status", "Department"];
-
-function EditMD(md, label, i, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen) {
+function EditMD(md, i, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen) {
   searchEditQuery = md;
 
+  const handleChange = (e) => {
+    setSearchEditQuery(e.target.value);
+  };
+
   return (
-    <tr style={{height: '50px'}}>
-      <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{label + ": "}</td>
-      <td style={{ fontSize: '12px', width: '50%', textAlign: 'left', borderBottom:'1px solid black'}} >
-        { editOpen === i?
-          <Input
-            size="small"
-            defaultValue={md === '' ? "Enter a " + label : searchEditQuery}
-            onChange={(e) => setSearchEditQuery(e.target.value)}
-            style={{ width: '90%'}}
-          />
-          :md}
-        </td>
-      <td style={{ fontSize: '12px', width: '10%', textAlign: 'right', borderBottom:'1px solid black'}} >
-        {md === '' ? 
-          <Button type="primary" size={"small"} onClick={() => {setEditOpen(editOpen === null ? i : null)}}>Create</Button>
-          : <Button color="default" variant="text" size={"default"} icon={<EditOutlined />}
-            onClick={() => {setEditOpen(editOpen === null ? i : null)}}/>}
-      </td>
-    </tr>
+      <><td style={{ fontSize: '12px', width: '50%', textAlign: 'left', borderBottom: '1px solid black' }}>
+      {editOpen ?
+        <Input
+          size="small"
+          onChange={handleChange}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                setSearchEditQuery(e.target.value);
+            }
+        }}
+          style={{ width: '90%' }} />
+        : searchEditQuery}
+    </td><td style={{ fontSize: '12px', width: '15%', textAlign: 'right', borderBottom: '1px solid black' }}>
+        {searchEditQuery === null || searchEditQuery === '' ?
+          <Button size={"small"} onClick={() => { setEditOpen(editOpen ? false : true); } }>
+            {editOpen ? 'Close' :
+              'Create'}</Button>
+          : <Button color="default" variant="text" size={"default"} icon={editOpen ? <CloseOutlined /> : <EditOutlined />}
+            onClick={() => { setEditOpen(editOpen ? false : true); } } />}
+      </td></>
   );
 }
 
-function popupForm(proj, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen) {
-  const onChange = (checked) => {
-    console.log(`switch to ${checked}`);
-  };
-
-  proj[2] = dayjs(proj[2]).format('MMM DD, YYYY');
+function popupForm(proj, searchEditQuery, setSearchEditQuery, setPopupFormOpen,
+  editNameOpen, setEditNameOpen, editLocOpen, setEditLocOpen, editDateOpen, setEditDateOpen, editStateOpen, setEditStateOpen, editPhaseOpen, setEditPhaseOpen) {
 
   return (
     <Box
@@ -59,11 +50,12 @@ function popupForm(proj, searchEditQuery, setSearchEditQuery, editOpen, setEditO
         justifyContent: 'flex-start',
         alignItems: 'left',
         width: '80%',
-        height: '85%',
+        height: '100%',
         backgroundColor: '#f5f5f5',
         borderRadius: '10px',
         margin: '20px auto',
         marginLeft: '0',
+        marginTop: '0',
         padding: '20px',
         paddingTop: '10px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
@@ -78,14 +70,50 @@ function popupForm(proj, searchEditQuery, setSearchEditQuery, editOpen, setEditO
           </tr>
           <tr style={{paddingTop: '0'}}>
               <th colspan="3" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} ><h5 style={{ margin:'0'}}>
-                {proj[0] + " Project"}
+                {proj.name + " Project"}
                 
                 </h5></th>
           </tr>
-          {metadata.map((label, index) => (
-            EditMD(proj[index], label, index, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)
-          ))}
+          {/*{labels.map((label, index) => (
+            EditMD(p[index], label, index, searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)
+          ))} */}
+
+          <tr style={{height: '50px'}}>
+            <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Project Name: "}</td>
+            {EditMD(proj.name, 0, searchEditQuery, setSearchEditQuery, editNameOpen, setEditNameOpen)}
+          </tr>
+          <tr style={{height: '50px'}}>
+            <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Location: "}</td>
+            {EditMD(proj.location, 1, searchEditQuery, setSearchEditQuery, editLocOpen, setEditLocOpen)}
+          </tr>
+          <tr style={{height: '50px'}}>
+            <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Date: "}</td>
+            {EditMD(dayjs(proj.date).format('MMM DD, YYYY'), 2, searchEditQuery, setSearchEditQuery, editDateOpen, setEditDateOpen)}
+          </tr>
+          <tr style={{height: '50px'}}>
+            <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Status: "}</td>
+            {EditMD(proj.status, 3, searchEditQuery, setSearchEditQuery, editStateOpen, setEditStateOpen)}
+          </tr>
+          <tr style={{height: '50px'}}>
+            <td style={{ fontSize: '12px', width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >{"Phase: "}</td>
+            {EditMD(proj.phase, 4, searchEditQuery, setSearchEditQuery, editPhaseOpen, setEditPhaseOpen)}
+          </tr>
+          
       </table>
+      <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', margin: '20px auto', marginBottom: '0'}}>
+        <Button color="default" variant="text" size={"default"} icon={<CloseOutlined/>}
+          onClick={(e) => {
+            e.stopPropagation();
+            setPopupFormOpen(false);
+          }}/>
+        <Button type="primary" size={"default"}
+          onClick={(e) => {
+            e.stopPropagation();
+            setPopupFormOpen(false);
+
+          }}>Submit</Button>
+      </div>
+      
     </div>
   </Box>
   );
@@ -94,9 +122,13 @@ function popupForm(proj, searchEditQuery, setSearchEditQuery, editOpen, setEditO
 export default function AdminMetadataManage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isPopupFormOpen, setPopupFormOpen] = useState(false);
-  const [projectName, setProjectName] = useState(null);
+  const [project, setProject] = useState(null);
   const [searchEditQuery, setSearchEditQuery] = useState('');
-  const [editOpen, setEditOpen] = useState(null);
+  const [editNameOpen, setEditNameOpen] = useState(false);
+  const [editLocOpen, setEditLocOpen] = useState(false);
+  const [editDateOpen, setEditDateOpen] = useState(false);
+  const [editStateOpen, setEditStateOpen] = useState(false);
+  const [editPhaseOpen, setEditPhaseOpen] = useState(false);
 
   return (
     <Box
@@ -176,13 +208,19 @@ export default function AdminMetadataManage() {
         <tr>
             <th colspan="2" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} ><h3>Projects</h3></th>
         </tr>
-        {(projects.filter(p => {return p.name.toLowerCase().includes(searchQuery.toLowerCase())})).map((project) => (
-          <tr onClick={() => {setPopupFormOpen(isPopupFormOpen ? false : true);
-            setProjectName(project)
+        {(projects.filter(p => {return p.name.toLowerCase().includes(searchQuery.toLowerCase())})).map((p) => (
+          <tr onClick={() => {
+            setPopupFormOpen(true);
+            setEditNameOpen(false);
+            setEditLocOpen(false);
+            setEditDateOpen(false);
+            setEditStateOpen(false);
+            setEditPhaseOpen(false);
+            setProject(p)
           }} style={{height: '50px'}}
             onMouseEnter={(e) => {e.currentTarget.style.backgroundColor = '#fcfcfc';}}
             onMouseLeave={(e) => {e.currentTarget.style.backgroundColor = '';}}>
-            <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >{project.name}</td>
+            <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >{p.name}</td>
           </tr>
         ))}
     </table>
@@ -199,40 +237,20 @@ export default function AdminMetadataManage() {
       justifyContent: 'flex-Center',
       alignItems: 'center',
       width: '50%',
+      height: '95%',
       margin: '20px auto',
+      marginTop: '0',
       borderRadius: '10px',
-      padding: '10px',
+      padding: '0',
       overflow: 'auto',
     }}
-  >
+  > 
 
-    {/* <Box
-      onClick={() => 
-        {setPopupFormOpen(isPopupFormOpen ? false : true)}
-      }
-      sx={{
-        textAlign: 'center',
-        width: 200,
-        height: 80,
-        border: 1,
-        borderRadius: '16px',
-        '&:hover': { boxShadow: 3},
-        }}
-      >
-        {isPopupFormOpen ? 
-        <CloseOutlined style={{ marginTop: '10px', fontSize: '30px'}}/>
-        : <PlusOutlined style={{ marginTop: '10px', fontSize: '30px'}}/>}
-        {isPopupFormOpen ? 
-        <h5 style={{margin: '15px'}}>Close</h5>
-        : <h5 style={{margin: '15px'}}>Add Metadata</h5>}
-    </Box>*/}
-    
-
-    {isPopupFormOpen && popupForm(Object.values(projectName), searchEditQuery, setSearchEditQuery, editOpen, setEditOpen)}
+    {isPopupFormOpen && popupForm(project, searchEditQuery, setSearchEditQuery, setPopupFormOpen,
+      editNameOpen, setEditNameOpen, editLocOpen, setEditLocOpen, editDateOpen, setEditDateOpen, editStateOpen, setEditStateOpen, editPhaseOpen, setEditPhaseOpen
+    )}
   </Box>
-
-</Box>
-
+  </Box>
     </Box>
   );
 }

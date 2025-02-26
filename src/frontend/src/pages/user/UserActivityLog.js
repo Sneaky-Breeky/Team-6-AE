@@ -2,27 +2,9 @@ import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography, } from 'antd';
 import { logs } from '../../utils/dummyData.js';
+import dayjs from 'dayjs';
 
 const { Title } = Typography;
-
-
-
-// change dates to string
-function logTime(date) {
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  let month = months[date.getMonth()];
-  let day = date.getDate();
-  let year = date.getFullYear();
-  let hours = date.getHours();
-  let minutes = date.getMinutes().toString().padStart(2, '0');
-  let period = hours >= 12 ? "pm" : "am";
-
-  if (hours === 0) hours = 12;
-  else if (hours > 12) hours -= 12;
-
-  return `${month} ${day}, ${year} ${hours}:${minutes}${period} PST`;
-}
-
 
 export default function ActivityLog() {
 
@@ -69,7 +51,7 @@ export default function ActivityLog() {
         </tr>
             {logs.map((log) => (
                 <tr>
-                    <td style={{width: '40%', textAlign: 'left', borderBottom:'1px solid black'}} >{logTime(log.time)}</td>
+                    <td style={{width: '40%', textAlign: 'left', borderBottom:'1px solid black'}} >{dayjs(log.time).format('MMM DD, YYYY h:mma')}</td>
                     <td style={{width: '60%', textAlign: 'left', borderBottom:'1px solid black'}} >{log.action}</td>
                 </tr>
             ))}
