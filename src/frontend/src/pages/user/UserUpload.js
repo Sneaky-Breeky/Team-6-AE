@@ -156,19 +156,31 @@ export default function UserDashboard() {
                             </Button>
                             {/* File list display */}
                             <Flex wrap="wrap" style={{ marginTop: '15px', maxWidth: '100%', overflow: 'auto' }}>
-                                {files.map((file) => (
-                                    <Tag
-                                        key={file.name}
-                                        closable
-                                        onClose={() => removeFile(file.name)}
-                                        style={tagStyle}
-                                    >
-                                        <strong>{file.name}</strong><br/>
-                                        File size: {(file.size / (1024 * 1024)).toFixed(2) + " MB"}, <br/>
-                                        File type: {file.type || "Unknown"}, <br/>
-                                        Last modified: {new Date(file.lastModified).toLocaleString()}
-                                    </Tag>
-                                ))}
+                                {files.map((file) => {
+                                    const fileURL = URL.createObjectURL(file);
+                                    return (
+                                        <Tag key={file.name} closable onClose={() => removeFile(file.name)} style={tagStyle}>
+                                            {/* Thumbnail Preview */}
+                                            {file.type.startsWith('image/') ? (
+                                                <img src={fileURL} alt={file.name} style={{ width: '80px', height: '80px', objectFit: 'cover', marginRight: '8px', borderRadius: '5px' }} />
+                                            ) : file.type.startsWith('video/') ? (
+                                                <video src={fileURL} width="80" height="80" controls style={{ marginRight: '8px', borderRadius: '5px' }}>
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            ) : (
+                                                <span>📄 {file.name}</span>
+                                            )}
+
+                                            {/* File Info */}
+                                            <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
+                                                <strong>{file.name}</strong><br />
+                                                Size: {(file.size / (1024 * 1024)).toFixed(2)} MB<br />
+                                                Type: {file.type || "Unknown"}<br />
+                                                Last Modified: {new Date(file.lastModified).toLocaleString()}
+                                            </div>
+                                        </Tag>
+                                    );
+                                })}
                             </Flex>
                         </Box>
                         {/*Constraint Info*/}
