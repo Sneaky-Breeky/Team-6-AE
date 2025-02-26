@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Typography, Button, Popover, Radio, Form, Input, Checkbox } from 'antd';
-import { SearchOutlined, EditOutlined} from '@ant-design/icons';
-import { users } from '../../utils/dummyData.js';
+import { SearchOutlined, EditOutlined, CloseOutlined} from '@ant-design/icons';
+import { projects, files, users } from '../../utils/dummyData.js';
 
 const { Title } = Typography;
 
-const projects = [
+/*const projects = [
   {name: 'Bridge Construction', accessLevel: 'Admins Only', metadata: ['Project Name', 'Location', 'Date', 'Image Description', 'Tags'], status: 'Active', listUsers: []},
   {name: 'High-Rise Development', accessLevel: 'Everyone', metadata: ['Project Name', 'Location', 'Date', 'Tags'], status: 'Active', listUsers: []},
   {name: 'Highway Expansion', accessLevel: 'Selected Users', metadata: ['Project Name', 'Location', 'Date'], status: 'Inactive', listUsers: ['John Doe', 'Sarah Brown']}
-];
+]; */
 
 /*
 const users = [
@@ -24,6 +24,7 @@ const metadata = ["Project Name", "Location", "Date", "Image Description", "Tags
 function PopupAccess(project) {
   const [adminChecked, setAdminChecked] = useState(project.accessLevel === 'Admins Only');
   const [allChecked, setAllChecked] = useState(project.accessLevel === 'Everyone');
+  const [selectedChecked, setSelectedChecked] = useState(project.accessLevel === 'Selected Users');
   const [listUsers, setListUsers] = useState(project.listUsers || []);
 
   const onChange = (e) => {
@@ -34,12 +35,14 @@ function PopupAccess(project) {
   const toggleAdminChecked = () => {
     setAdminChecked(!adminChecked);
     setAllChecked(false);
+    setSelectedChecked(false);
     setListUsers([]);
   };
 
   const toggleAllChecked = () => {
     setAllChecked(!allChecked);
     setAdminChecked(false);
+    setSelectedChecked(false);
     setListUsers([]);
   };
 
@@ -48,6 +51,7 @@ function PopupAccess(project) {
       ? [...listUsers, userName]
       : listUsers.filter((name) => name !== userName);
     
+    setSelectedChecked(!selectedChecked);
     setAdminChecked(false);
     setAllChecked(false);
 
@@ -89,7 +93,7 @@ function PopupAccess(project) {
   );
 }
 
-function popupForm() {
+function popupForm(project, setPopupFormOpen) {
   
   return (
     <Box
@@ -109,11 +113,11 @@ function popupForm() {
         overflow: 'auto'
       }}
     >
-      <div style={{overflowY: 'auto', width: '100%', height: '100%'}}>
+    <div style={{overflowY: 'auto', width: '100%', height: '100%'}}>
     <table style={{width: '100%', borderCollapse: 'collapse'}}>
         <tr>
             <th colspan="2" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} >
-              <h4>Edit Project Metadata Viewing</h4></th>
+              <h4>Edit {project.name} Project's Metadata Viewing</h4></th>
         </tr>
         {metadata.map((md) => (
           <tr style={{height: '50px'}}>
@@ -134,7 +138,22 @@ function popupForm() {
           </tr>
         ))}
     </table>
+    <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'space-between', margin: '20px auto', marginBottom: '0'}}>
+        <Button color="default" variant="text" size={"default"} icon={<CloseOutlined/>}
+          onClick={(e) => {
+            e.stopPropagation();
+            setPopupFormOpen(false);
+          }}/>
+        <Button type="primary" size={"default"}
+          onClick={(e) => {
+            e.stopPropagation();
+            setPopupFormOpen(false);
+
+          }}>Submit</Button>
+      </div>
+    
     </div>
+    
   </Box>
   );
 }
@@ -142,6 +161,7 @@ function popupForm() {
 export default function AdminProjectSecurity() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isPopupFormOpen, setPopupFormOpen] = useState(false);
+  const [project, setProject] = useState(null);
 
   return (
     <Box
@@ -200,7 +220,7 @@ export default function AdminProjectSecurity() {
     <Box
       sx={{
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'left',
         width: '100%',
@@ -220,16 +240,19 @@ export default function AdminProjectSecurity() {
           <th style={{ width: '25%', textAlign: 'left', borderBottom:'1px solid black'}} >Project</th>
           <th colSpan="2" style={{ width: '15%', textAlign: 'left', borderBottom:'1px solid black'}} >Access Level</th>
       </tr>
-          {(projects.filter(p => {return p.name.toLowerCase().includes(searchQuery.toLowerCase())})).map((project) => (
-              <tr onClick={() => {setPopupFormOpen(isPopupFormOpen ? false : true)}} style={{height: '50px'}}
+          {(projects.filter(p => {return p.name.toLowerCase().includes(searchQuery.toLowerCase())})).map((p) => (
+              <tr onClick={() => {
+                setProject(p);
+                setPopupFormOpen(true);
+              }} style={{height: '50px'}}
                onMouseEnter={(e) => {e.currentTarget.style.backgroundColor = '#fcfcfc';}}
                 onMouseLeave={(e) => {e.currentTarget.style.backgroundColor = '';}}>
-                  <td style={{ fontSize: '12px', width: '40%', textAlign: 'left', borderBottom:'1px solid black'}} >{project.name}</td>
-                  <td style={{ fontSize: '12px', width: '30%', textAlign: 'left', borderBottom:'1px solid black'}} >{project.accessLevel}</td>
+                  <td style={{ fontSize: '12px', width: '40%', textAlign: 'left', borderBottom:'1px solid black'}} >{p.name}</td>
+                  <td style={{ fontSize: '12px', width: '30%', textAlign: 'left', borderBottom:'1px solid black'}} >{p.accessLevel}</td>
                   <td style={{ fontSize: '12px', width: '5%', textAlign: 'left', borderBottom:'1px solid black'}} >{
                     // reload if status input differs from original user.status
                     <Popover
-                      content={PopupAccess(project)}
+                      content={PopupAccess(p)}
                       trigger="click"
                     >
                     <Button onClick={(e) => {
@@ -237,13 +260,21 @@ export default function AdminProjectSecurity() {
                         setPopupFormOpen(false);
                       }} 
                       color="default" variant="text" size={"default"} icon={<EditOutlined />}/>   
-                    </Popover>          
+                    </Popover>
+                              
                     }</td>
               </tr>
           ))}
   </table>
   </div>
+  <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', margin: '20px auto', marginBottom: '0'}}>
+    <Button type="primary" size={"default"}
+      onClick={(e) => {
+      }}>Save</Button>
+  </div>
   </Box>
+
+  
   </Box>
 
   {/* right container with new users */}
@@ -255,10 +286,10 @@ export default function AdminProjectSecurity() {
       alignItems: 'center',
       width: '40%',
       padding: '20px',
-
+      paddingTop: '0'
     }}
   >
-    {isPopupFormOpen && popupForm()}
+    {isPopupFormOpen && popupForm(project, setPopupFormOpen)}
 
   </Box>
 </Box>
