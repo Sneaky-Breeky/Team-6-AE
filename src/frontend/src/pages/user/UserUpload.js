@@ -1,9 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Box from '@mui/material/Box';
-import { Input, Typography, DatePicker, Button, Form, Select, Tag, Flex } from "antd";
-import { CalendarOutlined } from '@ant-design/icons';
+import { Input, Typography, DatePicker, Button, Form, Select, Tag, Flex, Image, Modal, Slider, message } from "antd";
+import { PlusOutlined, RotateLeftOutlined, RotateRightOutlined, ExclamationCircleOutlined, CalendarOutlined, DownOutlined } from '@ant-design/icons';
+import Cropper from 'react-easy-crop';
 
 const { Title } = Typography;
+const { confirm } = Modal;
 
 const tagStyle = {
     backgroundColor: '#dbdbdb',
@@ -11,23 +13,29 @@ const tagStyle = {
     margin: '3px'
 };
 
-//TODO : some of the boxes use the same formatting as UserDashboard.js, best to abstract styles
+export default function UserUpload() {
+    const [files, setFiles] = useState([]);
+    const [croppedImages, setCroppedImages] = useState([]);
+    const [currentFile, setCurrentFile] = useState(null);
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+    const [zoom, setZoom] = useState(1);
+    const [rotation, setRotation] = useState(0);
+    const [editing, setEditing] = useState(false);
 
-export default function UserDashboard() {
     const [projectName, setProjectName] = useState(null);
     const [metadataTagsInput, setMetadataTagsInput] = useState();
     const [metadataTags, setMetadataTags] = useState([]);
     const [location, setLocation] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
-    const [files, setFiles] = useState([]);
     const fileInputRef = useRef(null);
     const metadataBoxStyle = {
         textAlign: 'left',
         backgroundColor: '#f5f5f5',
         borderRadius: '10px',
+        padding: '12px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        paddingLeft: 2,
-        paddingRight: 2,
+        marginBottom: '12px',
+        width: '100%'
     };
 
     const handleMetadataTagClose = (removedTag) => {
@@ -42,253 +50,229 @@ export default function UserDashboard() {
         setMetadataTagsInput("");
     }
 
-    const handleFileChange = (event) => {
-        const selectedFiles = Array.from(event.target.files);
-        setFiles((prevFiles) => {
-            const existingFileNames = new Set(prevFiles.map(file => file.name));
 
-            // Separate duplicates from new files
+    const showDuplicateAlert = (duplicates) => {
+        message.warning(`Duplicate files ignored: ${duplicates.join(", ")}`);
+    };
+
+    const handleFileChange = (event) => {
+        const selectedFiles = Array.from(event.target.files).map(file => ({
+            file,
+            preview: URL.createObjectURL(file)
+        }));
+
+        setFiles((prevFiles) => {
+            const existingFileNames = new Set(prevFiles.map(file => file.file.name));
+
             const newFiles = [];
             const duplicateFiles = [];
 
             selectedFiles.forEach(file => {
-                if (existingFileNames.has(file.name)) {
-                    duplicateFiles.push(file.name);
+                if (existingFileNames.has(file.file.name)) {
+                    duplicateFiles.push(file.file.name);
                 } else {
                     newFiles.push(file);
                 }
             });
 
-            // Show alert for duplicates
             if (duplicateFiles.length > 0) {
-                alert(`Duplicate files ignored: ${duplicateFiles.join(", ")}`);
+                showDuplicateAlert(duplicateFiles);
             }
 
             return [...prevFiles, ...newFiles];
         });
     };
 
-    const removeFile = (fileName) => {
-        setFiles((prevFiles) => prevFiles.filter(file => file.name !== fileName));
+    const handleEditImage = (file) => {
+        setCurrentFile(file);
+        setEditing(true);
     };
 
-    const openFileWindow = () => {
-        fileInputRef.current.click();
+    const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+        console.log(croppedArea, croppedAreaPixels);
+    }, []);
+
+    const saveEditedImage = () => {
+        setCroppedImages([...croppedImages, currentFile]);
+        setEditing(false);
+        setCurrentFile(null);
     };
+
+    const confirmRemoveFile = (fileName) => {
+        if (!fileName || !fileName.file) {
+            console.error("Invalid file object:", fileName);
+            return;
+        }
+
+        confirm({
+            title: 'Are you sure you want to remove this image?',
+            icon: <ExclamationCircleOutlined />,
+            content: 'This action cannot be undone.',
+            okText: 'Yes, remove',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                removeFile(fileName.file.name);
+            }
+        });
+    };
+
+    const removeFile = (fileName) => {
+        setFiles(prevFiles => {
+            const updatedFiles = prevFiles.filter(file => file.file.name !== fileName);
+            return [...updatedFiles];
+        });
+    };
+
 
     return (
-        <Box
-            sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                height: '100vh',
-            }}
-        >
-            {/* Title */}
-            <Box
-                sx={{
+        <Box sx={{ display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px', gap: '20px' }}>
+            {/* Left section (image uploading)*/}
+            <Box sx={{ flex: 3, display: 'flex', flexDirection: 'column', gap: '15px', padding: '20px' }}>
+                <Box sx={{
                     textAlign: 'center',
                     padding: 4,
-                }}
-            >
-                <Title level={1}>Upload Files</Title>
-            </Box>
-
-            {/* Main content */}
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexGrow: 1,
-                }}
-            >
-                {/* Left container for upload */}
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'flex-start',
-                        width: '60%',
-                        minWidth: '150px',
-                        overflow: 'hidden',
-                        padding: 4,
-                        paddingRight: 2,
-                    }}
-                >
-                    <Title level={3} style={{ textAlign: 'left' }}>
-                        Upload File
-                    </Title>
-
-                    {/* File Upload Section */}
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'flex-start',
-                            width: '100%',
-                            alignItems: 'center',
-                            backgroundColor: '#f5f5f5',
-                            borderRadius: '10px',
-                            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                        }}
-                    >
-                        {/*Drag and Drop area*/}
-                        <Box
-                            sx={{
-                                textAlign: 'center',
-                                padding: 8,
-                            }}>
-                            <Title level={3}>
-                                Drag and drop files here*
-                            </Title>
-                            <Title level={4}>
-                                or
-                            </Title>
-                            <input
-                                type="file"
-                                multiple
-                                accept=".jpeg,.png,.mp4,.raw"
-                                ref={fileInputRef}
-                                onChange={handleFileChange}
-                                style={{ display: 'none' }}
-                            />
-                            <Button style={{ margin: '10%' }} type="primary" htmlType="button" color="cyan" variant="solid" onClick={openFileWindow}>
-                                + Add Files
-                            </Button>
-                            {/* File list display */}
-                            <Flex wrap="wrap" style={{ marginTop: '15px', maxWidth: '100%', overflow: 'auto' }}>
-                                {files.map((file) => {
-                                    const fileURL = URL.createObjectURL(file);
-                                    return (
-                                        <Tag key={file.name} closable onClose={() => removeFile(file.name)} style={tagStyle}>
-                                            {/* Thumbnail Preview */}
-                                            {file.type.startsWith('image/') ? (
-                                                <img src={fileURL} alt={file.name} style={{ width: '80px', height: '80px', objectFit: 'cover', marginRight: '8px', borderRadius: '5px' }} />
-                                            ) : file.type.startsWith('video/') ? (
-                                                <video src={fileURL} width="80" height="80" controls style={{ marginRight: '8px', borderRadius: '5px' }}>
-                                                    Your browser does not support the video tag.
-                                                </video>
-                                            ) : (
-                                                <span>📄 {file.name}</span>
-                                            )}
-
-                                            {/* File Info */}
-                                            <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
-                                                <strong>{file.name}</strong><br />
-                                                Size: {(file.size / (1024 * 1024)).toFixed(2)} MB<br />
-                                                Type: {file.type || "Unknown"}<br />
-                                                Last Modified: {new Date(file.lastModified).toLocaleString()}
-                                            </div>
-                                        </Tag>
-                                    );
-                                })}
-                            </Flex>
-                        </Box>
-                        {/*Constraint Info*/}
-                        <Box
-                            sx={{
-                                textAlign: 'center',
-                                padding: 1,
-                            }}>
-                            <Title level={4}>
-                                Supports jpeg, png, mp4, raw
-                            </Title>
-                            <Title level={5}>
-                                Maximum 100 files per upload*
-                            </Title>
-                        </Box>
-                    </Box>
-                </Box>
-
-                {/* Right container for metadata */}
-                <Box
-                    sx={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'flex-start',
-                        gap: 2,
-                        width: '30%',
-                        minWidth: '150px',
-                        overflow: 'hidden',
-                        padding: 4,
-                        paddingLeft: 2,
-                    }}
-                >
-                    {/*Project Name Box*/}
-                    <Box sx={metadataBoxStyle}>
-                        <Title level={5}>Project name</Title>
-                        <Form.Item>
-                            <Input
-                                value={projectName}
-                                onChange={(e) => setProjectName(e.target.value)}
-                            />
-                        </Form.Item>
-                    </Box>
-
-                    {/*Metadata Tags Box*/}
-                    <Box sx={metadataBoxStyle}>
-                        <Title level={5}>Add metadata:</Title>
-                        <Form.Item>
-                            <Input
-                                placeholder="ex. bridge"
-                                value={metadataTagsInput}
-                                onChange={(e) => setMetadataTagsInput(e.target.value)}
-                                onPressEnter={() => handleMetadataTagAdd()}
-                            />
-                        </Form.Item>
-                        <Flex style={{ marginBottom: "3%" }} gap="4px 0" wrap>
-                            {metadataTags.map((tag) => (
-                                <Tag
-                                    style={tagStyle}
-                                    key={tag}
-                                    closable={true}
-                                    onClose={() => handleMetadataTagClose(tag)}
-                                >
-                                    {tag}
-                                </Tag>
-                            ))
-                            }
-                        </Flex>
-                    </Box>
-
-                    {/*Resolution Box*/}
-                    <Box sx={metadataBoxStyle}>
-                        <Title level={5}>Adjust resolution:</Title>
-                        <Form.Item>
-                            <Select options={
-                                [{ value: 'low', label: <span>Low</span> },
-                                { value: 'medium', label: <span>Medium</span> },
-                                { value: 'high', label: <span>High</span> }]} />
-                        </Form.Item>
-                    </Box>
-
-                    {/*Date Box*/}
-                    <Box sx={metadataBoxStyle}>
-                        <Title level={5}>Add date:</Title>
-                        <Form.Item>
-                            <DatePicker
-                                placeholder="Select date"
-                                onChange={(date, dateString) => setSelectedDate(dateString)}
-                                suffixIcon={<CalendarOutlined />}
-                            />
-                        </Form.Item>
-                    </Box>
-
-                    {/*Location Box*/}
-                    <Box sx={metadataBoxStyle}>
-                        <Title level={5}>Location:</Title>
-                        <Form.Item>
-                            <Input
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                            />
-                        </Form.Item>
-                    </Box>
-
-                    <Button type="primary" htmlType="button" color="cyan" variant="solid" >
-                        Upload files to Project
+                    backgroundColor: '#f5f5f5',
+                    borderRadius: '10px',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                }}>
+                    <h2>Upload & Edit Files</h2>
+                    <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                    />
+                    <Button icon={<PlusOutlined />} type="primary" color="cyan" variant="solid" onClick={() => fileInputRef.current.click()}>
+                        Add Files
                     </Button>
                 </Box>
+
+            {/* Image preview & edit options */}
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, padding: 4 }}>
+                {files.map(({ file, preview }, index) => (
+                    <div key={index} style={{ position: 'relative', width: '150px' }}>
+                        <Image src={preview} width={150} preview={false} />
+                        <Button size="small" onClick={() => handleEditImage({ file, preview })}>Edit</Button>
+                        <Button danger size="small" onClick={() => {
+                            confirmRemoveFile(files[index]);
+                        }}>
+                            Remove
+                        </Button>
+
+                    </div>
+                ))}
             </Box>
+
+            {/* Image editor popup */}
+            <Modal
+                open={editing}
+                onCancel={() => setEditing(false)}
+                onOk={saveEditedImage}
+                okText="Save Changes"
+                title="Edit Image"
+                width={600}
+            >
+                {currentFile && (
+                    <div style={{ width: '100%', height: 400, position: 'relative' }}>
+                        <Cropper
+                            image={currentFile.preview}
+                            crop={crop}
+                            zoom={zoom}
+                            rotation={rotation}
+                            onCropChange={setCrop}
+                            onZoomChange={setZoom}
+                            onRotationChange={setRotation}
+                            onCropComplete={onCropComplete}
+                        />
+                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginTop: 2 }}>
+                            <Button icon={<RotateLeftOutlined />} onClick={() => setRotation(rotation - 90)} />
+                            <Button icon={<RotateRightOutlined />} onClick={() => setRotation(rotation + 90)} />
+                            <Slider min={1} max={3} step={0.1} value={zoom} onChange={setZoom} />
+                        </Box>
+                    </div>
+                )}
+            </Modal>
+
+            {/* Upload button */}
+            <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
+                <Button type="primary" color="cyan" variant="solid" disabled={files.length === 0}>
+                    Upload Files to Project
+                </Button>
+            </Box>
+
+            </Box>
+
+            {/* Right section (metadata) */}
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px', padding: '30px' }}>
+                <Box sx={metadataBoxStyle}>
+                    <Title level={5}>Project Name:</Title>
+                    <Input
+                        value={projectName}
+                        onChange={(e) => setProjectName(e.target.value)}
+                        placeholder="Enter project name"
+                    />
+                </Box>
+
+                <Box sx={metadataBoxStyle}>
+                    <Title level={5}>Add Metadata:</Title>
+                    <Input
+                        placeholder="ex. bridge"
+                        value={metadataTagsInput}
+                        onChange={(e) => setMetadataTagsInput(e.target.value)}
+                        onPressEnter={handleMetadataTagAdd}
+                    />
+                    <Flex wrap="wrap" style={{ marginTop: '10px' }}>
+                        {metadataTags.map((tag) => (
+                            <Tag
+                                style={tagStyle}
+                                key={tag}
+                                closable={true}
+                                onClose={() => handleMetadataTagClose(tag)}
+                            >
+                                {tag}
+                            </Tag>
+                        ))
+                        }
+                    </Flex>
+                </Box>
+
+                <Box sx={metadataBoxStyle}>
+                    <Title level={5}>Adjust Resolution:</Title>
+                    <Select
+                        placeholder="Select resolution"
+                        style={{ width: '100%' }}
+                        options={[
+                            { value: 'low', label: 'Low' },
+                            { value: 'medium', label: 'Medium' },
+                            { value: 'high', label: 'High' }
+                        ]}
+                        suffixIcon={<DownOutlined />}
+                    />
+                </Box>
+
+                <Box sx={metadataBoxStyle}>
+                    <Title level={5}>Add Date:</Title>
+                    <DatePicker
+                        placeholder="Select date"
+                        onChange={(date, dateString) => setSelectedDate(dateString)}
+                        suffixIcon={<CalendarOutlined />}
+                        style={{ width: '100%' }}
+                    />
+                </Box>
+
+                <Box sx={metadataBoxStyle}>
+                    <Title level={5}>Location:</Title>
+                    <Input
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder="Enter location"
+                    />
+                </Box>
+            </Box> 
+
         </Box>
-    )
-};
+    );
+}
