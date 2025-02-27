@@ -1,8 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import { Input, Typography, DatePicker, Button, Form, Select, Tag, Flex, Image, Modal, Slider, message } from "antd";
-import { PlusOutlined, RotateLeftOutlined, RotateRightOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import { CalendarOutlined } from '@ant-design/icons';
+import { PlusOutlined, RotateLeftOutlined, RotateRightOutlined, ExclamationCircleOutlined, CalendarOutlined, DownOutlined } from '@ant-design/icons';
 import Cropper from 'react-easy-crop';
 
 const { Title } = Typography;
@@ -33,9 +32,10 @@ export default function UserUpload() {
         textAlign: 'left',
         backgroundColor: '#f5f5f5',
         borderRadius: '10px',
+        padding: '12px',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        paddingLeft: 2,
-        paddingRight: 2,
+        marginBottom: '12px',
+        width: '100%'
     };
 
     const handleMetadataTagClose = (removedTag) => {
@@ -75,7 +75,6 @@ export default function UserUpload() {
                 }
             });
 
-            // Show alert for duplicate files
             if (duplicateFiles.length > 0) {
                 showDuplicateAlert(duplicateFiles);
             }
@@ -127,28 +126,29 @@ export default function UserUpload() {
 
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
-            {/* File upload section */}
-            <Box sx={{
-                textAlign: 'center',
-                padding: 4,
-                backgroundColor: '#f5f5f5',
-                borderRadius: '10px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            }}>
-                <h2>Upload & Edit Files</h2>
-                <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
-                    style={{ display: 'none' }}
-                />
-                <Button icon={<PlusOutlined />} type="primary" color="cyan" variant="solid" onClick={() => fileInputRef.current.click()}>
-                    Add Files
-                </Button>
-            </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px', gap: '20px' }}>
+            {/* Left section (image uploading)*/}
+            <Box sx={{ flex: 3, display: 'flex', flexDirection: 'column', gap: '15px', padding: '20px' }}>
+                <Box sx={{
+                    textAlign: 'center',
+                    padding: 4,
+                    backgroundColor: '#f5f5f5',
+                    borderRadius: '10px',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                }}>
+                    <h2>Upload & Edit Files</h2>
+                    <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        style={{ display: 'none' }}
+                    />
+                    <Button icon={<PlusOutlined />} type="primary" color="cyan" variant="solid" onClick={() => fileInputRef.current.click()}>
+                        Add Files
+                    </Button>
+                </Box>
 
             {/* Image preview & edit options */}
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, padding: 4 }}>
@@ -203,41 +203,28 @@ export default function UserUpload() {
                 </Button>
             </Box>
 
-            {/*  Metadata section option 1 */}
-            {/* <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                    gap: 2,
-                    width: '30%',
-                    minWidth: '150px',
-                    overflow: 'hidden',
-                    padding: 4,
-                    paddingLeft: 2,
-                }}
-            >
+            </Box>
+
+            {/* Right section (metadata) */}
+            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '12px', padding: '30px' }}>
                 <Box sx={metadataBoxStyle}>
-                    <Title level={5}>Project name</Title>
-                    <Form.Item>
-                        <Input
-                            value={projectName}
-                            onChange={(e) => setProjectName(e.target.value)}
-                        />
-                    </Form.Item>
+                    <Title level={5}>Project Name:</Title>
+                    <Input
+                        value={projectName}
+                        onChange={(e) => setProjectName(e.target.value)}
+                        placeholder="Enter project name"
+                    />
                 </Box>
 
                 <Box sx={metadataBoxStyle}>
-                    <Title level={5}>Add metadata:</Title>
-                    <Form.Item>
-                        <Input
-                            placeholder="ex. bridge"
-                            value={metadataTagsInput}
-                            onChange={(e) => setMetadataTagsInput(e.target.value)}
-                            onPressEnter={() => handleMetadataTagAdd()}
-                        />
-                    </Form.Item>
-                    <Flex style={{ marginBottom: "3%" }} gap="4px 0" wrap>
+                    <Title level={5}>Add Metadata:</Title>
+                    <Input
+                        placeholder="ex. bridge"
+                        value={metadataTagsInput}
+                        onChange={(e) => setMetadataTagsInput(e.target.value)}
+                        onPressEnter={handleMetadataTagAdd}
+                    />
+                    <Flex wrap="wrap" style={{ marginTop: '10px' }}>
                         {metadataTags.map((tag) => (
                             <Tag
                                 style={tagStyle}
@@ -253,59 +240,36 @@ export default function UserUpload() {
                 </Box>
 
                 <Box sx={metadataBoxStyle}>
-                    <Title level={5}>Adjust resolution:</Title>
-                    <Form.Item>
-                        <Select options={
-                            [{ value: 'low', label: <span>Low</span> },
-                            { value: 'medium', label: <span>Medium</span> },
-                            { value: 'high', label: <span>High</span> }]} />
-                    </Form.Item>
+                    <Title level={5}>Adjust Resolution:</Title>
+                    <Select
+                        placeholder="Select resolution"
+                        style={{ width: '100%' }}
+                        options={[
+                            { value: 'low', label: 'Low' },
+                            { value: 'medium', label: 'Medium' },
+                            { value: 'high', label: 'High' }
+                        ]}
+                        suffixIcon={<DownOutlined />}
+                    />
                 </Box>
 
                 <Box sx={metadataBoxStyle}>
-                    <Title level={5}>Add date:</Title>
-                    <Form.Item>
-                        <DatePicker
-                            placeholder="Select date"
-                            onChange={(date, dateString) => setSelectedDate(dateString)}
-                            suffixIcon={<CalendarOutlined />}
-                        />
-                    </Form.Item>
+                    <Title level={5}>Add Date:</Title>
+                    <DatePicker
+                        placeholder="Select date"
+                        onChange={(date, dateString) => setSelectedDate(dateString)}
+                        suffixIcon={<CalendarOutlined />}
+                        style={{ width: '100%' }}
+                    />
                 </Box>
 
                 <Box sx={metadataBoxStyle}>
                     <Title level={5}>Location:</Title>
-                    <Form.Item>
-                        <Input
-                            value={location}
-                            onChange={(e) => setLocation(e.target.value)}
-                        />
-                    </Form.Item>
-                </Box>
-
-                <Button type="primary" htmlType="button" color="cyan" variant="solid" >
-                    Upload files to Project
-                </Button>
-            </Box> */}
-
-
-            {/* Metadata section option */}
-            <Box sx={{ padding: 4 }}>
-                <h3>Metadata Fields</h3>
-
-                <Box>
-                    <h5>Project Name</h5>
-                    <input type="text" placeholder="Enter project name" />
-                </Box>
-
-                <Box>
-                    <h5>Metadata Tags</h5>
-                    <input type="text" placeholder="Enter metadata tags" />
-                </Box>
-
-                <Box>
-                    <h5>Location</h5>
-                    <input type="text" placeholder="Enter location" />
+                    <Input
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                        placeholder="Enter location"
+                    />
                 </Box>
             </Box> 
 
