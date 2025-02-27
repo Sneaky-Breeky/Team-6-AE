@@ -21,11 +21,11 @@ const users = [
 
 const metadata = ["Project Name", "Location", "Date", "Image Description", "Tags"];
 
-function PopupAccess(project) {
-  const [adminChecked, setAdminChecked] = useState(project.accessLevel === 'Admins Only');
+function PopupAccess(adminChecked, setAdminChecked, allChecked, setAllChecked, selectedChecked, setSelectedChecked, listUsers, setListUsers) {
+  /*const [adminChecked, setAdminChecked] = useState(project.accessLevel === 'Admins Only');
   const [allChecked, setAllChecked] = useState(project.accessLevel === 'Everyone');
   const [selectedChecked, setSelectedChecked] = useState(project.accessLevel === 'Selected Users');
-  const [listUsers, setListUsers] = useState(project.listUsers || []);
+  const [listUsers, setListUsers] = useState(project.listUsers || []); */
 
   const onChange = (e) => {
     // change access level here
@@ -65,7 +65,7 @@ function PopupAccess(project) {
         <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >
           <Checkbox checked={adminChecked}
             onChange={toggleAdminChecked}>
-              Admin Only
+              Admins Only
           </Checkbox>
           </td>
       </tr>
@@ -93,8 +93,8 @@ function PopupAccess(project) {
   );
 }
 
-function popupForm(project, setPopupFormOpen) {
-  
+function popupForm(project, setPopupFormOpen, adminChecked, setAdminChecked, allChecked, setAllChecked, selectedChecked, setSelectedChecked, listUsers, setListUsers) {
+
   return (
     <Box
       sx={{
@@ -105,10 +105,12 @@ function popupForm(project, setPopupFormOpen) {
         width: '80%',
         height: '100%',
         margin: '20px auto',
+        marginTop: '0',
         backgroundColor: '#f5f5f5',
         borderRadius: '10px',
         padding: '20px',
-        paddingTop: '10px',
+        paddingTop: '0',
+        paddingBottom: '10',
         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
         overflow: 'auto'
       }}
@@ -119,10 +121,28 @@ function popupForm(project, setPopupFormOpen) {
             <th colspan="2" style={{height: '40px', textAlign: 'center', borderBottom:'1px solid black', padding: '0px'}} >
               <h4>Edit {project.name} Project's Metadata Viewing</h4></th>
         </tr>
+        <tr style={{height: '50px'}}>
+            <td style={{ fontSize: '12px', width: '20%', textAlign: 'left', borderBottom:'1px solid black'}} >Access Level: </td>
+            <td style={{ fontSize: '12px', width: '5%', textAlign: 'center', borderBottom:'1px solid black'}} >{
+              // reload if status input differs from original user.status
+              // popup breaks
+               <Popover
+                content={PopupAccess(adminChecked, setAdminChecked, 
+                  allChecked, setAllChecked, 
+                  selectedChecked, setSelectedChecked, 
+                  listUsers, setListUsers)}
+
+                trigger="click"
+              >
+              <Button color="default" variant="text" size={"default"} icon={<EditOutlined />}/>   
+              </Popover>  
+                
+              }</td>
+          </tr>
         {metadata.map((md) => (
           <tr style={{height: '50px'}}>
             <td style={{ fontSize: '12px', textAlign: 'left', borderBottom:'1px solid black'}} >{md}</td>
-            <td style={{ fontSize: '12px', width: '5%', textAlign: 'left', borderBottom:'1px solid black'}} >{
+            <td style={{ fontSize: '12px', width: '5%', textAlign: 'center', borderBottom:'1px solid black'}} >{
               // reload if status input differs from original user.status
               <Popover
               content={
@@ -162,6 +182,10 @@ export default function AdminProjectSecurity() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isPopupFormOpen, setPopupFormOpen] = useState(false);
   const [project, setProject] = useState(null);
+  const [adminChecked, setAdminChecked] = useState(false);
+  const [allChecked, setAllChecked] = useState(false);
+  const [selectedChecked, setSelectedChecked] = useState(false);
+  const [listUsers, setListUsers] = useState([]);
 
   return (
     <Box
@@ -176,6 +200,7 @@ export default function AdminProjectSecurity() {
         sx={{
           textAlign: 'center',
           padding: 4,
+          marginBottom: '0',
         }}
       >
         <Title level={1}>Project Security</Title>
@@ -191,6 +216,7 @@ export default function AdminProjectSecurity() {
     height: '100vh',
     width: '80%',
     margin: '20px auto',
+    marginTop: '0',
     borderRadius: '10px',
 
     overflow: 'auto',
@@ -209,6 +235,7 @@ export default function AdminProjectSecurity() {
       borderRadius: '10px',
     }}
   >
+    
     <Input
       placeholder="Search for a project.."
       prefix={<SearchOutlined />}
@@ -251,26 +278,12 @@ export default function AdminProjectSecurity() {
                   <td style={{ fontSize: '12px', width: '30%', textAlign: 'left', borderBottom:'1px solid black'}} >{p.accessLevel}</td>
                   <td style={{ fontSize: '12px', width: '5%', textAlign: 'left', borderBottom:'1px solid black'}} >{
                     // reload if status input differs from original user.status
-                    <Popover
-                      content={PopupAccess(p)}
-                      trigger="click"
-                    >
-                    <Button onClick={(e) => {
-                        e.stopPropagation();
-                        setPopupFormOpen(false);
-                      }} 
-                      color="default" variant="text" size={"default"} icon={<EditOutlined />}/>   
-                    </Popover>
+                    // currently causes searchbar to break
                               
                     }</td>
               </tr>
           ))}
   </table>
-  </div>
-  <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end', margin: '20px auto', marginBottom: '0'}}>
-    <Button type="primary" size={"default"}
-      onClick={(e) => {
-      }}>Save</Button>
   </div>
   </Box>
 
@@ -286,10 +299,11 @@ export default function AdminProjectSecurity() {
       alignItems: 'center',
       width: '40%',
       padding: '20px',
+      paddingBottom: '10',
       paddingTop: '0'
     }}
   >
-    {isPopupFormOpen && popupForm(project, setPopupFormOpen)}
+    {isPopupFormOpen && popupForm(project, setPopupFormOpen, adminChecked, setAdminChecked, allChecked, setAllChecked, selectedChecked, setSelectedChecked, listUsers, setListUsers)}
 
   </Box>
 </Box>

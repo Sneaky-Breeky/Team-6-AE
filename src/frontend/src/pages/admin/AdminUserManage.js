@@ -150,7 +150,7 @@ export default function AdminUserManage() {
   <Box
     sx={{
       display: 'flex',
-      flexDirection: 'row',
+      flexDirection: 'column',
       justifyContent: 'flex-start',
       alignItems: 'left',
       width: '60%',
@@ -197,6 +197,17 @@ export default function AdminUserManage() {
               </tr>
           ))}
   </table>
+  
+  </div>
+  <div style={{display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'flex-end',
+      alignItems: 'right',
+      width: '100%',
+      margin: '20px auto',}}>
+  <Button type="primary" htmlType="submit">
+          Save
+        </Button>
   </div>
   </Box>
 
