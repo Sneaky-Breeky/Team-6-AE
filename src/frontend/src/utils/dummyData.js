@@ -9,9 +9,9 @@ const files = [
     { Id: 4, FileName: "Park Restoration", FilePath: '/images/park.jpeg', Metadata: ["park", "restoration"], ProjectId: 4, Status: "Active", Date: dayjs("2025-01-31 00:16:01") },
     { Id: 5, FileName: "School Construction", FilePath: '/images/school.png', Metadata: ["school", "construction"], ProjectId: 5, Status: "Active", Date: dayjs("2024-12-18 00:16:01") },
     { Id: 6, FileName: "Airport Expansion", FilePath: '/images/airport.webp', Metadata: ["airport", "expansion"], ProjectId: 6, Status: "Active", Date: dayjs("2024-11-22 00:16:01") },
-    { Id: 7, FileName: "Hospital Renovation", FilePath: '/images/hospital.jpg', Metadata: ["hospital", "renovation"], ProjectId: 7, Status: "Inactive", Date: dayjs("2024-09-30 00:16:01") },
+    { Id: 7, FileName: "Hospital Renovation", FilePath: '/images/hospital.jpg', Metadata: ["hospital", "renovation"], ProjectId: 7, Status: "Archived", Date: dayjs("2024-09-30 00:16:01") },
     { Id: 8, FileName: "Railway Modernization", FilePath: '/images/railway.jpeg', Metadata: ["railway", "modernization"], ProjectId: 8, Status: "Active", Date: dayjs("2024-07-10 00:16:01") },
-    { Id: 9, FileName: "Water Treatment Plant", FilePath: '/images/waterTreatment.webp', Metadata: ["water", "treatment", "plant"], ProjectId: 9, Status: "Inactive", Date: dayjs("2024-06-22 00:16:01") },
+    { Id: 9, FileName: "Water Treatment Plant", FilePath: '/images/waterTreatment.webp', Metadata: ["water", "treatment", "plant"], ProjectId: 9, Status: "Archived", Date: dayjs("2024-06-22 00:16:01") },
     { Id: 10, FileName: "Underground Parking Facility", FilePath: '/images/undergroundParking.jpg', Metadata: ["parking", "underground"], ProjectId: 10, Status: "Active", Date: dayjs("2024-05-05 00:16:01") },
     { Id: 11, FileName: "Renewable Energy Farm", FilePath: '/images/energyFarm.png', Metadata: ["renewable", "energy", "farm"], ProjectId: 11, Status: "Active", Date: dayjs("2024-04-12 00:16:01") }
 ];
