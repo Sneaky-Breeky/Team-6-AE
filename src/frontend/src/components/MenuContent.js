@@ -14,6 +14,7 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import SecurityIcon from '@mui/icons-material/Security';
 import { isAdmin } from '../utils/auth';
+import { useNavigate } from 'react-router-dom';
 
 
 var userPages = [
@@ -43,6 +44,7 @@ const GetDirectoryPrefix = (isAdmin) => (isAdmin ? '/admin/' : '/user/');
 export default function MenuContent() {
   const menuItems = isAdmin() ? adminPages : userPages;
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     sessionStorage.clear();
@@ -59,7 +61,8 @@ export default function MenuContent() {
             <ListItemButton selected={index === parseInt(sessionStorage.getItem('menu'))}
               onClick={() => {
                 sessionStorage.setItem('menu', index);
-                window.location.href = GetDirectoryPrefix(isAdmin()) + item.url;
+                navigate(GetDirectoryPrefix(isAdmin()) + item.url)
+                // window.location.href = GetDirectoryPrefix(isAdmin()) + item.url;
               }}
             >
               <ListItemIcon sx={{ color: 'white' }} >{item.icon}</ListItemIcon>
