@@ -4,6 +4,7 @@ import { Input, Button, DatePicker, Form, Typography, Card, Row, Col, } from 'an
 import { SearchOutlined, CalendarOutlined, PlusOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { projects } from '../../utils/dummyData.js';
+import SideMenu from '../../components/SideMenu.js';
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -28,6 +29,7 @@ export default function UserDashboard() {
         height: '100vh',
       }}
     >
+
       {/* Title */}
       <Box
         sx={{
@@ -111,7 +113,7 @@ export default function UserDashboard() {
           <Box
             onClick={() => {
               sessionStorage.setItem('menu', 2);
-              window.location.href = '/user/uploadFiles';
+              navigate('/user/uploadFiles');
             }}
             sx={{
               textAlign: 'center',
@@ -131,7 +133,7 @@ export default function UserDashboard() {
           <Box
             onClick={() => {
               sessionStorage.setItem('menu', 3);
-              window.location.href = '/user/activityLog';
+              navigate('/user/activityLog');
             }}
             sx={{
               textAlign: 'center',
@@ -155,7 +157,7 @@ export default function UserDashboard() {
         <Box
           onClick={() => {
             sessionStorage.setItem('menu', 1);
-            window.location.href = '/user/projectDirectory';
+            navigate('/user/projectDirectory');
           }}
           sx={{
             display: 'flex',
@@ -200,7 +202,7 @@ export default function UserDashboard() {
                       e.stopPropagation();
                       sessionStorage.setItem('menu', 1);
                       navigate(`/projectDirectory/projectOverview/${project.id}`, { state: { project } })
-                      window.location.reload();
+                      window.location.reload(); // TODO: this'll cause issues on the deployment build, find alternative
                     }}
                     style={{
                       borderRadius: '10px',
