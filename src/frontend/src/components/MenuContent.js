@@ -41,7 +41,7 @@ const secondaryListItems = [
 const GetDirectoryPrefix = (isAdmin) => (isAdmin ? '/admin/' : '/user/');
 
 
-export default function MenuContent() {
+export default function MenuContent({setLoggedIn}) {
   const menuItems = isAdmin() ? adminPages : userPages;
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -49,7 +49,8 @@ export default function MenuContent() {
   const handleLogout = () => {
     sessionStorage.clear();
     localStorage.removeItem('authToken');
-    window.location.href = '/login';
+    setLoggedIn(false);
+    navigate('/login');
   };
 
   return (
@@ -62,7 +63,6 @@ export default function MenuContent() {
               onClick={() => {
                 sessionStorage.setItem('menu', index);
                 navigate(GetDirectoryPrefix(isAdmin()) + item.url)
-                // window.location.href = GetDirectoryPrefix(isAdmin()) + item.url;
               }}
             >
               <ListItemIcon sx={{ color: 'white' }} >{item.icon}</ListItemIcon>

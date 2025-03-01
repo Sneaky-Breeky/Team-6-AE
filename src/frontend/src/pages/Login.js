@@ -73,7 +73,6 @@ export default function Login({setLoggedIn}) {
     
     setLoggedIn(true);
     navigate(user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard');
-    //window.location.href = user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
     
   };
   

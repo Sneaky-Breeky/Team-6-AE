@@ -21,7 +21,7 @@ function App() {
   return (
     <Router>
       <Box sx={{ display: 'flex' }}>
-        {loggedIn && <SideMenu />}
+        {loggedIn && <SideMenu setLoggedIn={setLoggedIn}/>}
         <Box sx={{ flexGrow: 1 }}>
           <AppNavbar />
           <Routes>
