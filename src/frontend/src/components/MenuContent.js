@@ -48,9 +48,11 @@ export default function MenuContent({setLoggedIn}) {
 
   const handleLogout = () => {
     sessionStorage.clear();
-    localStorage.removeItem('authToken');
+    localStorage.removeItem("authToken");
+    localStorage.setItem("loggedIn", "false");
+    localStorage.removeItem("userRole");
     setLoggedIn(false);
-    navigate('/login');
+    navigate("/login");
   };
 
   return (

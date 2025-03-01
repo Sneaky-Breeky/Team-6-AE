@@ -70,7 +70,10 @@ export default function Login({setLoggedIn}) {
       setEmailErrorMessage("Account does not exist.");
       return;
     }
-    
+
+    localStorage.setItem("loggedIn", "true");
+    localStorage.setItem("userRole", user.role);
+
     setLoggedIn(true);
     navigate(user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard');
     

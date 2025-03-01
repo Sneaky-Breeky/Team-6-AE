@@ -1,5 +1,5 @@
 import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import React, { useCallback, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Login from './pages/Login';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUserManage from './pages/admin/AdminUserManage';
@@ -16,7 +16,14 @@ import AppNavbar from './components/AppNavbar';
 import Box from '@mui/material/Box';
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(
+    localStorage.getItem("loggedIn") === "true"
+  );
+
+  useEffect(() => {
+    const storedLoginStatus = localStorage.getItem("loggedIn") === "true";
+    setLoggedIn(storedLoginStatus);
+  }, []);
 
   return (
     <Router>
