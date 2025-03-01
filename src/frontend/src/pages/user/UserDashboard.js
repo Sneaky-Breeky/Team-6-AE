@@ -4,6 +4,7 @@ import { Input, Button, DatePicker, Form, Typography, Card, Row, Col, } from 'an
 import { SearchOutlined, CalendarOutlined, PlusOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { projects } from '../../utils/dummyData.js';
+import SideMenu from '../../components/SideMenu.js';
 
 const { RangePicker } = DatePicker;
 const { Title } = Typography;
@@ -28,6 +29,7 @@ export default function UserDashboard() {
         height: '100vh',
       }}
     >
+
       {/* Title */}
       <Box
         sx={{

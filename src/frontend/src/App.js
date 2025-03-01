@@ -1,4 +1,5 @@
 import { HashRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import React, { useCallback, useState } from 'react';
 import Login from './pages/Login';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminUserManage from './pages/admin/AdminUserManage';
@@ -10,20 +11,21 @@ import ProjectOverview from './pages/user/UserProjectOverview';
 import ProjectCreation from './pages/admin/AdminProjectCreation';
 import AdminProjectSecurity from './pages/admin/AdminProjectSecurity';
 import ActivityLog from './pages/user/UserActivityLog';
-import { isAdmin, isLoggedIn } from './utils/auth';
 import SideMenu from './components/SideMenu';
 import AppNavbar from './components/AppNavbar';
 import Box from '@mui/material/Box';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
   return (
     <Router>
       <Box sx={{ display: 'flex' }}>
-        <SideMenu />
+        {loggedIn && <SideMenu />}
         <Box sx={{ flexGrow: 1 }}>
           <AppNavbar />
           <Routes>
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<Login setLoggedIn={setLoggedIn} />} />
             <Route path="*" element={<Navigate to="/login" />} />
 
             <Route path="/admin/dashboard" element={<AdminDashboard />} />

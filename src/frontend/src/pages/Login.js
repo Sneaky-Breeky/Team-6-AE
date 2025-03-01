@@ -41,7 +41,7 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 
 
 
-export default function Login() {
+export default function Login({setLoggedIn}) {
   const [emailError, setEmailError] = useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordError, setPasswordError] = useState(false);
@@ -71,7 +71,7 @@ export default function Login() {
       return;
     }
     
-
+    setLoggedIn(true);
     navigate(user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard');
     //window.location.href = user.role === 'admin' ? '/admin/dashboard' : '/user/dashboard';
     
