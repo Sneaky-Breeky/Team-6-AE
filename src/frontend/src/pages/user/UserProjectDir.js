@@ -150,7 +150,7 @@ export default function UserProjectDir() {
           >
             <Row gutter={[16, 16]} justify="center">
               {projects.sort((a, b) => {
-                const aFav = favProjects.has(a.id) ? -1 : 1; // Move favorites to the top
+                const aFav = favProjects.has(a.id) ? -1 : 1;
                 const bFav = favProjects.has(b.id) ? -1 : 1;
                 return aFav - bFav;
               }).map((project, index) => (
