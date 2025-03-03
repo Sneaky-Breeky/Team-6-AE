@@ -40,7 +40,7 @@ export default function SideMenu({setLoggedIn}) {
         }}
       >
         <img
-          src="/images/AE_logo.png"
+          src={`${process.env.PUBLIC_URL}/images/AE_logo.png`}
           alt="AE Logo"
           style={{
             width: '150px',
