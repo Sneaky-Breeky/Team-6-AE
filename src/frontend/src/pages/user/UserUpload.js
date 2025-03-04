@@ -21,6 +21,7 @@ export default function UserUpload() {
     const [zoom, setZoom] = useState(1);
     const [rotation, setRotation] = useState(0);
     const [editing, setEditing] = useState(false);
+    const MAX_FILES = 100;
 
     const [projectName, setProjectName] = useState(null);
     const [metadataTagsInput, setMetadataTagsInput] = useState();
@@ -62,6 +63,13 @@ export default function UserUpload() {
         }));
 
         setFiles((prevFiles) => {
+            const totalFiles = prevFiles.length + selectedFiles.length;
+
+            if (totalFiles > MAX_FILES) {
+                message.error(`You can only upload up to ${MAX_FILES} images. You tried adding ${totalFiles}.`);
+                return prevFiles;
+            }
+
             const existingFileNames = new Set(prevFiles.map(file => file.file.name));
 
             const newFiles = [];
@@ -137,6 +145,9 @@ export default function UserUpload() {
                     boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
                 }}>
                     <h2>Upload & Edit Files</h2>
+                    <p style={{ color: files.length >= MAX_FILES ? 'red' : 'black' }}>
+                        {files.length}/{MAX_FILES} images uploaded
+                    </p>
                     <input
                         type="file"
                         multiple
@@ -145,63 +156,63 @@ export default function UserUpload() {
                         onChange={handleFileChange}
                         style={{ display: 'none' }}
                     />
-                    <Button icon={<PlusOutlined />} type="primary" color="cyan" variant="solid" onClick={() => fileInputRef.current.click()}>
+                    <Button icon={<PlusOutlined />} type="primary" color="cyan" variant="solid" onClick={() => fileInputRef.current.click()} disabled={files.length >= MAX_FILES}>
                         Add Files
                     </Button>
                 </Box>
 
-            {/* Image preview & edit options */}
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, padding: 4 }}>
-                {files.map(({ file, preview }, index) => (
-                    <div key={index} style={{ position: 'relative', width: '150px' }}>
-                        <Image src={preview} width={150} preview={false} />
-                        <Button size="small" onClick={() => handleEditImage({ file, preview })}>Edit</Button>
-                        <Button danger size="small" onClick={() => {
-                            confirmRemoveFile(files[index]);
-                        }}>
-                            Remove
-                        </Button>
+                {/* Image preview & edit options */}
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, padding: 4 }}>
+                    {files.map(({ file, preview }, index) => (
+                        <div key={index} style={{ position: 'relative', width: '150px' }}>
+                            <Image src={preview} width={150} preview={false} />
+                            <Button size="small" onClick={() => handleEditImage({ file, preview })}>Edit</Button>
+                            <Button danger size="small" onClick={() => {
+                                confirmRemoveFile(files[index]);
+                            }}>
+                                Remove
+                            </Button>
 
-                    </div>
-                ))}
-            </Box>
+                        </div>
+                    ))}
+                </Box>
 
-            {/* Image editor popup */}
-            <Modal
-                open={editing}
-                onCancel={() => setEditing(false)}
-                onOk={saveEditedImage}
-                okText="Save Changes"
-                title="Edit Image"
-                width={600}
-            >
-                {currentFile && (
-                    <div style={{ width: '100%', height: 400, position: 'relative' }}>
-                        <Cropper
-                            image={currentFile.preview}
-                            crop={crop}
-                            zoom={zoom}
-                            rotation={rotation}
-                            onCropChange={setCrop}
-                            onZoomChange={setZoom}
-                            onRotationChange={setRotation}
-                            onCropComplete={onCropComplete}
-                        />
-                        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginTop: 2 }}>
-                            <Button icon={<RotateLeftOutlined />} onClick={() => setRotation(rotation - 90)} />
-                            <Button icon={<RotateRightOutlined />} onClick={() => setRotation(rotation + 90)} />
-                            <Slider min={1} max={3} step={0.1} value={zoom} onChange={setZoom} />
-                        </Box>
-                    </div>
-                )}
-            </Modal>
+                {/* Image editor popup */}
+                <Modal
+                    open={editing}
+                    onCancel={() => setEditing(false)}
+                    onOk={saveEditedImage}
+                    okText="Save Changes"
+                    title="Edit Image"
+                    width={600}
+                >
+                    {currentFile && (
+                        <div style={{ width: '100%', height: 400, position: 'relative' }}>
+                            <Cropper
+                                image={currentFile.preview}
+                                crop={crop}
+                                zoom={zoom}
+                                rotation={rotation}
+                                onCropChange={setCrop}
+                                onZoomChange={setZoom}
+                                onRotationChange={setRotation}
+                                onCropComplete={onCropComplete}
+                            />
+                            <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, marginTop: 2 }}>
+                                <Button icon={<RotateLeftOutlined />} onClick={() => setRotation(rotation - 90)} />
+                                <Button icon={<RotateRightOutlined />} onClick={() => setRotation(rotation + 90)} />
+                                <Slider min={1} max={3} step={0.1} value={zoom} onChange={setZoom} />
+                            </Box>
+                        </div>
+                    )}
+                </Modal>
 
-            {/* Upload button */}
-            <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                <Button type="primary" color="cyan" variant="solid" disabled={files.length === 0}>
-                    Upload Files to Project
-                </Button>
-            </Box>
+                {/* Upload button */}
+                <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
+                    <Button type="primary" color="cyan" variant="solid" disabled={files.length === 0}>
+                        Upload Files to Project
+                    </Button>
+                </Box>
 
             </Box>
 
@@ -271,7 +282,7 @@ export default function UserUpload() {
                         placeholder="Enter location"
                     />
                 </Box>
-            </Box> 
+            </Box>
 
         </Box>
     );
