@@ -165,6 +165,7 @@ export default function UserUpload() {
     };
 
     const handleSubmitTagInfo = () => {
+        // TODO: add this project to the user's "workingProjs" if its not already there
         if (selectedFiles.size === 0 || metadataTags.length === 0) return;
 
         setFiles(prevFiles =>
