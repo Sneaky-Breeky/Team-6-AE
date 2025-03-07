@@ -64,7 +64,9 @@ export default function UserUpload() {
         const selectedFiles = Array.from(event.target.files).map(file => ({
             file,
             preview: URL.createObjectURL(file),
-            metadata: []
+            metadata: [],
+            date: selectedDate || null,
+            location: location || ""
         }));
 
         setFiles((prevFiles) => {
@@ -143,7 +145,6 @@ export default function UserUpload() {
     };
 
 
-
     const toggleFileSelection = (fileObj) => {
 
         const fileName = fileObj.file.name;
@@ -208,10 +209,25 @@ export default function UserUpload() {
         setTagApplications(prev => prev.filter((_, i) => i !== index));
     };
 
+    const handleDateChange = (date, dateString) => {
+        setSelectedDate(dateString);
+        setFiles(prevFiles => prevFiles.map(file => ({ ...file, date: dateString })));
+    };
+
+    const handleLocationChange = (event) => {
+        const newLocation = event.target.value;
+        setLocation(newLocation);
+        setFiles(prevFiles => prevFiles.map(file => ({ ...file, location: newLocation })));
+    };
+
     const handleUploadFilesToProject = () => {
         console.log("Uploading files:", files);
         setFiles([]);
         setTagApplications([]);
+        setProjectName(null);
+        setMetadataTags([]);
+        setSelectedDate(null);
+        setLocation(null);
     };
 
 
@@ -406,7 +422,7 @@ export default function UserUpload() {
                     <Title level={5}>Add Date:</Title>
                     <DatePicker
                         placeholder="Select date"
-                        onChange={(date, dateString) => setSelectedDate(dateString)}
+                        onChange={handleDateChange}
                         suffixIcon={<CalendarOutlined />}
                         style={{ width: '100%' }}
                     />
@@ -416,7 +432,7 @@ export default function UserUpload() {
                     <Title level={5}>Location:</Title>
                     <Input
                         value={location}
-                        onChange={(e) => setLocation(e.target.value)}
+                        onChange={handleLocationChange}
                         placeholder="Enter location"
                     />
                 </Box>
