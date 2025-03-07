@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import { Input, Typography, DatePicker, Button, Form, Select, Tag, Flex, Image, Modal, Slider, message } from "antd";
-import { PlusOutlined, RotateLeftOutlined, RotateRightOutlined, ExclamationCircleOutlined, CalendarOutlined, DownOutlined } from '@ant-design/icons';
+import { PlusOutlined, RotateLeftOutlined, RotateRightOutlined, ExclamationCircleOutlined, CalendarOutlined, DownOutlined, CloseOutlined } from '@ant-design/icons';
 import Cropper from 'react-easy-crop';
 
 const { Title } = Typography;
@@ -29,6 +29,7 @@ export default function UserUpload() {
     const [projectName, setProjectName] = useState(null);
     const [metadataTagsInput, setMetadataTagsInput] = useState();
     const [metadataTags, setMetadataTags] = useState([]);
+    const [tagApplications, setTagApplications] = useState([]);
     const [location, setLocation] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const fileInputRef = useRef(null);
@@ -62,7 +63,8 @@ export default function UserUpload() {
     const handleFileChange = (event) => {
         const selectedFiles = Array.from(event.target.files).map(file => ({
             file,
-            preview: URL.createObjectURL(file)
+            preview: URL.createObjectURL(file),
+            metadata: []
         }));
 
         setFiles((prevFiles) => {
@@ -158,23 +160,64 @@ export default function UserUpload() {
 
     const handleTagAllFiles = () => {
         setTaggingMode(true);
-
         const allFiles = new Set(files.map(({ file }) => file.name));
         setSelectedFiles(allFiles);
     };
 
     const handleSubmitTagInfo = () => {
-        // save all currently selected files's images and current tags
-        // create a box underneath metadata field containing # of images selected & tags
-        //selectedFiles
+        if (selectedFiles.size === 0 || metadataTags.length === 0) return;
+
+        setFiles(prevFiles =>
+            prevFiles.map(fileObj => {
+                if (selectedFiles.has(fileObj.file.name)) {
+                    return {
+                        ...fileObj,
+                        metadata: [...new Set([...fileObj.metadata, ...metadataTags])]
+                    };
+                }
+                return fileObj;
+            })
+        );
+
+        setTagApplications(prev => [
+            ...prev,
+            { tags: [...metadataTags], files: [...selectedFiles] }
+        ]);
+
+        setSelectedFiles(new Set());
+        setMetadataTags([]);
+        setTaggingMode(false);
+    };
+
+    const removeTagApplication = (index) => {
+        const { tags, files } = tagApplications[index];
+
+        setFiles(prevFiles =>
+            prevFiles.map(fileObj => {
+                if (files.includes(fileObj.file.name)) {
+                    return {
+                        ...fileObj,
+                        metadata: fileObj.metadata.filter(tag => !tags.includes(tag))
+                    };
+                }
+                return fileObj;
+            })
+        );
+
+        setTagApplications(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const handleUploadFilesToProject = () => {
+        console.log("Uploading files:", files);
+        setFiles([]);
+        setTagApplications([]);
     };
 
 
 
 
-
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px', gap: '20px' }}>
+        <Box sx={{ display: 'flex', flexDirection: 'row', minHeight: '100vh', padding: '20px', gap: '20px', paddingBottom: '40px'}}>
             {/* Left section (image uploading)*/}
             <Box sx={{ flex: 3, display: 'flex', flexDirection: 'column', gap: '15px', padding: '20px' }}>
                 <Box sx={{
@@ -273,7 +316,7 @@ export default function UserUpload() {
 
                 {/* Upload button */}
                 <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                    <Button type="primary" color="cyan" variant="solid" disabled={files.length === 0}>
+                    <Button type="primary" color="cyan" variant="solid" onClick = {handleUploadFilesToProject} disabled={files.length === 0}>
                         Upload Files to Project
                     </Button>
                 </Box>
@@ -325,6 +368,22 @@ export default function UserUpload() {
                         <Button type="primary" color="cyan" variant="solid" onClick={handleSubmitTagInfo} disabled={selectedFiles.size === 0 || metadataTags.length === 0 || files.length === 0}>
                             Submit Tag Info
                         </Button>
+                    </Box>
+                    <Box sx={{ marginTop: "20px" }}>
+                        {tagApplications.map(({ tags, files }, index) => (
+                            <Box key={index} sx={{ backgroundColor: "#eef", padding: "10px", marginTop: "10px", borderRadius: "8px" }}>
+                                <Flex justify="space-between">
+                                    <div>
+                                        <strong>Tags:</strong> {tags.join(", ")} <br />
+                                        <strong>Files:</strong> {files.length} {files.length === 1 ? "file" : "files"}
+
+                                    </div>
+                                    <Button type="text" icon={<CloseOutlined />} danger onClick={() => removeTagApplication(index)}>
+                                        Undo
+                                    </Button>
+                                </Flex>
+                            </Box>
+                        ))}
                     </Box>
                 </Box>
 
