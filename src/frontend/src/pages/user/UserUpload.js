@@ -22,6 +22,9 @@ export default function UserUpload() {
     const [rotation, setRotation] = useState(0);
     const [editing, setEditing] = useState(false);
     const MAX_FILES = 100;
+    const [taggingMode, setTaggingMode] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState(new Set());
+
 
     const [projectName, setProjectName] = useState(null);
     const [metadataTagsInput, setMetadataTagsInput] = useState();
@@ -132,6 +135,43 @@ export default function UserUpload() {
         });
     };
 
+    const handleToggleTagging = () => {
+        setTaggingMode((prev) => !prev);
+        setSelectedFiles(new Set());
+    };
+
+
+
+    const toggleFileSelection = (fileObj) => {
+
+        const fileName = fileObj.file.name;
+        const updatedSelection = new Set(selectedFiles);
+
+        if (updatedSelection.has(fileName)) {
+            updatedSelection.delete(fileName);
+        } else {
+            updatedSelection.add(fileName);
+        }
+
+        setSelectedFiles(updatedSelection);
+    };
+
+    const handleTagAllFiles = () => {
+        setTaggingMode(true);
+
+        const allFiles = new Set(files.map(({ file }) => file.name));
+        setSelectedFiles(allFiles);
+    };
+
+    const handleSubmitTagInfo = () => {
+        // save all currently selected files's images and current tags
+        // create a box underneath metadata field containing # of images selected & tags
+        //selectedFiles
+    };
+
+
+
+
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'row', height: '100vh', padding: '20px', gap: '20px' }}>
@@ -166,6 +206,30 @@ export default function UserUpload() {
                     {files.map(({ file, preview }, index) => (
                         <div key={index} style={{ position: 'relative', width: '150px' }}>
                             <Image src={preview} width={150} preview={false} />
+                            {taggingMode && (
+                                <div
+                                    onClick={() => toggleFileSelection(files[index])}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '5px',
+                                        right: '5px',
+                                        width: '24px',
+                                        height: '24px',
+                                        borderRadius: '50%',
+                                        backgroundColor: 'white',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        fontSize: '16px',
+                                        fontWeight: 'bold',
+                                        color: 'black',
+                                        cursor: 'pointer',
+                                    }}
+                                >
+                                    {selectedFiles.has(files[index].file.name) && '✔️'}
+                                </div>
+                            )}
+
                             <Button size="small" onClick={() => handleEditImage({ file, preview })}>Edit</Button>
                             <Button danger size="small" onClick={() => {
                                 confirmRemoveFile(files[index]);
@@ -228,12 +292,21 @@ export default function UserUpload() {
                 </Box>
 
                 <Box sx={metadataBoxStyle}>
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                        <Button type="primary" color="cyan" variant="solid" onClick={handleToggleTagging} disabled={files.length === 0}>
+                            {taggingMode ? "Cancel Tagging" : "Tag Files"}
+                        </Button>
+                        <Button type="primary" color="cyan" variant="solid" onClick={handleTagAllFiles} disabled={files.length === 0}>
+                            Tag All
+                        </Button>
+                    </Box>
                     <Title level={5}>Add Metadata:</Title>
                     <Input
-                        placeholder="ex. bridge"
+                        placeholder="Select files first"
                         value={metadataTagsInput}
                         onChange={(e) => setMetadataTagsInput(e.target.value)}
                         onPressEnter={handleMetadataTagAdd}
+                        disabled={selectedFiles.size === 0}
                     />
                     <Flex wrap="wrap" style={{ marginTop: '10px' }}>
                         {metadataTags.map((tag) => (
@@ -248,6 +321,11 @@ export default function UserUpload() {
                         ))
                         }
                     </Flex>
+                    <Box sx={{ marginTop: '15px' }}>
+                        <Button type="primary" color="cyan" variant="solid" onClick={handleSubmitTagInfo} disabled={selectedFiles.size === 0 || metadataTags.length === 0 || files.length === 0}>
+                            Submit Tag Info
+                        </Button>
+                    </Box>
                 </Box>
 
                 <Box sx={metadataBoxStyle}>
