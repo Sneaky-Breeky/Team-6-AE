@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { Input, Typography, DatePicker, Button, Form, Select, Tag, Flex, Image, Modal, Slider, message } from "antd";
 import { PlusOutlined, RotateLeftOutlined, RotateRightOutlined, ExclamationCircleOutlined, CalendarOutlined, DownOutlined, CloseOutlined } from '@ant-design/icons';
 import Cropper from 'react-easy-crop';
+import dayjs from 'dayjs';
 import { projects, users } from '../../utils/dummyData.js';
 
 const { Title } = Typography;
@@ -32,7 +33,7 @@ export default function UserUpload() {
     const [metadataTags, setMetadataTags] = useState([]);
     const [tagApplications, setTagApplications] = useState([]);
     const [location, setLocation] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
     const fileInputRef = useRef(null);
     const metadataBoxStyle = {
         textAlign: 'left',
@@ -444,6 +445,7 @@ export default function UserUpload() {
                         onChange={handleDateChange}
                         suffixIcon={<CalendarOutlined />}
                         style={{ width: '100%' }}
+                        value={selectedDate ? dayjs(selectedDate) : null}
                     />
                 </Box>
 
