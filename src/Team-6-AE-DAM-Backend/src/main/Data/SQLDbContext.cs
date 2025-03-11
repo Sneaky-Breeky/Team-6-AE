@@ -17,9 +17,9 @@ namespace DAMBackend.Models
         {
             // One to one betwen file and tag model
             modelBuilder.Entity<FileModel>()
-                .HasOne(f => f.Tags)
-                .WithOne(t => t.File)
-                .HasForeignKey<TagModel>(t => t.FileId)
+                .HasMany(t => t.Tags)
+                .WithOne(f => f.File)
+                .HasForeignKey(t => t.FileId)
                 .IsRequired();
 
             // One to many from projects to files
