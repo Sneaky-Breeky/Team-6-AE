@@ -67,7 +67,8 @@ export default function UserUpload() {
             preview: URL.createObjectURL(file),
             metadata: [],
             date: selectedDate || null,
-            location: location || ""
+            location: location || "",
+            projectId: project !== null ? project.id : null
         }));
 
         setFiles((prevFiles) => {
@@ -139,6 +140,13 @@ export default function UserUpload() {
             return [...updatedFiles];
         });
     };
+
+    const handleProjectChange = (value) => {
+        const selectedProject = projects.find(proj => proj.id === value);
+        setProject(selectedProject);
+        setFiles(prevFiles => prevFiles.map(file => ({ ...file, projectId: selectedProject.id })));
+    };
+
 
     const handleToggleTagging = () => {
         setTaggingMode((prev) => !prev);
@@ -356,8 +364,9 @@ export default function UserUpload() {
                             value: proj.id,
                             label: `${proj.id}: ${proj.name}`
                         }))}
-                        onChange={(value) => setProject(value)}
+                        onChange={handleProjectChange}
                         style={{ width: '100%' }}
+                        value={project !== null ? project.id : undefined}
                     />
                 </Box>
 
