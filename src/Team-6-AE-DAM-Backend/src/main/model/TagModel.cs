@@ -1,4 +1,5 @@
-using Microsoft.Identity.Client;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace DAMBackend.Models
 
@@ -27,12 +28,14 @@ namespace DAMBackend.Models
     // Metadata
 
     {
+        [Key]
+        public int Id { get; set; }
 
         public required int UserId { get; set; }
 
-        public Guid ProjectId { get; set; }
+        public Guid? ProjectId { get; set; }
 
-        public string Phase { get; set; }
+        public required string Phase { get; set; }
         // Ask developers
         
         public Department Dep { get; set; }
@@ -41,7 +44,7 @@ namespace DAMBackend.Models
 
         public required Guid FileId { get; set; }
 
-        public required FileModel File { get; set; }
+        public FileModel? File { get; set; }
 
 
 

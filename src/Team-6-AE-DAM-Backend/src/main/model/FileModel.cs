@@ -13,9 +13,11 @@ namespace DAMBackend.Models
         public required string ThumbnailPath { get; set; }
         public required string ViewPath { get; set; }
         public required string OriginalPath { get; set; }
+
         public decimal? GPSLat { get; set; }
         public decimal? GPSLon { get; set; }
         public decimal? GPSAlt { get; set; }
+        
         public DateTime? DateTimeOriginal { get; set; }
         public required int PixelWidth { get; set; }
         public required int PixelHeight { get; set; }
@@ -24,7 +26,7 @@ namespace DAMBackend.Models
         public int? FocalLength { get; set; }
         public float? Aperture { get; set; }
         public string? Copyright { get; set; }
-        public TagModel? Tags { get; set; }
+        public List<TagModel> Tags { get; set; } = new List<TagModel>();
         public Guid? ProjectId { get; set; }
         public ProjectModel? Project { get; set; }
 
