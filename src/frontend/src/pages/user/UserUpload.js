@@ -343,7 +343,7 @@ export default function UserUpload() {
 
                 {/* Upload button */}
                 <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                    <Button type="primary" color="cyan" variant="solid" onClick={handleUploadFilesToProject} disabled={files.length === 0}>
+                    <Button type="primary" color="cyan" variant="solid" onClick={handleUploadFilesToProject} disabled={files.length === 0 || project === null}>
                         Upload Files to Project
                     </Button>
                 </Box>
