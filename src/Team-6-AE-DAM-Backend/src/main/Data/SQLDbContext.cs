@@ -18,9 +18,13 @@ namespace DAMBackend.Models
             // One to one betwen file and tag model
             modelBuilder.Entity<FileModel>()
                 .HasMany(t => t.Tags)
-                .WithOne(f => f.File)
-                .HasForeignKey(t => t.FileId)
-                .IsRequired();
+                .WithMany(f => f.Files)
+                .UsingEntity<Dictionary<string, object>>( // Create a junction table
+                "FileTag", // Table name
+                j => j.HasOne<TagModel>().WithMany().HasForeignKey("TagId"), // Foreign key for TagModel
+                j => j.HasOne<FileModel>().WithMany().HasForeignKey("FileId"), // Foreign key for FileModel
+                j => j.HasKey("FileId", "TagId") // Composite key
+            );
 
             // One to many from projects to files
             modelBuilder.Entity<ProjectModel>()
