@@ -21,11 +21,11 @@ namespace DAMBackend.services
         public UserModel AddUser(string first, string last, string email, Role role, bool stat) {
             var user = new UserModel
             {
-                firstName = first,
-                lastName = last,
+                FirstName = first,
+                LastName = last,
                 Email = email,
                 Role = role,
-                status = stat
+                Status = stat
             };
 
             // database.Users.Add(user); 
@@ -56,15 +56,16 @@ namespace DAMBackend.services
                 UserId = file.UserId,
                 Phase = phase,
                 Dep = dep,
-                Type = type,
-                FileId = file.Id,
-                File = file
+                Type = type
             };
+
+            tags.Files.Add(file);
+
             if (project != null) {
                 tags.ProjectId = project.Id;
             }
 
-            // database.Tags.Add(tag);
+            
             // await database.SaveChanges();
             return tags;
         }

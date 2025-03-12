@@ -15,5 +15,11 @@ export async function loginUser(email, password) {
         body: JSON.stringify({ email, password })
     });
 
+    if (!response.ok) {
+        // Handle errors and parse JSON safely
+        const errorData = await response.json().catch(() => ({ error: "Unknown error" }));
+        return errorData;
+    }
+
     return response.json();
 }

@@ -1,61 +1,52 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
-using Microsoft.Data.Sqlite;
+using System.Threading.Tasks;
+using DAMBackend.Data;
+using DAMBackend.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAMBackend.auth
 {
     public class AuthService
     {
-        private readonly string _connectionString = "Data Source=Auth/auth.db";
+        private readonly AppDbContext _context;
 
-        public AuthService()
+        public AuthService(AppDbContext context)
         {
-            using var connection = new SqliteConnection(_connectionString);
-            connection.Open();
-            var command = connection.CreateCommand();
-            command.CommandText = @"CREATE TABLE IF NOT EXISTS users (
-                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        email TEXT UNIQUE NOT NULL,
-                                        passwordHash TEXT NOT NULL
-                                    );";
-            command.ExecuteNonQuery();
+            _context = context;
         }
 
         public async Task<bool> RegisterUserAsync(string email, string password)
         {
-            var hashedPassword = HashPassword(password);
-            using var connection = new SqliteConnection(_connectionString);
-            connection.Open();
-            var command = connection.CreateCommand();
-            command.CommandText = "INSERT INTO users (email, passwordHash) VALUES (@Email, @PasswordHash)";
-            command.Parameters.AddWithValue("@Email", email);
-            command.Parameters.AddWithValue("@PasswordHash", hashedPassword);
+            if (await _context.Users.AnyAsync(u => u.Email == email))
+                return false; // User already exists
 
-            try
+            var hashedPassword = HashPassword(password);
+
+            var newUser = new UserModel
             {
-                await command.ExecuteNonQueryAsync();
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+                FirstName = "Default", // Ensure a proper value is provided
+                LastName = "User",
+                Email = email,
+                PasswordHash = hashedPassword,
+                Role = Role.User, // Assign a default role
+                Status = true
+            };
+
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<bool> AuthenticateUserAsync(string email, string password)
         {
-            using var connection = new SqliteConnection(_connectionString);
-            connection.Open();
-            var command = connection.CreateCommand();
-            command.CommandText = "SELECT passwordHash FROM users WHERE email = @Email";
-            command.Parameters.AddWithValue("@Email", email);
-            using var reader = await command.ExecuteReaderAsync();
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
 
-            if (!reader.Read()) return false;
+            if (user == null) return false; // User not found
+            Console.WriteLine($"Hashed Password for {email}: {HashPassword(password)}, {user.PasswordHash}");
 
-            string storedHash = reader.GetString(0);
-            return VerifyPassword(password, storedHash);
+            return VerifyPassword(password, user.PasswordHash);
         }
 
         private static string HashPassword(string password)

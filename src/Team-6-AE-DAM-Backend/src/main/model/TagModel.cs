@@ -42,11 +42,8 @@ namespace DAMBackend.Models
 
         public MediaType Type { get; set; }
 
-        public required Guid FileId { get; set; }
+        // public required Guid FileId { get; set; }
 
-        public FileModel? File { get; set; }
-
-
-
+        public List<FileModel> Files { get; set; } = new List<FileModel>();
     }
 }

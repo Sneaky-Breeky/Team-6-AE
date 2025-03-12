@@ -1,37 +1,49 @@
 using DAMBackend.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using DAMBackend.auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add CORS policy
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>();
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", policy =>
+    options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:3000") // Allow only your frontend
-              .AllowAnyMethod()
-              .AllowAnyHeader();
+        if (allowedOrigins != null && allowedOrigins.Length > 0)
+        {
+            policy.WithOrigins(allowedOrigins)
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials()
+                  .SetPreflightMaxAge(TimeSpan.FromMinutes(10));
+        }
+        else
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        }
     });
 });
 
-// Add DB context
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AzureSQL")));
 
+builder.Services.AddScoped<AuthService>();
+
 var app = builder.Build();
 
+app.UseCors("AllowFrontend");
 
-// Enable CORS middleware before Authorization
-app.UseCors("AllowReactApp");
-
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -53,27 +65,11 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-
-
-
-
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
-//    app.UseSwagger();
-//    app.UseSwaggerUI();
-//}
 app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "DAM Backend API V1");
-    c.RoutePrefix = string.Empty; // Makes Swagger the default page
+    c.RoutePrefix = string.Empty;
 });
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
 
 app.Run();

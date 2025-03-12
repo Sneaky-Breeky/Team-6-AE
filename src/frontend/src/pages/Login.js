@@ -65,6 +65,8 @@ export default function Login({setLoggedIn}) {
     try {
       const response = await loginUser(email, password);
 
+      console.log("yay" + response);
+
       if (response.error) {
         if (response.error === "wrongpassword") {
           setPasswordError(true);
