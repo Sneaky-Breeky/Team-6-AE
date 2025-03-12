@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import Box from '@mui/material/Box';
-import { Input, Typography, DatePicker, Button, Form, Select, Tag, Flex, Image, Modal, Slider, message } from "antd";
+import { Input, Typography, DatePicker, Button, Form, Select, Tag, Flex, Image, Modal, Slider, message, Result } from "antd";
 import { PlusOutlined, RotateLeftOutlined, RotateRightOutlined, ExclamationCircleOutlined, CalendarOutlined, DownOutlined, CloseOutlined } from '@ant-design/icons';
 import Cropper from 'react-easy-crop';
 import dayjs from 'dayjs';
@@ -35,6 +35,7 @@ export default function UserUpload() {
     const [location, setLocation] = useState(null);
     const [selectedDate, setSelectedDate] = useState(dayjs().format('YYYY-MM-DD'));
     const fileInputRef = useRef(null);
+    const [uploadSuccess, setUploadSuccess] = useState(false);
     const metadataBoxStyle = {
         textAlign: 'left',
         backgroundColor: '#f5f5f5',
@@ -237,8 +238,13 @@ export default function UserUpload() {
         setTagApplications([]);
         setProject(null);
         setMetadataTags([]);
-        setSelectedDate(null);
+        setSelectedDate(dayjs().format('YYYY-MM-DD'));
         setLocation(null);
+        setUploadSuccess(true);
+    };
+
+    const resetUploadState = () => {
+        setUploadSuccess(false);
     };
 
 
@@ -342,11 +348,24 @@ export default function UserUpload() {
                     )}
                 </Modal>
 
-                {/* Upload button */}
+                {/* Upload button w success popup*/}
                 <Box sx={{ textAlign: 'center', marginTop: '20px' }}>
-                    <Button type="primary" color="cyan" variant="solid" onClick={handleUploadFilesToProject} disabled={files.length === 0 || project === null}>
-                        Upload Files to Project
-                    </Button>
+                    {uploadSuccess ? (
+                        <Result
+                            status="success"
+                            title="Files Successfully Uploaded!"
+                            subTitle={"Your files have been added!"}
+                            extra={[
+                                <Button key="uploadAgain" onClick={resetUploadState}>
+                                    Return
+                                </Button>,
+                            ]}
+                        />
+                    ) : (
+                        <Button type="primary" color="cyan" variant="solid" onClick={handleUploadFilesToProject} disabled={files.length === 0 || project === null}>
+                            Upload Files to Project
+                        </Button>
+                    )}
                 </Box>
 
             </Box>
